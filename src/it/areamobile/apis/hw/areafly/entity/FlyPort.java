@@ -1,21 +1,29 @@
 package it.areamobile.apis.hw.areafly.entity;
 
+import android.util.Log;
+import it.areamobile.apis.hw.areafly.Warrior;
+
 /**
  * Created by AreaMobile
  * Date: 28/12/11
  */
-public abstract class FlyPort extends Warrior implements Comparable {
+public abstract class FlyPort implements Comparable, Warrior, Event.OnAreaFlyEventListener {
     private String mac_address;
     private String ip_address;
-    private int port;
     private String netbios_name;
-    private final String TOSTRING_SEPARETOR = "*";
+    private final static String ATTR_SEPARETOR = "*";
+    private final String TAG = this.getClass().getName();
+    private Event event;
 
-    public FlyPort() {};
+    public FlyPort() {
+        super();
+        event = new Event();
+        event.setOnAreaFlyEventListener(this);
+    };
 
     @Override
-    public String toString() {
-        return this.netbios_name + this.TOSTRING_SEPARETOR + this.mac_address + this.TOSTRING_SEPARETOR;
+    public void OnEventReceived(Event event) {
+        Log.i(TAG, event.toString());
     }
 
     @Override
@@ -40,12 +48,7 @@ public abstract class FlyPort extends Warrior implements Comparable {
 
     @Override
     public int getPort() {
-        return port;
-    }
-
-    @Override
-    public void setPort(int port) {
-        this.port = port;
+        return PORT;
     }
 
     @Override
@@ -56,5 +59,15 @@ public abstract class FlyPort extends Warrior implements Comparable {
     @Override
     public void setNetBiosName(String netbios_name) {
         this.netbios_name = netbios_name;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.compareTo((FlyPort) o);
+    }
+
+    @Override
+    public String toString() {
+        return this.netbios_name + this.ATTR_SEPARETOR + this.mac_address + this.ATTR_SEPARETOR;
     }
 };
