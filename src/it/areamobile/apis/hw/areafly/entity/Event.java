@@ -12,13 +12,14 @@ import java.io.Serializable;
  * Date: 29/12/11
  */
 
-public class Event implements Serializable {
+class Event implements Serializable {
     private String type;
     private OnAreaFlyEventListener eventListener;
     private Handler handler;
     private Bundle data;
 
-    public Event() {}
+    public Event() {
+    }
 
     private void init() {
         handler = new Handler() {
@@ -51,4 +52,4 @@ public class Event implements Serializable {
         this.eventListener = listener;
         init();
     }
-};
+}

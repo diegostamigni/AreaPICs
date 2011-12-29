@@ -7,21 +7,26 @@ import it.areamobile.apis.hw.areafly.Warrior;
  * Created by AreaMobile
  * Date: 28/12/11
  */
-public abstract class FlyPort implements Comparable, Warrior, Event.OnAreaFlyEventListener {
+public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEventListener {
     private String mac_address;
     private String ip_address;
     private String netbios_name;
     private final static String ATTR_SEPARETOR = "*";
     private final String TAG = this.getClass().getName();
-    private Event event;
+    private final Event event;
 
-    public FlyPort() {
+    public AreaFly() {
         super();
         event = new Event();
         event.setOnAreaFlyEventListener(this);
-    };
+    }
+
+    public Event getEvent() {
+        return event;
+    }
 
     @Override
+
     public void OnEventReceived(Event event) {
         Log.i(TAG, event.toString());
     }
@@ -47,11 +52,6 @@ public abstract class FlyPort implements Comparable, Warrior, Event.OnAreaFlyEve
     }
 
     @Override
-    public int getPort() {
-        return PORT;
-    }
-
-    @Override
     public String getNetBiosName() {
         return netbios_name;
     }
@@ -62,12 +62,20 @@ public abstract class FlyPort implements Comparable, Warrior, Event.OnAreaFlyEve
     }
 
     @Override
-    public int compareTo(Object o) {
-        return this.compareTo((FlyPort) o);
+    public String toString() {
+        return this.netbios_name + ATTR_SEPARETOR + this.mac_address + ATTR_SEPARETOR;
     }
 
     @Override
-    public String toString() {
-        return this.netbios_name + this.ATTR_SEPARETOR + this.mac_address + this.ATTR_SEPARETOR;
+    public int compareTo(AreaFly areaFly) {
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+        if (areaFly.toString().toLowerCase().equals(this.toString().toLowerCase()))
+            return EQUAL;
+        else if (areaFly.toString().toLowerCase().length() > this.toString().toLowerCase().length())
+            return AFTER;
+        else
+            return BEFORE;
     }
-};
+}
