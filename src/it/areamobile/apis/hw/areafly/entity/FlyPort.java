@@ -9,12 +9,13 @@ public abstract class FlyPort extends Warrior implements Comparable {
     private String ip_address;
     private int port;
     private String netbios_name;
+    private final String TOSTRING_SEPARETOR = "*";
 
     public FlyPort() {};
 
     @Override
     public String toString() {
-        return null;
+        return this.netbios_name + this.TOSTRING_SEPARETOR + this.mac_address + this.TOSTRING_SEPARETOR;
     }
 
     @Override
@@ -28,7 +29,7 @@ public abstract class FlyPort extends Warrior implements Comparable {
     }
 
     @Override
-    public String getIp_address() {
+    public String getIPAddress() {
         return ip_address;
     }
 

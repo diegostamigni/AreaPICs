@@ -14,7 +14,7 @@ public abstract class Warrior implements Serializable {
 
     public abstract void setMacAddress(String mac_address);
 
-    public abstract String getIp_address();
+    public abstract String getIPAddress();
 
     public abstract void setIPAddress(String ip_address);
 
