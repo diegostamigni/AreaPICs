@@ -15,10 +15,7 @@ public interface Warrior {
     abstract String getIPAddress();
 
     abstract void setIPAddress(String ip_address);
-
-    // The port should be final static, not changeable by world
-//    public abstract void setPort(int port);
-
+    
     abstract String getNetBiosName();
 
     abstract void setNetBiosName(String netbios_name);
