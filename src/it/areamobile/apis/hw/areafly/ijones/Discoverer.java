@@ -106,7 +106,7 @@ public class Discoverer extends Thread {
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
         socket.send(packet);
     }
-    
+
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves.
