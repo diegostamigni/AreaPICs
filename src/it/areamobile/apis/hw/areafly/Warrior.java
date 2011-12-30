@@ -3,6 +3,8 @@ package it.areamobile.apis.hw.areafly;
 /**
  * Created by AreaMobile
  * Date: 29/12/11
+ *
+ * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
 public interface Warrior {

@@ -5,6 +5,8 @@ import it.areamobile.apis.hw.areafly.entity.Event;
 /**
  * Created by AreaMobile
  * Date: 30/12/11
+ *
+ * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
 public abstract class Common {

@@ -18,6 +18,8 @@ import java.util.Collection;
 /**
  * Created by AreaMobile
  * Date: 29/12/11
+ *
+ * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
 public class Discoverer extends Thread {

@@ -7,6 +7,8 @@ import it.areamobile.apis.hw.areafly.Warrior;
 /**
  * Created by AreaMobile
  * Date: 28/12/11
+ *
+ * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEventListener {
