@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 
 public class Event implements Serializable {
-    private String type;
+    private String description;
     private OnAreaFlyEventListener eventListener;
     private Handler handler;
     private Bundle data;
@@ -27,8 +27,8 @@ public class Event implements Serializable {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 data = msg.getData();
-                type = data.getString(Discoverer.EVENT_TYPE);
-                setType(type);
+                description = data.getString(Discoverer.EVENT_DESCRIPTION);
+                setDescription(description);
 
                 if (eventListener != null)
                     eventListener.OnEventReceived(Event.this);
@@ -40,12 +40,16 @@ public class Event implements Serializable {
         return handler;
     }
 
-    public String getType() {
-        return type;
+    /**
+     * Return the <b>last</b> description event occurred.
+     * @return event description
+     */
+    public String getDescription() {
+        return description;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public static interface OnAreaFlyEventListener {
@@ -54,7 +58,7 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
-        return this.type;
+        return this.description;
     }
 
     public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {

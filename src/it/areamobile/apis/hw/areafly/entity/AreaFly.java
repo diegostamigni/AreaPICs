@@ -12,6 +12,7 @@ public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEve
     private String mac_address;
     private String ip_address;
     private String netbios_name;
+    private final static String FLYPORT_ID = "PICUS";
     private final static String ATTR_SEPARETOR = "*";
     private final String TAG = this.getClass().getName();
     private final Event event;
@@ -77,5 +78,9 @@ public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEve
     @Override
     public void OnEventReceived(Event event) {
         Log.i(TAG, event.toString());
+    }
+
+    public static boolean isAreaFly(String s) {
+        return s.equalsIgnoreCase(FLYPORT_ID);
     }
 }
