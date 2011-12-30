@@ -104,6 +104,23 @@ public class Discoverer extends Thread {
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
         socket.send(packet);
     }
+    
+    /**
+     * Send a broadcast UDP packet containing a request for service to
+     * announce themselves.
+     *
+     * @param socket the socket
+     * @param msg   the data you'd like to send throw the socket
+     * @throws IOException something goes wrong
+     */
+    private void sendMessage(AreaFly destAreaFly, DatagramSocket socket, String msg) throws IOException {
+        String af_address = destAreaFly.getIPAddress();
+        String af_netbios = destAreaFly.getNetBiosName();
+        String af_macaddress = destAreaFly.getMacAddress();
+
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
+        socket.send(packet);
+    }
 
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
@@ -145,7 +162,7 @@ public class Discoverer extends Thread {
                     areaFly.setMacAddress(mMacAddress);
                     areaFliesList.add(areaFly);
 
-                    //we need to set Events
+                    //we need to get/set Events
                     Handler handler = areaFly.getEvent().getHandler();
                     Message msg = new Message();
                     Bundle bundle = new Bundle();

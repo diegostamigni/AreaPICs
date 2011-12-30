@@ -19,6 +19,8 @@ public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Eve
 
     public AreaFly() {
         super();
+
+        // Set in listening for events
         this.setOnAreaFlyEventListener(this);
     }
 

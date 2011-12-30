@@ -25,12 +25,17 @@ public class Event extends Common implements Serializable {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
+
                 data = msg.getData();
                 description = data.getString(Discoverer.EVENT_DESCRIPTION);
                 setDescription(description);
 
-                if (eventListener != null)
+                if (eventListener != null) {
                     eventListener.OnEventReceived(Event.this);
+
+                    // Re join listening
+                    init(eventListener);
+                }
             }
         };
     }
