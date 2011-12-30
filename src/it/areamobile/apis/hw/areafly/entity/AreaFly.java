@@ -1,6 +1,7 @@
 package it.areamobile.apis.hw.areafly.entity;
 
 import android.util.Log;
+import it.areamobile.apis.hw.areafly.Common;
 import it.areamobile.apis.hw.areafly.Warrior;
 
 /**
@@ -8,23 +9,17 @@ import it.areamobile.apis.hw.areafly.Warrior;
  * Date: 28/12/11
  */
 
-public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEventListener {
+public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEventListener {
     private String mac_address;
     private String ip_address;
     private String netbios_name;
     private final static String FLYPORT_ID = "PICUS";
     private final static String ATTR_SEPARETOR = "*";
     private final String TAG = this.getClass().getName();
-    private final Event event;
 
     public AreaFly() {
         super();
-        event = new Event();
-        event.setOnAreaFlyEventListener(this);
-    }
-
-    public Event getEvent() {
-        return event;
+        this.setOnAreaFlyEventListener(this);
     }
 
     @Override

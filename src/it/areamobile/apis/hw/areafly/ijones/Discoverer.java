@@ -95,13 +95,13 @@ public class Discoverer extends Thread {
      * announce themselves.
      *
      * @param socket the socket
-     * @param data   the data you'd like to send throw the socket
+     * @param msg   the data you'd like to send throw the socket
      * @throws IOException something goes wrong
      */
-    private void sendMessage(DatagramSocket socket, String data) throws IOException {
-        Log.d(TAG, "Sending data: " + data);
+    private void sendMessage(DatagramSocket socket, String msg) throws IOException {
+        Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getBroadcast());
 
-        DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
         socket.send(packet);
     }
 
@@ -134,10 +134,10 @@ public class Discoverer extends Thread {
 //                String[] parsed = s.split(expr);
                 String parsed = s;
 
-                Log.d(TAG, "Received response: " + parsed);
+                Log.d(TAG, "Received response: " + parsed + " by address (broadcast): " + socket.getBroadcast());
                 String mNetBiosName = parsed;
                 String mMacAddress = parsed;
-                String mEvent = parsed;
+                String mEventDescription = parsed;
                 //////
 
                 if (AreaFly.isAreaFly(s)) {
@@ -149,7 +149,7 @@ public class Discoverer extends Thread {
                     Handler handler = areaFly.getEvent().getHandler();
                     Message msg = new Message();
                     Bundle bundle = new Bundle();
-                    bundle.putString(EVENT_DESCRIPTION, mEvent);
+                    bundle.putString(EVENT_DESCRIPTION, mEventDescription);
                     msg.setData(bundle);
                     handler.sendMessage(msg);
                 }

@@ -3,6 +3,7 @@ package it.areamobile.apis.hw.areafly.entity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import it.areamobile.apis.hw.areafly.Common;
 import it.areamobile.apis.hw.areafly.ijones.Discoverer;
 
 import java.io.Serializable;
@@ -12,16 +13,14 @@ import java.io.Serializable;
  * Date: 29/12/11
  */
 
-public class Event implements Serializable {
+public class Event extends Common implements Serializable {
     private String description;
-    private OnAreaFlyEventListener eventListener;
     private Handler handler;
     private Bundle data;
 
-    public Event() {
-    }
+    public Event() {}
 
-    private void init() {
+    public void init(final OnAreaFlyEventListener eventListener) {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -52,17 +51,12 @@ public class Event implements Serializable {
         this.description = description;
     }
 
-    public static interface OnAreaFlyEventListener {
-        public void OnEventReceived(Event event);
-    }
-
+    /**
+     * Infos about this Event
+     * @return the description of this event
+     */
     @Override
     public String toString() {
         return this.description;
-    }
-
-    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
-        this.eventListener = listener;
-        init();
     }
 }
