@@ -1,6 +1,9 @@
 package it.areamobile.apis.hw.areafly.ijones;
 
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import it.areamobile.apis.hw.areafly.entity.AreaFly;
 import it.areamobile.apis.hw.areafly.utils.NetUtils;
@@ -41,6 +44,11 @@ public class Discoverer extends Thread {
         mWifi = wifi;
     }
 
+    /**
+     * Scan the current wifi network to search any kind of AreaFly.
+     *
+     * @return the collection of AreaFly available
+     */
     public Collection<AreaFly> scan() {
         try {
             DatagramSocket socket = new DatagramSocket(DISCOVERY_PORT);
@@ -84,10 +92,10 @@ public class Discoverer extends Thread {
         DatagramPacket packet;
         String s;
         AreaFly areaFly;
-        Collection<AreaFly> areaFlies = null;
+        Collection<AreaFly> areaFliesList = null;
 
         try {
-            areaFlies = new ArrayList<AreaFly>();
+            areaFliesList = new ArrayList<AreaFly>();
             while (true) {
                 areaFly = new AreaFly();
                 packet = new DatagramPacket(buf, buf.length);
@@ -95,18 +103,35 @@ public class Discoverer extends Thread {
 
                 areaFly.setIPAddress(packet.getAddress().getHostAddress());
 
-                //TODO such as parser here for the data that I receive
+                //TODO We need a parser here for the data that I receive
                 s = new String(packet.getData(), 0, packet.getLength());
-                Log.d(TAG, "Received response: " + s);
-                areaFly.setNetBiosName(s);
-                areaFly.setMacAddress(s);
-                areaFlies.add(areaFly);
+//                String expr = "\\*";
+//                String[] parsed = s.split(expr);
+                String parsed = s;
+
+                Log.d(TAG, "Received response: " + parsed);
+                String mNetBiosName = parsed;
+                String mMacAddress = parsed;
+                String mEvent = parsed;
+                //////
+
+                areaFly.setNetBiosName(mNetBiosName);
+                areaFly.setMacAddress(mMacAddress);
+                areaFliesList.add(areaFly);
+
+                //we need to set Event
+                Handler handler = areaFly.getEvent().getHandler();
+                Message msg = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putString(EVENT_TYPE, mEvent);
+                msg.setData(bundle);
+                handler.sendMessage(msg);
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
         }
 
-        return areaFlies;
+        return areaFliesList;
     }
 
     /**

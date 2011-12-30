@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Date: 29/12/11
  */
 
-class Event implements Serializable {
+public class Event implements Serializable {
     private String type;
     private OnAreaFlyEventListener eventListener;
     private Handler handler;
@@ -28,6 +28,7 @@ class Event implements Serializable {
                 super.handleMessage(msg);
                 data = msg.getData();
                 type = data.getString(Discoverer.EVENT_TYPE);
+                setType(type);
 
                 if (eventListener != null)
                     eventListener.OnEventReceived(Event.this);
@@ -37,6 +38,14 @@ class Event implements Serializable {
 
     public Handler getHandler() {
         return handler;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public static interface OnAreaFlyEventListener {

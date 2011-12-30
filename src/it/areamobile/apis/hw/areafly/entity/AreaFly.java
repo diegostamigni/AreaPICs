@@ -7,6 +7,7 @@ import it.areamobile.apis.hw.areafly.Warrior;
  * Created by AreaMobile
  * Date: 28/12/11
  */
+
 public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEventListener {
     private String mac_address;
     private String ip_address;
@@ -23,12 +24,6 @@ public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEve
 
     public Event getEvent() {
         return event;
-    }
-
-    @Override
-
-    public void OnEventReceived(Event event) {
-        Log.i(TAG, event.toString());
     }
 
     @Override
@@ -77,5 +72,10 @@ public class AreaFly implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEve
             return AFTER;
         else
             return BEFORE;
+    }
+
+    @Override
+    public void OnEventReceived(Event event) {
+        Log.i(TAG, event.toString());
     }
 }
