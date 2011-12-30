@@ -75,8 +75,8 @@ public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Eve
     }
 
     @Override
-    public void OnEventReceived(Event event) {
-        Log.i(TAG, event.toString());
+    public void OnEventReceived(Common areaFly) {
+        Log.i(TAG, areaFly.toString());
     }
 
     public static boolean isAreaFly(String s) {

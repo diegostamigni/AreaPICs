@@ -19,8 +19,11 @@ public class Event extends Common implements Serializable {
     private String description;
     private Handler handler;
     private Bundle data;
+    private Common comm;
 
-    public Event() {}
+    public Event(Common comm) {
+        this.comm = comm;
+    }
 
     public void init(final OnAreaFlyEventListener eventListener) {
         handler = new Handler() {
@@ -33,7 +36,7 @@ public class Event extends Common implements Serializable {
                 setDescription(description);
 
                 if (eventListener != null) {
-                    eventListener.OnEventReceived(Event.this);
+                    eventListener.OnEventReceived(comm);
 
                     // Re join listening
                     init(eventListener);
@@ -46,6 +49,10 @@ public class Event extends Common implements Serializable {
         return handler;
     }
 
+    public Common getCommon() {
+        return comm;
+    }
+
     /**
      * Return the <b>last</b> description event occurred.
      * @return event description
@@ -54,12 +61,15 @@ public class Event extends Common implements Serializable {
         return description;
     }
 
+    /**
+     * Set the description event.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     * Infos about this Event
+     * Info about this Event
      * @return the description of this event
      */
     @Override

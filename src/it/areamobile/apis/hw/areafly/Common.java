@@ -14,12 +14,16 @@ public abstract class Common {
     private Event event;
 
     public static interface OnAreaFlyEventListener {
-        public void OnEventReceived(Event event);
+        public void OnEventReceived(Common comm);
     }
 
+    /**
+     * Set the obj listening for events
+     * @param listener instance of OnAreaFlyEventListener
+     */
     public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
         this.listener = listener;
-        event = new Event();
+        event = new Event(this);
         event.init(this.listener);
     }
 

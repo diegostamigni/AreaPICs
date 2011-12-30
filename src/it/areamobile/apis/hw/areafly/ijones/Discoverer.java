@@ -97,7 +97,7 @@ public class Discoverer extends Thread {
      * announce themselves.
      *
      * @param socket the socket
-     * @param msg   the data you'd like to send throw the socket
+     * @param msg    the data you'd like to send throw the socket
      * @throws IOException something goes wrong
      */
     private void sendMessage(DatagramSocket socket, String msg) throws IOException {
@@ -111,11 +111,12 @@ public class Discoverer extends Thread {
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves.
      *
-     * @param socket the socket
-     * @param msg   the data you'd like to send throw the socket
+     * @param socket      the socket
+     * @param destAreaFly is the AreaFly you would send the data
+     * @param msg         the data you'd like to send throw the socket
      * @throws IOException something goes wrong
      */
-    private void sendMessage(AreaFly destAreaFly, DatagramSocket socket, String msg) throws IOException {
+    public void sendMessage(DatagramSocket socket, AreaFly destAreaFly, String msg) throws IOException {
         String af_address = destAreaFly.getIPAddress();
         String af_netbios = destAreaFly.getNetBiosName();
         String af_macaddress = destAreaFly.getMacAddress();
@@ -178,6 +179,38 @@ public class Discoverer extends Thread {
         }
 
         return areaFliesList;
+    }
+
+    /**
+     * Listen on socket for responses, timing out after TIMEOUT_MS.
+     *
+     * @param socket  socket on which the announcement request was sent
+     * @param areaFly specify what kind of AreaFly you'd like to listen for response
+     * @return the packet received from the socket. <br></br><b>Note</b>: it will contains all the network data.
+     *         May need to be parsed.
+     * @throws IOException something goes wrong
+     * @see java.net.DatagramPacket
+     */
+    public DatagramPacket listenForData(DatagramSocket socket, AreaFly areaFly) throws IOException {
+        String af_address = areaFly.getIPAddress();
+        String af_netbios = areaFly.getNetBiosName();
+        String af_macaddress = areaFly.getMacAddress();
+
+        byte[] buf = new byte[1024];
+        DatagramPacket packet = null;
+
+        try {
+            while (true) {
+                packet = new DatagramPacket(buf, buf.length);
+                socket.receive(packet);
+            }
+        } catch (SocketTimeoutException e) {
+            Log.d(TAG, "Receive timed out.");
+        }
+
+        //TODO packed need to be parsed before return, to be from areaFly->IPAddress
+
+        return packet;
     }
 
     /**
