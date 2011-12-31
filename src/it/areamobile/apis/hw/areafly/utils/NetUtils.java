@@ -11,10 +11,12 @@ import java.net.InetAddress;
  * Created by AreaMobile
  * Date: 29/12/11
  *
+ * Some utility
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
 public class NetUtils {
+    //TODO write javadoc
     public static InetAddress getBroadcastAddress(android.net.wifi.WifiManager mWifi) throws IOException {
         DhcpInfo dhcp = mWifi.getDhcpInfo();
         if (dhcp == null) {

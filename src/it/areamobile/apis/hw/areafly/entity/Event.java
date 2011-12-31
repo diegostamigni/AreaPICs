@@ -12,6 +12,7 @@ import java.io.Serializable;
  * Created by AreaMobile
  * Date: 29/12/11
  *
+ * Event of an AreaFly.
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
@@ -20,11 +21,26 @@ public class Event extends Common implements Serializable {
     private Handler handler;
     private Bundle data;
     private Common comm;
+    private int UPDATE_EVENT_DELAY = 10000;
 
     public Event(Common comm) {
         this.comm = comm;
     }
 
+    public Event(Common comm, int period) {
+        this.comm = comm;
+        this.UPDATE_EVENT_DELAY = period;
+    }
+
+    public int getUpdateDelay() {
+        return UPDATE_EVENT_DELAY;
+    }
+
+    public void setUpdateDelay(int period) {
+        this.UPDATE_EVENT_DELAY = period;
+    }
+
+    //TODO write javadoc
     public void init(final OnAreaFlyEventListener eventListener) {
         handler = new Handler() {
             @Override
@@ -45,10 +61,12 @@ public class Event extends Common implements Serializable {
         };
     }
 
+    //TODO write javadoc
     public Handler getHandler() {
         return handler;
     }
 
+    //TODO write javadoc
     public Common getCommon() {
         return comm;
     }

@@ -36,6 +36,7 @@ public class Discoverer extends Thread {
     //TODO Only for test right now
     private final String FAKE_DATA = "D";
 
+    //TODO write javadoc
     public interface DiscoveryReceiver {
         void addAnnouncedServers(InetAddress[] host, int port[]);
     }
@@ -66,28 +67,21 @@ public class Discoverer extends Thread {
         return socket;
     }
 
-    /**
-     * Time out of the socket
-     *
-     * @return the timeout of the socket in mills
-     */
-    public static int getTimeOutInMs() {
-        return TIMEOUT_MS;
-    }
-
     public void setSocket(DatagramSocket socket) {
         this.socket = socket;
     }
 
     /**
      * Scan the current wifi network to search any kind of AreaFly.
-     * This method is synchronized.
+     * This method is synchronized and set the local collection of AreaFlies.
      *
      * @return the collection of AreaFly available
+     * @throws IOException something goes wrong
+     * @see it.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
         this.sendMessage(socket, FAKE_DATA);
-        this.areaFlyCollection = this.listenForResponses(socket);
+        this.areaFlyCollection = this.listenForAllResponses(socket);
         Log.e(TAG, "Could not send request.");
         return areaFlyCollection;
     }
@@ -100,7 +94,7 @@ public class Discoverer extends Thread {
      * @param msg    the data you'd like to send throw the socket
      * @throws IOException something goes wrong
      */
-    private void sendMessage(DatagramSocket socket, String msg) throws IOException {
+    public void sendMessage(DatagramSocket socket, String msg) throws IOException {
         Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getBroadcast());
 
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
@@ -109,7 +103,7 @@ public class Discoverer extends Thread {
 
     /**
      * Send a broadcast UDP packet containing a request for service to
-     * announce themselves.
+     * announce themselves. The destAreaFly is the destination AreaFly device.
      *
      * @param socket      the socket
      * @param destAreaFly is the AreaFly you would send the data
@@ -129,10 +123,10 @@ public class Discoverer extends Thread {
      * Listen on socket for responses, timing out after TIMEOUT_MS
      *
      * @param socket socket on which the announcement request was sent
-     * @return the collection of found areafly
+     * @return the collection of found areaFlies
      * @throws IOException something goes wrong
      */
-    private Collection<AreaFly> listenForResponses(DatagramSocket socket) throws IOException {
+    private Collection<AreaFly> listenForAllResponses(DatagramSocket socket) throws IOException {
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
@@ -166,12 +160,7 @@ public class Discoverer extends Thread {
                     areaFliesList.add(areaFly);
 
                     //we need to get/set Events
-                    Handler handler = areaFly.getEvent().getHandler();
-                    Message msg = new Message();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(EVENT_DESCRIPTION, mEventDescription);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
+                    setEventDescription(areaFly, mEventDescription);
                 }
             }
         } catch (SocketTimeoutException e) {
@@ -182,19 +171,31 @@ public class Discoverer extends Thread {
     }
 
     /**
+     * Get the AreaFly collection, already scanned.<br></br>
+     * <b>Note: </b>This collection may be old, you've to rescan you're collection of AreaFlies.
+     *
+     * @return the collection of AreaFly already scanned before with this.scan()
+     * @see Discoverer#scan()
+     */
+    public Collection<AreaFly> getAreaFlyCollection() {
+        return areaFlyCollection;
+    }
+
+    /**
      * Listen on socket for responses, timing out after TIMEOUT_MS.
      *
      * @param socket  socket on which the announcement request was sent
      * @param areaFly specify what kind of AreaFly you'd like to listen for response
-     * @return the packet received from the socket. <br></br><b>Note</b>: it will contains all the network data.
-     *         May need to be parsed.
+     * @return the packet received (Event) set to the passed areaFly.
      * @throws IOException something goes wrong
      * @see java.net.DatagramPacket
+     * @see it.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
      */
-    public DatagramPacket listenForData(DatagramSocket socket, AreaFly areaFly) throws IOException {
+    public synchronized DatagramPacket listenForData(DatagramSocket socket, AreaFly areaFly) throws IOException {
         String af_address = areaFly.getIPAddress();
         String af_netbios = areaFly.getNetBiosName();
         String af_macaddress = areaFly.getMacAddress();
+        String s;
 
         byte[] buf = new byte[1024];
         DatagramPacket packet = null;
@@ -203,12 +204,24 @@ public class Discoverer extends Thread {
             while (true) {
                 packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
+
+                //TODO We need a parser here for the data that I receive
+                s = new String(packet.getData(), 0, packet.getLength());
+//                String expr = "\\*";
+//                String[] parsed = s.split(expr);
+                String parsed = s;
+                String mMacAddress = parsed;
+                String mEventDescription = parsed;
+                //////
+
+                if (AreaFly.isAreaFly(s) && mMacAddress.equalsIgnoreCase(areaFly.getMacAddress())) {
+                    //we need to get/set Events, if we're talking with the same areaFly we passed
+                    setEventDescription(areaFly, mEventDescription);
+                }
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
         }
-
-        //TODO packed need to be parsed before return, to be from areaFly->IPAddress
 
         return packet;
     }
@@ -222,20 +235,49 @@ public class Discoverer extends Thread {
      * @throws IOException something goes wrong
      * @see java.net.DatagramPacket
      */
-    public DatagramPacket listenForData(DatagramSocket socket) throws IOException {
+    public synchronized DatagramPacket listenForData(DatagramSocket socket) throws IOException {
         byte[] buf = new byte[1024];
         DatagramPacket packet = null;
+        Collection<AreaFly> areaFliesList = null;
+        String s;
 
         try {
+            areaFliesList = this.getAreaFlyCollection();
             while (true) {
                 packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
+
+                /*
+                 * TODO packed need to be parsed and divided. Read below.
+                 * The packet will contains a lot of data. This method will return all data in a single packet,
+                 * came from Broadcast. This one contains the information about all AreaFlies. But we're listening
+                 * for Events, and every event will be connected to his specific AreaFly. We got the collection of
+                 * AreaFly with getAreaFlyCollection() and on every AreaFly we can use getMacAddress().
+                 *
+                 * Every packet contains also the MAC_ADDRESS that need to be compared with the internal mac_address
+                 * in the packet; so, we can compare this data to update every AreaFly with his specific Event.
+                 */
+                s = new String(packet.getData(), 0, packet.getLength());
+//                String expr = "\\*";
+//                String[] parsed = s.split(expr);
+                String parsed = s;
+                String mMacAddress = parsed;
+                String mEventDescription = parsed;
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
         }
 
         return packet;
+    }
+
+    private void setEventDescription(AreaFly areaFly, String eventDescription) {
+        Handler handler = areaFly.getEvent().getHandler();
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString(EVENT_DESCRIPTION, eventDescription);
+        msg.setData(bundle);
+        handler.sendMessage(msg);
     }
 
     /**

@@ -7,7 +7,8 @@ package it.areamobile.apis.hw.areafly;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public interface Warrior {
+//TODO improve javadoc to all class
+public interface HWSpecs {
     final static int PORT = 30303;
 
     abstract String getMacAddress();

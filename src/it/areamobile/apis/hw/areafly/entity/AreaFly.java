@@ -1,17 +1,18 @@
 package it.areamobile.apis.hw.areafly.entity;
 
-import android.util.Log;
 import it.areamobile.apis.hw.areafly.Common;
-import it.areamobile.apis.hw.areafly.Warrior;
+import it.areamobile.apis.hw.areafly.HWSpecs;
 
+//TODO improve javadoc
 /**
  * Created by AreaMobile
  * Date: 28/12/11
  *
+ * Your AreaFly obj reference.
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Event.OnAreaFlyEventListener {
+public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Event.OnAreaFlyEventListener {
     private String mac_address;
     private String ip_address;
     private String netbios_name;
@@ -22,8 +23,8 @@ public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Eve
     public AreaFly() {
         super();
 
-        // Set in listening for events
-        this.setOnAreaFlyEventListener(this);
+        // Set in listening for events, every millis
+        this.setOnAreaFlyEventListener(this, 1000);
     }
 
     @Override
@@ -75,9 +76,7 @@ public class AreaFly extends Common implements Comparable<AreaFly>, Warrior, Eve
     }
 
     @Override
-    public void OnEventReceived(Common areaFly) {
-        Log.i(TAG, areaFly.toString());
-    }
+    public void OnEventReceived(Common areaFly) {}
 
     public static boolean isAreaFly(String s) {
         return s.equalsIgnoreCase(FLYPORT_ID);
