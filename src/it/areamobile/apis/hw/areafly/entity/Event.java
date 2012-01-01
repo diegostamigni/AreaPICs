@@ -12,8 +12,9 @@ import java.io.Serializable;
 /**
  * Created by AreaMobile
  * Date: 29/12/11
- *
+ * <p/>
  * Event of an AreaFly.
+ *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
@@ -51,7 +52,7 @@ public class Event implements Serializable {
     }
 
     //TODO write javadoc
-    public void init(final Common.OnAreaFlyEventListener eventListener) {
+    protected void init(final Common.OnAreaFlyEventListener eventListener) {
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -71,6 +72,13 @@ public class Event implements Serializable {
         };
     }
 
+    /**
+     * Service Updater enabler
+     *
+     * @param enable if you'd like to be able to get auto update from service
+     * @see it.areamobile.apis.hw.areafly.entity.Event#isUpdaterEnabled()
+     * @see Updater
+     */
     public void enableUpdater(boolean enable) {
         this.isUpdaterEnabled = enable;
         if (isUpdaterEnabled) {
@@ -91,6 +99,7 @@ public class Event implements Serializable {
 
     /**
      * Return the <b>last</b> description event occurred.
+     *
      * @return event description
      */
     public String getDescription() {
@@ -106,6 +115,7 @@ public class Event implements Serializable {
 
     /**
      * Info about this Event
+     *
      * @return the description of this event
      */
     @Override
