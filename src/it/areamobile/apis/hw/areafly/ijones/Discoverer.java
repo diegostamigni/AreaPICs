@@ -1,11 +1,13 @@
 package it.areamobile.apis.hw.areafly.ijones;
 
+import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import it.areamobile.apis.hw.areafly.entity.AreaFly;
+import it.areamobile.apis.hw.areafly.entity.Event;
 import it.areamobile.apis.hw.areafly.utils.NetUtils;
 
 import java.io.IOException;
@@ -23,18 +25,18 @@ import java.util.Collection;
  */
 
 public class Discoverer extends Thread {
-    public final static String EVENT_DESCRIPTION = "EVENT_TYPE_TAG";
     public static final String TAG = Discoverer.class.getName();
     private static final String REMOTE_KEY = "";
 
     private final static int DISCOVERY_PORT = AreaFly.PORT;
-    private static final int TIMEOUT_MS = 500;
+    public static final int TIMEOUT_MS = 500;
     private final WifiManager mWifi;
     private Collection<AreaFly> areaFlyCollection;
     private DatagramSocket socket;
 
     //TODO Only for test right now
     private final String FAKE_DATA = "D";
+    private final Context mContext;
 
     //TODO write javadoc
     public interface DiscoveryReceiver {
@@ -48,7 +50,8 @@ public class Discoverer extends Thread {
      * @throws SocketException Something goes wrong in the init of the socket. Are you connected ?
      * @see Discoverer#scan()
      */
-    public Discoverer(android.net.wifi.WifiManager wifi) throws SocketException {
+    public Discoverer(Context ctx, android.net.wifi.WifiManager wifi) throws SocketException {
+        this.mContext = ctx;
         mWifi = wifi;
         initSocket();
     }
@@ -81,9 +84,7 @@ public class Discoverer extends Thread {
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
         this.sendMessage(socket, FAKE_DATA);
-        this.areaFlyCollection = this.listenForAllResponses(socket);
-        Log.e(TAG, "Could not send request.");
-        return areaFlyCollection;
+        return this.areaFlyCollection = this.listenForAllResponses(socket);
     }
 
     /**
@@ -136,7 +137,7 @@ public class Discoverer extends Thread {
         try {
             areaFliesList = new ArrayList<AreaFly>();
             while (true) {
-                areaFly = new AreaFly();
+                areaFly = new AreaFly(mContext);
                 packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
 
@@ -275,7 +276,7 @@ public class Discoverer extends Thread {
         Handler handler = areaFly.getEvent().getHandler();
         Message msg = new Message();
         Bundle bundle = new Bundle();
-        bundle.putString(EVENT_DESCRIPTION, eventDescription);
+        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
         msg.setData(bundle);
         handler.sendMessage(msg);
     }

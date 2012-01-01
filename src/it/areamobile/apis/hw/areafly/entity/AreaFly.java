@@ -1,6 +1,6 @@
 package it.areamobile.apis.hw.areafly.entity;
 
-import it.areamobile.apis.hw.areafly.Common;
+import android.content.Context;
 import it.areamobile.apis.hw.areafly.HWSpecs;
 
 //TODO improve javadoc
@@ -12,54 +12,17 @@ import it.areamobile.apis.hw.areafly.HWSpecs;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Event.OnAreaFlyEventListener {
-    private String mac_address;
-    private String ip_address;
-    private String netbios_name;
+public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Common.OnAreaFlyEventListener {
     private final static String FLYPORT_ID = "PICUS";
-    private final static String ATTR_SEPARETOR = "*";
     private final String TAG = this.getClass().getName();
+    private final Context mContext;
 
-    public AreaFly() {
+    public AreaFly(Context ctx) {
         super();
 
+        this.mContext = ctx;
         // Set in listening for events, every millis
         this.setOnAreaFlyEventListener(this, 1000);
-    }
-
-    @Override
-    public String getMacAddress() {
-        return mac_address;
-    }
-
-    @Override
-    public void setMacAddress(String mac_address) {
-        this.mac_address = mac_address;
-    }
-
-    @Override
-    public String getIPAddress() {
-        return ip_address;
-    }
-
-    @Override
-    public void setIPAddress(String ip_address) {
-        this.ip_address = ip_address;
-    }
-
-    @Override
-    public String getNetBiosName() {
-        return netbios_name;
-    }
-
-    @Override
-    public void setNetBiosName(String netbios_name) {
-        this.netbios_name = netbios_name;
-    }
-
-    @Override
-    public String toString() {
-        return this.netbios_name + ATTR_SEPARETOR + this.mac_address + ATTR_SEPARETOR;
     }
 
     @Override
@@ -80,5 +43,11 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Eve
 
     public static boolean isAreaFly(String s) {
         return s.equalsIgnoreCase(FLYPORT_ID);
+    }
+
+    @Override
+    public Context getContext() {
+        super.getContext();
+        return mContext;
     }
 }
