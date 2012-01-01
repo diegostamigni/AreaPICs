@@ -21,6 +21,8 @@ public class Event extends Common implements Serializable {
     private Handler handler;
     private Bundle data;
     private Common comm;
+
+    // Default period value
     private int UPDATE_EVENT_DELAY = 10000;
 
     public Event(Common comm) {
