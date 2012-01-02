@@ -43,7 +43,11 @@ public class Event implements Serializable {
         mContext = areaFly.getContext();
     }
 
-    public int getUpdateDelay() {
+    /**
+     * Get the service period of updating.
+     * @return update period in millis
+     */
+    public int getUpdatePeriod() {
         return UPDATE_EVENT_DELAY;
     }
 

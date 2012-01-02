@@ -13,7 +13,6 @@ import it.areamobile.apis.hw.areafly.HWSpecs;
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Common.OnAreaFlyEventListener {
-    private final static String FLYPORT_ID = "PICUS";
     private final String TAG = this.getClass().getName();
     private final Context mContext;
 
