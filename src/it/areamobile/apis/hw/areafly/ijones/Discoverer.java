@@ -2,12 +2,8 @@ package it.areamobile.apis.hw.areafly.ijones;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import it.areamobile.apis.hw.areafly.entity.AreaFly;
-import it.areamobile.apis.hw.areafly.entity.Event;
 import it.areamobile.apis.hw.areafly.utils.NetUtils;
 
 import java.io.IOException;
@@ -30,22 +26,35 @@ public class Discoverer extends Thread {
 
     private final static int DISCOVERY_PORT = AreaFly.PORT;
     public static final int TIMEOUT_MS = 500;
-    private final WifiManager mWifi;
+    private WifiManager mWifi;
     private Collection<AreaFly> areaFlyCollection;
     private DatagramSocket socket;
 
-    //TODO Only for test right now
-    private final String FAKE_DATA = "D";
-    private final Context mContext;
+    private Context mContext;
 
-    //TODO write javadoc
+    /**
+     * It's a receiver interface, not fully implemented yet.
+     */
     public interface DiscoveryReceiver {
         void addAnnouncedServers(InetAddress[] host, int port[]);
+    }
+
+    public Discoverer() {}
+    
+    public Discoverer(Context ctx) throws SocketException {
+        this.mContext = ctx;
+        initSocket();
+    }
+
+    public Discoverer(android.net.wifi.WifiManager wifi) throws SocketException {
+        this.mWifi = wifi;
+        initSocket();
     }
 
     /**
      * It is an adventure obj. Initialize it and use scan function to find any AreaFly on the current net.
      *
+     * @param ctx is the context
      * @param wifi is the android.net.wifi.WifiManager
      * @throws SocketException Something goes wrong in the init of the socket. Are you connected ?
      * @see Discoverer#scan()
@@ -54,6 +63,22 @@ public class Discoverer extends Thread {
         this.mContext = ctx;
         mWifi = wifi;
         initSocket();
+    }
+
+    public WifiManager getWifiManager() {
+        return mWifi;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public void setWifiManager(WifiManager mWifi) {
+        this.mWifi = mWifi;
+    }
+
+    public void setContext(Context mContext) {
+        this.mContext = mContext;
     }
 
     /**
@@ -66,6 +91,11 @@ public class Discoverer extends Thread {
         socket.setSoTimeout(TIMEOUT_MS);
     }
 
+    /**
+     * Get the current socket, created by Discoverer
+     * @return the socket
+     * @see DatagramSocket
+     */
     public DatagramSocket getSocket() {
         return socket;
     }
@@ -83,6 +113,7 @@ public class Discoverer extends Thread {
      * @see it.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
+        String FAKE_DATA = "D";
         this.sendMessage(socket, FAKE_DATA);
         return this.areaFlyCollection = this.listenForAllResponses(socket);
     }
@@ -161,7 +192,7 @@ public class Discoverer extends Thread {
                     areaFliesList.add(areaFly);
 
                     //we need to get/set Events
-                    setEventDescription(areaFly, mEventDescription);
+                    areaFly.setEventDescription(mEventDescription);
                 }
             }
         } catch (SocketTimeoutException e) {
@@ -217,7 +248,7 @@ public class Discoverer extends Thread {
 
                 if (AreaFly.isAreaFly(s) && mMacAddress.equalsIgnoreCase(areaFly.getMacAddress())) {
                     //we need to get/set Events, if we're talking with the same areaFly we passed
-                    setEventDescription(areaFly, mEventDescription);
+                    areaFly.setEventDescription(mEventDescription);
                 }
             }
         } catch (SocketTimeoutException e) {
@@ -270,15 +301,6 @@ public class Discoverer extends Thread {
         }
 
         return packet;
-    }
-
-    private void setEventDescription(AreaFly areaFly, String eventDescription) {
-        Handler handler = areaFly.getEvent().getHandler();
-        Message msg = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
-        msg.setData(bundle);
-        handler.sendMessage(msg);
     }
 
     /**

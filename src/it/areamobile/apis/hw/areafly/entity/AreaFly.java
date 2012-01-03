@@ -1,14 +1,16 @@
 package it.areamobile.apis.hw.areafly.entity;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import it.areamobile.apis.hw.areafly.HWSpecs;
 
-//TODO improve javadoc
 /**
  * Created by AreaMobile
  * Date: 28/12/11
  *
- * Your AreaFly obj reference.
+ * AreaFly, the derivation of FlyPort, this is the class you've to use for connection on it.
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
@@ -48,5 +50,14 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     public Context getContext() {
         super.getContext();
         return mContext;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        Handler handler = getEvent().getHandler();
+        Message msg = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
+        msg.setData(bundle);
+        handler.sendMessage(msg);
     }
 }

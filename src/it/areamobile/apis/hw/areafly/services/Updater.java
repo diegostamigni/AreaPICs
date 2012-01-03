@@ -4,14 +4,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import it.areamobile.apis.hw.areafly.entity.AreaFly;
-import it.areamobile.apis.hw.areafly.entity.Event;
 import it.areamobile.apis.hw.areafly.ijones.Discoverer;
-import it.areamobile.apis.hw.areafly.utils.NetUtils;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -23,39 +18,63 @@ import java.util.TimerTask;
 /**
  * Created by AreaMobile
  * Date: 31/12/11
+ * <p/>
+ * This service is developed to work as an updater for areafly's events.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
+ * @see Service
  */
 
 public class Updater extends Service {
     private final Timer timer;
-    private int PERIOD = -1;
+    private int PERIOD = 10000;
     private DatagramSocket socket;
     private final AreaFly areaFly;
-    private final WifiManager mWifi;
+    private WifiManager mWifi;
     private final String STATUS_MSG = "STATUS";
     private DatagramPacket packet;
+    private Discoverer discoverer;
 
+    /**
+     * Updater constructor. Without period parameter, it's by default set on 10000 mills.
+     *
+     * @param areaFly is the AreaFly where you'd like to allow the event service auto updater
+     * @see Updater(AreaFly, int)
+     */
     public Updater(AreaFly areaFly) {
         timer = new Timer();
+        discoverer = new Discoverer();
+
         this.areaFly = areaFly;
-        mWifi = (WifiManager) areaFly.getContext().getSystemService(Context.WIFI_SERVICE);
     }
 
+    /**
+     * Updater constructor.
+     *
+     * @param areaFly is the AreaFly where you'd like to allow the event service auto updater
+     * @param period is the time in millis used by the service as a delay between every update
+     * @see Updater(AreaFly)
+     */
     public Updater(AreaFly areaFly, int period) {
-        PERIOD = period;
         timer = new Timer();
+        discoverer = new Discoverer();
+
+        PERIOD = period;
         this.areaFly = areaFly;
-        mWifi = (WifiManager) areaFly.getContext().getSystemService(Context.WIFI_SERVICE);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mWifi = (WifiManager) areaFly.getContext().getSystemService(Context.WIFI_SERVICE);
+        discoverer.setWifiManager(mWifi);
+
+
         try {
             socket = new DatagramSocket(AreaFly.PORT);
             socket.setBroadcast(true);
             socket.setSoTimeout(Discoverer.TIMEOUT_MS);
+            discoverer.setSocket(socket);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -66,7 +85,7 @@ public class Updater extends Service {
                 // Stuff here
                 try {
                     byte[] buf = new byte[1024];
-                    sendMessage(socket, STATUS_MSG);
+                    discoverer.sendMessage(socket, STATUS_MSG);
                     String s;
 
                     while (true) {
@@ -83,7 +102,7 @@ public class Updater extends Service {
 
                         if (AreaFly.isAreaFly(s) && mMacAddress.equalsIgnoreCase(areaFly.getMacAddress())) {
                             //we need to get/set Events, if we're talking with the same common we passed
-                            setEventDescription(areaFly, mEventDescription);
+                            areaFly.setEventDescription(mEventDescription);
                         }
                     }
                 } catch (IOException e) {
@@ -93,23 +112,30 @@ public class Updater extends Service {
         }, 0, PERIOD);
     }
 
-    private void sendMessage(DatagramSocket socket, String msg) throws IOException {
-        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
-        socket.send(packet);
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    private void setEventDescription(AreaFly common, String eventDescription) {
-        Handler handler = common.getEvent().getHandler();
-        Message msg = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
-        msg.setData(bundle);
-        handler.sendMessage(msg);
+    public Discoverer getDiscoverer() {
+        return discoverer;
     }
 
+    /**
+     * Return the socket used by this service.
+     * @return socket
+     * @see DatagramSocket
+     */
+    public DatagramSocket getSocket() {
+        return socket;
+    }
+
+    /**
+     * Return the WiFiManager used by this service.
+     * @return socket
+     * @see android.net.wifi.WifiManager
+     */
+    public WifiManager getWifiManager() {
+        return mWifi;
+    }
 }

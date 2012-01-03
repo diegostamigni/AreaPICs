@@ -11,12 +11,22 @@ import java.net.InetAddress;
  * Created by AreaMobile
  * Date: 29/12/11
  *
- * Some utility
+ * Some useful utility
+ * @see NetUtils#getBroadcastAddress(android.net.wifi.WifiManager)
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
 public class NetUtils {
-    //TODO write javadoc
+    /**
+     * Useful method to get the Broadcast Address from the current connection.
+     * @param mWifi is the WiFiManager
+     * @return broadcast address in InetAddress obj
+     * @throws IOException something goes wrong
+     * @see InetAddress
+     * @see android.net.wifi.WifiManager
+     * @see android.net.wifi.WifiManager#getDhcpInfo()
+     * @see InetAddress#getByAddress(byte[])
+     */
     public static InetAddress getBroadcastAddress(android.net.wifi.WifiManager mWifi) throws IOException {
         DhcpInfo dhcp = mWifi.getDhcpInfo();
         if (dhcp == null) {
