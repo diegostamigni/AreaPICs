@@ -14,7 +14,7 @@ public class JNITalker {
 
     /**
      * From JNI code
-     * @return String
+     * @return boolean
      */
     public native boolean attaching();
 
