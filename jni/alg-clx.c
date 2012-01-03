@@ -1,11 +1,12 @@
-#include <jni.h>
-#include <stdio.h>
-
-/* Enum on false, true for generating Java Boolean (that's for @gianky, obv):
- * 0: false
- * 1: true
+/**
+ * Created by AreaMobile
+ * Date: 03/01/12
+ *
+ * Nested to alg-clx.h
+ * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
-typedef enum {false, true} boolean;
+
+#include "alg-clx.h"
 
 jboolean it_areamobile_apis_hw_areafly_utils_attaching(JNIEnv* env, jobject thiz) {
     return true;
