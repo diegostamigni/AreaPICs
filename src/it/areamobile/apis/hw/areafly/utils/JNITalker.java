@@ -10,12 +10,13 @@ package it.areamobile.apis.hw.areafly.utils;
 public class JNITalker {
     public final static String LIB_NAME = "alg-clx";
 
-    public JNITalker() {
-    }
+    public JNITalker() {}
 
-    public native String helloWorld();
-
-    public native String unimplementedHelloWorld();
+    /**
+     * From JNI code
+     * @return String
+     */
+    public native String attaching();
 
     static {
         System.loadLibrary(LIB_NAME);
