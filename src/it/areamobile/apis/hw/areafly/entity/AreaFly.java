@@ -17,6 +17,9 @@ import it.areamobile.apis.hw.areafly.HWSpecs;
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Common.OnAreaFlyEventListener {
     private final String TAG = this.getClass().getName();
     private final Context mContext;
+    private final int BEFORE = -1;
+    private final int EQUAL = 0;
+    private final int AFTER = 1;
 
     public AreaFly(Context ctx) {
         super();
@@ -28,9 +31,6 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
 
     @Override
     public int compareTo(AreaFly areaFly) {
-        final int BEFORE = -1;
-        final int EQUAL = 0;
-        final int AFTER = 1;
         if (areaFly.toString().toLowerCase().equals(this.toString().toLowerCase()))
             return EQUAL;
         else if (areaFly.toString().toLowerCase().length() > this.toString().toLowerCase().length())
