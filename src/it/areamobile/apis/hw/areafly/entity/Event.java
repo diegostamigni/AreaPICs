@@ -1,7 +1,5 @@
 package it.areamobile.apis.hw.areafly.entity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,9 +11,10 @@ import java.io.Serializable;
  * Created by AreaMobile
  * Date: 29/12/11
  * <p/>
- * Event of an AreaFly.
+ * Event of an AreaFly; include service usage.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
+ * @see Updater
  */
 
 public class Event implements Serializable {
@@ -24,9 +23,6 @@ public class Event implements Serializable {
     private Handler handler;
     private Bundle data;
     private final AreaFly areaFly;
-    private Updater updater;
-    private Intent intent;
-    private final Context mContext;
 
     // Default period value
     private int UPDATE_EVENT_DELAY = 10000;
@@ -34,17 +30,16 @@ public class Event implements Serializable {
 
     public Event(AreaFly areaFly) {
         this.areaFly = areaFly;
-        mContext = areaFly.getContext();
     }
 
     public Event(AreaFly areaFly, int period) {
         this.areaFly = areaFly;
         this.UPDATE_EVENT_DELAY = period;
-        mContext = areaFly.getContext();
     }
 
     /**
      * Get the service period of updating.
+     *
      * @return update period in millis
      */
     public int getUpdatePeriod() {
@@ -55,7 +50,10 @@ public class Event implements Serializable {
         this.UPDATE_EVENT_DELAY = period;
     }
 
-    //TODO write javadoc
+    /**
+     * Init and set Event. It has to be protected
+     * @param eventListener is the listener to use for the connection
+     */
     protected void init(final Common.OnAreaFlyEventListener eventListener) {
         handler = new Handler() {
             @Override
@@ -77,26 +75,9 @@ public class Event implements Serializable {
     }
 
     /**
-     * Service Updater enabler
-     *
-     * @param enable if you'd like to be able to get auto update from service
-     * @see it.areamobile.apis.hw.areafly.entity.Event#isUpdaterEnabled()
-     * @see Updater
+     * Return the handler used for handling connectino between AreaFly -> Event
+     * @return the handler used by Event
      */
-    public void enableUpdater(boolean enable) {
-        this.isUpdaterEnabled = enable;
-        if (isUpdaterEnabled) {
-            updater = new Updater(areaFly);
-            intent = new Intent(mContext, Updater.class);
-            mContext.startService(intent);
-        } else {
-            if (intent != null && updater != null)
-                updater.stopSelf();
-        }
-
-    }
-
-    //TODO write javadoc
     public Handler getHandler() {
         return handler;
     }

@@ -17,6 +17,7 @@ import java.util.Collection;
  * Created by AreaMobile
  * Date: 29/12/11
  *
+ * This class help you to search AreaFlies and manage those.
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 

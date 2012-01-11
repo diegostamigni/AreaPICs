@@ -3,8 +3,6 @@ package it.areamobile.apis.hw.areafly.entity;
 import android.content.Context;
 import it.areamobile.apis.hw.areafly.HWSpecs;
 
-//TODO improve javadoc
-
 /**
  * Created by AreaMobile
  * Date: 30/12/11
@@ -39,17 +37,27 @@ abstract class Common implements HWSpecs {
      * Set the obj listening for events
      *
      * @param listener instance of OnAreaFlyEventListener
-     * @param period in millis, means the delay between every areafly event update
+     * @param period   in millis, means the delay between every areafly event update
      * @see OnAreaFlyEventListener
      */
     public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {
         this.listener = listener;
         event = new Event((AreaFly) this, period);
         event.init(this.listener);
-        event.enableUpdater(true);
     }
 
-    //TODO improve javadoc
+    /**
+     * Set the obj listening for events
+     *
+     * @param listener instance of OnAreaFlyEventListener
+     * @see OnAreaFlyEventListener
+     */
+    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
+        this.listener = listener;
+        event = new Event((AreaFly) this);
+        event.init(this.listener);
+    }
+
     /**
      * @return the event
      * @see Event
