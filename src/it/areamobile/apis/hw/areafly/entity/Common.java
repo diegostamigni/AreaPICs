@@ -13,14 +13,13 @@ import it.areamobile.apis.hw.areafly.HWSpecs;
  */
 
 abstract class Common implements HWSpecs {
-    public final static String FLYPORT_ID = "PICUS";
     private OnAreaFlyEventListener listener;
     private Event event;
     private Context mContext;
     private String mac_address;
     private String ip_address;
     private String netbios_name;
-    public final static String ATTR_SEPARETOR = "*";
+    public final static String ATTR_SEPARATOR = "*";
 
     public static interface OnAreaFlyEventListener {
         /**
@@ -109,6 +108,6 @@ abstract class Common implements HWSpecs {
 
     @Override
     public String toString() {
-        return this.netbios_name + ATTR_SEPARETOR + this.mac_address + ATTR_SEPARETOR;
+        return this.netbios_name + ATTR_SEPARATOR + this.mac_address + ATTR_SEPARATOR;
     }
 }

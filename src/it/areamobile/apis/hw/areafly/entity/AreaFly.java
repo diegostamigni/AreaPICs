@@ -19,6 +19,15 @@ import it.areamobile.apis.hw.areafly.services.Updater;
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Common.OnAreaFlyEventListener {
+    public final static String WELCOME = "D";
+    public final static String AREAFLY_NETBIOS_NAME = "PICUS";
+
+    /**
+     * Used as a separator for parsing stuffs
+     */
+    public static final String SEPARATOR = Common.ATTR_SEPARATOR;
+
+    //
     private final String TAG = this.getClass().getName();
     private final Context mContext;
     private final int BEFORE = -1;
@@ -49,7 +58,7 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     public void OnEventReceived(Common areaFly) {}
 
     public static boolean isAreaFly(String s) {
-        return s.equalsIgnoreCase(FLYPORT_ID);
+        return s.equalsIgnoreCase(AREAFLY_NETBIOS_NAME);
     }
 
     @Override

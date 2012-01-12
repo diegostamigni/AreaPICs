@@ -25,7 +25,6 @@ public class Discoverer extends Thread {
     public static final String TAG = Discoverer.class.getName();
     private static final String REMOTE_KEY = "";
 
-    private final static int DISCOVERY_PORT = AreaFly.PORT;
     public static final int TIMEOUT_MS = 500;
     private WifiManager mWifi;
     private Collection<AreaFly> areaFlyCollection;
@@ -36,17 +35,43 @@ public class Discoverer extends Thread {
     /**
      * It's a receiver interface, not fully implemented yet.
      */
+    //TODO to code
     public interface DiscoveryReceiver {
         void addAnnouncedServers(InetAddress[] host, int port[]);
     }
 
+    /**
+     * Blank constructor. You've to set every fields:<br></br>
+     * <ol>
+     *     <li>Context</li>
+     *     <li>WifiManager</li>
+     * </ol>
+     * @see Discoverer#setContext(android.content.Context)
+     * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
+     */
     public Discoverer() {}
-    
+
+    /**
+     * Half constructor. You've to set:<br></br>
+     * <ol>
+     *     <li>WifiManager</li>
+     * </ol>
+     *
+     * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
+     */
     public Discoverer(Context ctx) throws SocketException {
         this.mContext = ctx;
         initSocket();
     }
 
+    /**
+     * Half constructor. You've to set:<br></br>
+     * <ol>
+     *     <li>Context</li>
+     * </ol>
+     *
+     * @see Discoverer#setContext(android.content.Context)
+     */
     public Discoverer(android.net.wifi.WifiManager wifi) throws SocketException {
         this.mWifi = wifi;
         initSocket();
@@ -87,7 +112,7 @@ public class Discoverer extends Thread {
      */
     private void initSocket() throws SocketException {
         // PORT: final static field taken by AreaFly.PORT
-        socket = new DatagramSocket(DISCOVERY_PORT);
+        socket = new DatagramSocket(AreaFly.PORT);
         socket.setBroadcast(true);
         socket.setSoTimeout(TIMEOUT_MS);
     }
@@ -114,44 +139,55 @@ public class Discoverer extends Thread {
      * @see it.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
-        String FAKE_DATA = "D";
-        this.sendMessage(socket, FAKE_DATA);
+        this.sendMessage(socket, AreaFly.WELCOME);
         return this.areaFlyCollection = this.listenForAllResponses(socket);
     }
 
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves.
-     *
+     * <br></br><br></br>
+     * Be careful: you're developing you're own message, it means that it needs to be parsed as the example below:<br></br>
+     * <br></br>
+     * <ul>
+     *     <li><b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b></li>
+     * </ul>
      * @param socket the socket
      * @param msg    the data you'd like to send throw the socket
      * @throws IOException something goes wrong
+     * @see AreaFly#SEPARATOR
      */
     public void sendMessage(DatagramSocket socket, String msg) throws IOException {
         Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getBroadcast());
 
-        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
         socket.send(packet);
     }
 
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves. The destAreaFly is the destination AreaFly device.
-     *
+     * <br></br><br></br>
+     * Actually I send a message in this format: <b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b>
      * @param socket      the socket
      * @param destAreaFly is the AreaFly you would send the data
      * @param msg         the data you'd like to send throw the socket
      * @throws IOException something goes wrong
+     * @see AreaFly#SEPARATOR
      */
     public void sendMessage(DatagramSocket socket, AreaFly destAreaFly, String msg) throws IOException {
         String af_address = destAreaFly.getIPAddress();
         String af_netbios = destAreaFly.getNetBiosName();
         String af_macaddress = destAreaFly.getMacAddress();
 
-        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), DISCOVERY_PORT);
+        String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + "D";
+        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
+
+        Log.d(TAG, "Sending data: " + message + " to address (broadcast): " + socket.getBroadcast());
         socket.send(packet);
     }
 
+    //TODO review
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
      *
@@ -171,8 +207,10 @@ public class Discoverer extends Thread {
             while (true) {
                 areaFly = new AreaFly(mContext);
                 packet = new DatagramPacket(buf, buf.length);
+
                 socket.receive(packet);
 
+                //TODO it set the broadcast ip instead of a parsing. Check it out
                 areaFly.setIPAddress(packet.getAddress().getHostAddress());
 
                 //TODO We need a parser here for the data that I receive
@@ -214,17 +252,25 @@ public class Discoverer extends Thread {
         return areaFlyCollection;
     }
 
+    private void setAreaFlyCollection(Collection<AreaFly> list) {
+        this.areaFlyCollection = list;
+    }
+
+    //TODO review
     /**
-     * Listen on socket for responses, timing out after TIMEOUT_MS.
+     * Listen on socket for responses of a specific AreaFly, timing out after TIMEOUT_MS.
+     * <br></br>
+     * <b>NOTE:</b> The AreaFly passed will be updated from data received.
      *
      * @param socket  socket on which the announcement request was sent
      * @param areaFly specify what kind of AreaFly you'd like to listen for response
-     * @return the packet received (Event) set to the passed areaFly.
+     * @return the AreaFly passed
      * @throws IOException something goes wrong
      * @see java.net.DatagramPacket
      * @see it.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
+     * @see Discoverer#TIMEOUT_MS
      */
-    public synchronized DatagramPacket listenForData(DatagramSocket socket, AreaFly areaFly) throws IOException {
+    public AreaFly listenForData(DatagramSocket socket, AreaFly areaFly) throws IOException {
         String af_address = areaFly.getIPAddress();
         String af_netbios = areaFly.getNetBiosName();
         String af_macaddress = areaFly.getMacAddress();
@@ -256,19 +302,21 @@ public class Discoverer extends Thread {
             Log.d(TAG, "Receive timed out.");
         }
 
-        return packet;
+        return areaFly;
     }
 
+    //TODO review
     /**
-     * Listen on socket for responses, timing out after TIMEOUT_MS.
+     * Listen on socket for responses of all AreaFly connected, timing out after TIMEOUT_MS.
      *
      * @param socket socket on which the announcement request was sent
      * @return the packet received from the socket. <br></br><b>Note</b>: it will contains all the network data.
      *         May need to be parsed.
      * @throws IOException something goes wrong
      * @see java.net.DatagramPacket
+     * @see Discoverer#TIMEOUT_MS
      */
-    public synchronized DatagramPacket listenForData(DatagramSocket socket) throws IOException {
+    public Collection<AreaFly> listenForData(DatagramSocket socket) throws IOException {
         byte[] buf = new byte[1024];
         DatagramPacket packet = null;
         Collection<AreaFly> areaFliesList = null;
@@ -301,7 +349,8 @@ public class Discoverer extends Thread {
             Log.d(TAG, "Receive timed out.");
         }
 
-        return packet;
+        this.setAreaFlyCollection(areaFliesList);
+        return this.getAreaFlyCollection();
     }
 
     /**
