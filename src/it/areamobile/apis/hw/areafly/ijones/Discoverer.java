@@ -163,7 +163,7 @@ public class Discoverer extends Thread {
     public void sendMessage(String msg) throws IOException {
         DatagramSocket socket = this.getSocket();
 
-        Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getBroadcast());
+        Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getInetAddress().getHostAddress());
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
         socket.send(packet);
     }
@@ -183,7 +183,7 @@ public class Discoverer extends Thread {
      * @see AreaFly#SEPARATOR
      */
     public void sendMessage(DatagramSocket socket, String msg) throws IOException {
-        Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getBroadcast());
+        Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getInetAddress().getHostAddress());
 
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
         socket.send(packet);
@@ -208,7 +208,7 @@ public class Discoverer extends Thread {
         String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + "D";
         DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
 
-        Log.d(TAG, "Sending data: " + message + " to address (broadcast): " + socket.getBroadcast());
+        Log.d(TAG, "Sending data: " + message + " to address (broadcast): " + socket.getInetAddress().getHostAddress());
         socket.send(packet);
     }
 
@@ -232,7 +232,7 @@ public class Discoverer extends Thread {
         String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + "D";
         DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
 
-        Log.d(TAG, "Sending data: " + message + " to address (broadcast): " + socket.getBroadcast());
+        Log.d(TAG, "Sending data: " + message + " to address (broadcast): " + socket.getInetAddress().getHostAddress());
         socket.send(packet);
     }
 
@@ -268,7 +268,7 @@ public class Discoverer extends Thread {
 //                String[] parsed = s.split(expr);
                 String parsed = s;
 
-                Log.d(TAG, "Received response: " + parsed + " by address (broadcast): " + socket.getBroadcast());
+                Log.d(TAG, "Received response: " + parsed + " by address (broadcast): " + socket.getInetAddress().getHostAddress());
                 String mNetBiosName = parsed;
                 String mMacAddress = parsed;
                 String mEventDescription = parsed;
