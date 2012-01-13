@@ -112,6 +112,9 @@ public class Discoverer extends Thread {
      */
     private void initSocket() throws SocketException {
         // PORT: final static field taken by AreaFly.PORT
+        if (socket != null && !socket.isClosed())
+            socket.close();
+
         socket = new DatagramSocket(AreaFly.PORT);
         socket.setBroadcast(true);
         socket.setSoTimeout(TIMEOUT_MS);
@@ -328,6 +331,55 @@ public class Discoverer extends Thread {
         }
 
         return list;
+    }
+
+        //TODO review
+    /**
+     * Listen on socket for responses of a specific AreaFly, timing out after TIMEOUT_MS. It use inner socket created
+     * by Discoverer.
+     * <br></br>
+     * <b>NOTE:</b> The AreaFly passed will be updated from data received.
+     *
+     * @return the AreaFly passed
+     * @throws IOException something goes wrong
+     * @see java.net.DatagramPacket
+     * @see it.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
+     * @see Discoverer#TIMEOUT_MS
+     */
+    public AreaFly listenForData(AreaFly areaFly) throws IOException {
+        String af_address = areaFly.getIPAddress();
+        String af_netbios = areaFly.getNetBiosName();
+        String af_macaddress = areaFly.getMacAddress();
+        String s;
+
+        byte[] buf = new byte[1024];
+        DatagramPacket packet = null;
+        DatagramSocket socket = this.getSocket();
+
+        try {
+            while (true) {
+                packet = new DatagramPacket(buf, buf.length);
+                socket.receive(packet);
+
+                //TODO We need a parser here for the data that I receive
+                s = new String(packet.getData(), 0, packet.getLength());
+//                String expr = "\\*";
+//                String[] parsed = s.split(expr);
+                String parsed = s;
+                String mMacAddress = parsed;
+                String mEventDescription = parsed;
+                //////
+
+                if (AreaFly.isAreaFly(s) && mMacAddress.equalsIgnoreCase(areaFly.getMacAddress())) {
+                    //we need to get/set Events, if we're talking with the same areaFly we passed
+                    areaFly.setEventDescription(mEventDescription);
+                }
+            }
+        } catch (SocketTimeoutException e) {
+            Log.d(TAG, "Receive timed out.");
+        }
+
+        return areaFly;
     }
 
     //TODO review
