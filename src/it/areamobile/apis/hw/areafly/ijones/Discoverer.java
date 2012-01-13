@@ -142,8 +142,13 @@ public class Discoverer extends Thread {
      * @see it.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
+        int tmpTM = this.TIMEOUT_MS;
+        int mTimeOut = 4000;
+        this.socket.setSoTimeout(mTimeOut);
         this.sendMessage(socket, AreaFly.WELCOME);
-        return this.areaFlyCollection = this.listenForAllResponses(socket);
+        this.areaFlyCollection = this.listenForAllResponses(socket);
+        this.socket.setSoTimeout(tmpTM);
+        return this.areaFlyCollection;
     }
 
     /**
@@ -264,14 +269,14 @@ public class Discoverer extends Thread {
                 String mEventDescription = parsed;
                 //////
 
-                if (AreaFly.isAreaFly(s)) {
+//                if (AreaFly.isAreaFly(s)) {
                     areaFly.setNetBiosName(mNetBiosName);
                     areaFly.setMacAddress(mMacAddress);
                     areaFliesList.add(areaFly);
 
                     //we need to get/set Events
                     areaFly.setEventDescription(mEventDescription);
-                }
+//                }
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
