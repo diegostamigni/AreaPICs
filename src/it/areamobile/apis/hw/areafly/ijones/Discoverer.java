@@ -304,6 +304,34 @@ public class Discoverer extends Thread {
 
     //TODO review
     /**
+     * Listen on socket for all responses, timing out after TIMEOUT_MS.
+     * <br></br>
+     *
+     * @return a collection of net packet
+     * @throws IOException something goes wrong
+     * @see java.net.DatagramPacket
+     * @see Discoverer#TIMEOUT_MS
+     */
+    public synchronized Collection<DatagramPacket> listenForResponse() throws IOException {
+        byte[] buf = new byte[1024];
+        Collection<DatagramPacket> list = new ArrayList<DatagramPacket>();
+        DatagramPacket packet = null;
+
+        try {
+            while (true) {
+                packet = new DatagramPacket(buf, buf.length);
+                socket.receive(packet);
+                list.add(packet);
+            }
+        } catch (SocketTimeoutException e) {
+            Log.d(TAG, "Receive timed out.");
+        }
+
+        return list;
+    }
+
+    //TODO review
+    /**
      * Listen on socket for responses of a specific AreaFly, timing out after TIMEOUT_MS.
      * <br></br>
      * <b>NOTE:</b> The AreaFly passed will be updated from data received.
