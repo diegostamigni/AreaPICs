@@ -145,6 +145,28 @@ public class Discoverer extends Thread {
 
     /**
      * Send a broadcast UDP packet containing a request for service to
+     * announce themselves. It use the inner socket, created by Discoverer.
+     * <br></br><br></br>
+     * Be careful: you're developing you're own message, it means that it needs to be parsed as the example below:<br></br>
+     * <br></br>
+     * <ul>
+     *     <li><b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b></li>
+     * </ul>
+     * @param msg    the data you'd like to send throw the socket
+     * @throws IOException something goes wrong
+     * @see AreaFly#SEPARATOR
+     * @see Discoverer#sendMessage(java.net.DatagramSocket, String)
+     */
+    public void sendMessage(String msg) throws IOException {
+        DatagramSocket socket = this.getSocket();
+
+        Log.d(TAG, "Sending data: " + msg + " to address (broadcast): " + socket.getBroadcast());
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
+        socket.send(packet);
+    }
+
+    /**
+     * Send a broadcast UDP packet containing a request for service to
      * announce themselves.
      * <br></br><br></br>
      * Be careful: you're developing you're own message, it means that it needs to be parsed as the example below:<br></br>
@@ -176,6 +198,30 @@ public class Discoverer extends Thread {
      * @see AreaFly#SEPARATOR
      */
     public void sendMessage(DatagramSocket socket, AreaFly destAreaFly, String msg) throws IOException {
+        String af_address = destAreaFly.getIPAddress();
+        String af_netbios = destAreaFly.getNetBiosName();
+        String af_macaddress = destAreaFly.getMacAddress();
+
+        String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + "D";
+        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
+
+        Log.d(TAG, "Sending data: " + message + " to address (broadcast): " + socket.getBroadcast());
+        socket.send(packet);
+    }
+
+    /**
+     * Send a broadcast UDP packet containing a request for service to
+     * announce themselves. The destAreaFly is the destination AreaFly device. It use the inner socket, created by Discoverer.
+     * <br></br><br></br>
+     * Actually I send a message in this format: <b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b>
+     * @param destAreaFly is the AreaFly you would send the data
+     * @param msg         the data you'd like to send throw the socket
+     * @throws IOException something goes wrong
+     * @see AreaFly#SEPARATOR
+     */
+    public void sendMessage(AreaFly destAreaFly, String msg) throws IOException {
+        DatagramSocket socket = this.getSocket();
+
         String af_address = destAreaFly.getIPAddress();
         String af_netbios = destAreaFly.getNetBiosName();
         String af_macaddress = destAreaFly.getMacAddress();
