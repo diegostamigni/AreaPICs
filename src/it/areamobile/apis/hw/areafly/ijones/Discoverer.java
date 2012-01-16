@@ -16,8 +16,9 @@ import java.util.Collection;
 /**
  * Created by AreaMobile
  * Date: 29/12/11
- *
+ * <p/>
  * This class help you to search AreaFlies and manage those.
+ *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
@@ -43,18 +44,20 @@ public class Discoverer extends Thread {
     /**
      * Blank constructor. You've to set every fields:<br></br>
      * <ol>
-     *     <li>Context</li>
-     *     <li>WifiManager</li>
+     * <li>Context</li>
+     * <li>WifiManager</li>
      * </ol>
+     *
      * @see Discoverer#setContext(android.content.Context)
      * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
      */
-    public Discoverer() {}
+    public Discoverer() {
+    }
 
     /**
      * Half constructor. You've to set:<br></br>
      * <ol>
-     *     <li>WifiManager</li>
+     * <li>WifiManager</li>
      * </ol>
      *
      * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
@@ -67,7 +70,7 @@ public class Discoverer extends Thread {
     /**
      * Half constructor. You've to set:<br></br>
      * <ol>
-     *     <li>Context</li>
+     * <li>Context</li>
      * </ol>
      *
      * @see Discoverer#setContext(android.content.Context)
@@ -80,7 +83,7 @@ public class Discoverer extends Thread {
     /**
      * It is an adventure obj. Initialize it and use scan function to find any AreaFly on the current net.
      *
-     * @param ctx is the context
+     * @param ctx  is the context
      * @param wifi is the android.net.wifi.WifiManager
      * @throws SocketException Something goes wrong in the init of the socket. Are you connected ?
      * @see Discoverer#scan()
@@ -122,6 +125,7 @@ public class Discoverer extends Thread {
 
     /**
      * Get the current socket, created by Discoverer
+     *
      * @return the socket
      * @see DatagramSocket
      */
@@ -158,9 +162,10 @@ public class Discoverer extends Thread {
      * Be careful: you're developing you're own message, it means that it needs to be parsed as the example below:<br></br>
      * <br></br>
      * <ul>
-     *     <li><b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b></li>
+     * <li><b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b></li>
      * </ul>
-     * @param msg    the data you'd like to send throw the socket
+     *
+     * @param msg the data you'd like to send throw the socket
      * @throws IOException something goes wrong
      * @see AreaFly#SEPARATOR
      * @see Discoverer#sendMessage(java.net.DatagramSocket, String)
@@ -178,8 +183,9 @@ public class Discoverer extends Thread {
      * Be careful: you're developing you're own message, it means that it needs to be parsed as the example below:<br></br>
      * <br></br>
      * <ul>
-     *     <li><b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b></li>
+     * <li><b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b></li>
      * </ul>
+     *
      * @param socket the socket
      * @param msg    the data you'd like to send throw the socket
      * @throws IOException something goes wrong
@@ -195,6 +201,7 @@ public class Discoverer extends Thread {
      * announce themselves. The destAreaFly is the destination AreaFly device.
      * <br></br><br></br>
      * Actually I send a message in this format: <b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b>
+     *
      * @param socket      the socket
      * @param destAreaFly is the AreaFly you would send the data
      * @param msg         the data you'd like to send throw the socket
@@ -216,6 +223,7 @@ public class Discoverer extends Thread {
      * announce themselves. The destAreaFly is the destination AreaFly device. It use the inner socket, created by Discoverer.
      * <br></br><br></br>
      * Actually I send a message in this format: <b>LOREM</b> + <u>AreaFly.SEPARATOR</u> + <b>IPSUM</b>
+     *
      * @param destAreaFly is the AreaFly you would send the data
      * @param msg         the data you'd like to send throw the socket
      * @throws IOException something goes wrong
@@ -234,6 +242,7 @@ public class Discoverer extends Thread {
     }
 
     //TODO review
+
     /**
      * Listen on socket for responses, timing out after TIMEOUT_MS
      *
@@ -272,10 +281,10 @@ public class Discoverer extends Thread {
 //                if (AreaFly.isAreaFly(s)) {
                     areaFly.setNetBiosName(mNetBiosName);
                     areaFly.setMacAddress(mMacAddress);
+                    areaFly.setEventDescription(mEventDescription);
                     areaFliesList.add(areaFly);
 
-                    //we need to get/set Events
-                    areaFly.setEventDescription(mEventDescription);
+                //we need to get/set Events
 //                }
             }
         } catch (SocketTimeoutException e) {
@@ -301,6 +310,7 @@ public class Discoverer extends Thread {
     }
 
     //TODO review
+
     /**
      * Listen on socket for all responses, timing out after TIMEOUT_MS.
      * <br></br>
@@ -328,7 +338,8 @@ public class Discoverer extends Thread {
         return list;
     }
 
-        //TODO review
+    //TODO review
+
     /**
      * Listen on socket for responses of a specific AreaFly, timing out after TIMEOUT_MS. It use inner socket created
      * by Discoverer.
@@ -378,6 +389,7 @@ public class Discoverer extends Thread {
     }
 
     //TODO review
+
     /**
      * Listen on socket for responses of a specific AreaFly, timing out after TIMEOUT_MS.
      * <br></br>
@@ -427,6 +439,7 @@ public class Discoverer extends Thread {
     }
 
     //TODO review
+
     /**
      * Listen on socket for responses of all AreaFly connected, timing out after TIMEOUT_MS.
      *

@@ -1,8 +1,5 @@
 package it.areamobile.apis.hw.areafly.entity;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import it.areamobile.apis.hw.areafly.services.Updater;
 
 import java.io.Serializable;
@@ -17,11 +14,11 @@ import java.io.Serializable;
  * @see Updater
  */
 
-public class Event implements Serializable {
+class Event implements Serializable {
     public final static String EVENT_DESCRIPTION = "EVENT_TYPE_TAG";
     private String description;
-    private Handler handler;
-    private Bundle data;
+//    private Handler handler;
+//    private Bundle data;
     private final AreaFly areaFly;
 
     // Default period value
@@ -55,32 +52,32 @@ public class Event implements Serializable {
      * @param eventListener is the listener to use for the connection
      */
     protected void init(final Common.OnAreaFlyEventListener eventListener) {
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                data = msg.getData();
-                description = data.getString(EVENT_DESCRIPTION);
-                setDescription(description);
+//        handler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//
+//                data = msg.getData();
+//                String description = data.getString(EVENT_DESCRIPTION);
+//                setDescription(description);
 
                 if (eventListener != null) {
                     eventListener.OnEventReceived(areaFly);
 
                     // Re join listening
-                    init(eventListener);
+//                    init(eventListener);
                 }
-            }
-        };
+//            }
+//        };
     }
 
     /**
      * Return the handler used for handling connectino between AreaFly -> Event
      * @return the handler used by Event
      */
-    public Handler getHandler() {
-        return handler;
-    }
+//    public Handler getHandler() {
+//        return handler;
+//    }
 
     /**
      * Return the <b>last</b> description event occurred.

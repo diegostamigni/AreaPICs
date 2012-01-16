@@ -39,11 +39,7 @@ abstract class Common implements HWSpecs {
      * @param period   in millis, means the delay between every areafly event update
      * @see OnAreaFlyEventListener
      */
-    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {
-        this.listener = listener;
-        event = new Event((AreaFly) this, period);
-        event.init(this.listener);
-    }
+    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {}
 
     /**
      * Set the obj listening for events
@@ -51,26 +47,13 @@ abstract class Common implements HWSpecs {
      * @param listener instance of OnAreaFlyEventListener
      * @see OnAreaFlyEventListener
      */
-    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
-        this.listener = listener;
-        event = new Event((AreaFly) this);
-        event.init(this.listener);
-    }
-
-    /**
-     * @return the event
-     * @see Event
-     */
-    public Event getEvent() {
-        return event;
-    }
+    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {}
 
     //TODO code this and improve javadoc
     /**
      * When an event is received ...
      */
-    public void notifyEventReceived() {
-    }
+    public void notifyEventReceived() {}
 
     public Context getContext() {
         return mContext;

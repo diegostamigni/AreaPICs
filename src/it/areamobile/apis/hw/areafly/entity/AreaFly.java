@@ -2,9 +2,6 @@ package it.areamobile.apis.hw.areafly.entity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import it.areamobile.apis.hw.areafly.HWSpecs;
 import it.areamobile.apis.hw.areafly.services.Updater;
 
@@ -30,10 +27,11 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     //
     private final String TAG = this.getClass().getName();
     private final Context mContext;
-    private final int BEFORE = -1;
-    private final int EQUAL = 0;
-    private final int AFTER = 1;
+//    private final int BEFORE = -1;
+//    private final int EQUAL = 0;
+//    private final int AFTER = 1;
     private static Updater updaterService;
+    private Event event;
 
     public AreaFly(Context ctx) {
         super();
@@ -68,12 +66,13 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     }
 
     public void setEventDescription(String eventDescription) {
-        Handler handler = getEvent().getHandler();
-        Message msg = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
-        msg.setData(bundle);
-        handler.sendMessage(msg);
+//        Handler handler = getEvent().getHandler();
+//        Message msg = new Message();
+//        Bundle bundle = new Bundle();
+//        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
+//        msg.setData(bundle);
+//        handler.sendMessage(msg);
+        event.setDescription(eventDescription);
     }
 
     /**
@@ -99,5 +98,33 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
      */
     public static Updater getUpdaterService() {
         return updaterService;
+    }
+
+    /**
+     * @return the event
+     * @see Event
+     */
+    public Event getEvent() {
+        return event;
+    }
+    
+    void setEvent(Event event) {
+        this.event = event;
+    }
+
+    @Override
+    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {
+        super.setOnAreaFlyEventListener(listener, period);
+        event = new Event(this, period);
+        event.init(listener);
+        this.setEvent(event);
+    }
+
+    @Override
+    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
+        super.setOnAreaFlyEventListener(listener);
+        event = new Event(this);
+        event.init(listener);
+        this.setEvent(event);
     }
 }
