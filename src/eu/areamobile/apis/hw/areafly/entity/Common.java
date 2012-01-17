@@ -1,7 +1,7 @@
-package it.areamobile.apis.hw.areafly.entity;
+package eu.areamobile.apis.hw.areafly.entity;
 
 import android.content.Context;
-import it.areamobile.apis.hw.areafly.HWSpecs;
+import eu.areamobile.apis.hw.areafly.HWSpecs;
 
 /**
  * Created by AreaMobile
@@ -12,7 +12,7 @@ import it.areamobile.apis.hw.areafly.HWSpecs;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-abstract class Common implements HWSpecs {
+public abstract class Common implements HWSpecs {
     private OnAreaFlyEventListener listener;
     private Event event;
     private Context mContext;
@@ -25,11 +25,11 @@ abstract class Common implements HWSpecs {
         /**
          * Event received listener.
          *
-         * @param comm is the Common about the Event
+         * @param areaFly is the Common about the Event
          * @see Common
          * @see Common#setOnAreaFlyEventListener(Common.OnAreaFlyEventListener, int)
          */
-        public void OnEventReceived(Common comm);
+        public void OnEventReceived(AreaFly areaFly);
     }
 
     /**

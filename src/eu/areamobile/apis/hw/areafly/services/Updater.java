@@ -1,12 +1,12 @@
-package it.areamobile.apis.hw.areafly.services;
+package eu.areamobile.apis.hw.areafly.services;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
-import it.areamobile.apis.hw.areafly.entity.AreaFly;
-import it.areamobile.apis.hw.areafly.ijones.Discoverer;
+import eu.areamobile.apis.hw.areafly.entity.AreaFly;
+import eu.areamobile.apis.hw.areafly.ijones.Discoverer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

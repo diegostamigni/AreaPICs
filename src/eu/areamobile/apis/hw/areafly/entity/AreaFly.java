@@ -1,9 +1,9 @@
-package it.areamobile.apis.hw.areafly.entity;
+package eu.areamobile.apis.hw.areafly.entity;
 
 import android.content.Context;
 import android.content.Intent;
-import it.areamobile.apis.hw.areafly.HWSpecs;
-import it.areamobile.apis.hw.areafly.services.Updater;
+import eu.areamobile.apis.hw.areafly.HWSpecs;
+import eu.areamobile.apis.hw.areafly.services.Updater;
 
 /**
  * Created by AreaMobile
@@ -12,7 +12,7 @@ import it.areamobile.apis.hw.areafly.services.Updater;
  * AreaFly, the derivation of FlyPort, this is the class you've to use for connection on it.
  * It already instance a connection between AreaFly -> Event.
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
- * @see it.areamobile.apis.hw.areafly.services.Updater
+ * @see eu.areamobile.apis.hw.areafly.services.Updater
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Common.OnAreaFlyEventListener {
@@ -38,7 +38,21 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
 
         this.mContext = ctx;
         // Set in listening for events, every millis
-        this.setOnAreaFlyEventListener(this, 1000);
+
+        event = new Event(this);
+        event.receiver(this);
+        this.setEvent(event);
+    }
+
+    public AreaFly(Context ctx, int period) {
+        super();
+
+        this.mContext = ctx;
+        // Set in listening for events, every millis
+
+        event = new Event(this, period);
+        event.receiver(this);
+        this.setEvent(event);
     }
 
     @Override
@@ -53,7 +67,7 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     }
 
     @Override
-    public void OnEventReceived(Common areaFly) {}
+    public void OnEventReceived(AreaFly areaFly) {}
 
     public static boolean isAreaFly(String s) {
         return s.equalsIgnoreCase(AREAFLY_NETBIOS_NAME);
@@ -66,20 +80,14 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     }
 
     public void setEventDescription(String eventDescription) {
-//        Handler handler = getEvent().getHandler();
-//        Message msg = new Message();
-//        Bundle bundle = new Bundle();
-//        bundle.putString(Event.EVENT_DESCRIPTION, eventDescription);
-//        msg.setData(bundle);
-//        handler.sendMessage(msg);
         event.setDescription(eventDescription);
     }
 
     /**
      * Service Updater enabler
      *
-     * @see it.areamobile.apis.hw.areafly.entity.Event#isUpdaterEnabled()
-     * @see it.areamobile.apis.hw.areafly.services.Updater
+     * @see eu.areamobile.apis.hw.areafly.entity.Event#isUpdaterEnabled()
+     * @see eu.areamobile.apis.hw.areafly.services.Updater
      */
     // This may not work on an application that use the apis, cause of
     // service in application's manifest missing. need to be done outside
@@ -115,16 +123,14 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Com
     @Override
     public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {
         super.setOnAreaFlyEventListener(listener, period);
-        event = new Event(this, period);
-        event.init(listener);
-        this.setEvent(event);
     }
 
     @Override
     public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
         super.setOnAreaFlyEventListener(listener);
-        event = new Event(this);
-        event.init(listener);
-        this.setEvent(event);
+    }
+
+    public String getEventDescription() {
+        return event.getDescription();
     }
 }

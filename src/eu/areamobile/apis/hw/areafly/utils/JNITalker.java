@@ -1,4 +1,4 @@
-package it.areamobile.apis.hw.areafly.utils;
+package eu.areamobile.apis.hw.areafly.utils;
 
 /**
  * Created by AreaMobile

@@ -1,10 +1,10 @@
-package it.areamobile.apis.hw.areafly.ijones;
+package eu.areamobile.apis.hw.areafly.ijones;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
-import it.areamobile.apis.hw.areafly.entity.AreaFly;
-import it.areamobile.apis.hw.areafly.utils.NetUtils;
+import eu.areamobile.apis.hw.areafly.entity.AreaFly;
+import eu.areamobile.apis.hw.areafly.utils.NetUtils;
 
 import java.io.IOException;
 import java.net.*;
@@ -143,7 +143,7 @@ public class Discoverer extends Thread {
      *
      * @return the collection of AreaFly available
      * @throws IOException something goes wrong
-     * @see it.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
+     * @see eu.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
 //        int tmpTM = this.TIMEOUT_MS;
@@ -349,7 +349,7 @@ public class Discoverer extends Thread {
      * @return the AreaFly passed
      * @throws IOException something goes wrong
      * @see java.net.DatagramPacket
-     * @see it.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
+     * @see eu.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
      * @see Discoverer#TIMEOUT_MS
      */
     public AreaFly listenForData(AreaFly areaFly) throws IOException {
@@ -400,7 +400,7 @@ public class Discoverer extends Thread {
      * @return the AreaFly passed
      * @throws IOException something goes wrong
      * @see java.net.DatagramPacket
-     * @see it.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
+     * @see eu.areamobile.apis.hw.areafly.entity.AreaFly#getEvent()
      * @see Discoverer#TIMEOUT_MS
      */
     public AreaFly listenForData(DatagramSocket socket, AreaFly areaFly) throws IOException {

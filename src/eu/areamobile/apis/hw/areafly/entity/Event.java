@@ -1,6 +1,8 @@
-package it.areamobile.apis.hw.areafly.entity;
+package eu.areamobile.apis.hw.areafly.entity;
 
-import it.areamobile.apis.hw.areafly.services.Updater;
+import android.os.Handler;
+import android.os.Message;
+import eu.areamobile.apis.hw.areafly.services.Updater;
 
 import java.io.Serializable;
 
@@ -17,19 +19,21 @@ import java.io.Serializable;
 class Event implements Serializable {
     public final static String EVENT_DESCRIPTION = "EVENT_TYPE_TAG";
     private String description;
-//    private Handler handler;
-//    private Bundle data;
+    private Handler handler;
+    //    private Bundle data;
     private final AreaFly areaFly;
 
     // Default period value
     private int UPDATE_EVENT_DELAY = 10000;
     private boolean isUpdaterEnabled;
+    protected final static int __ID_OK = 0;
+    protected final static String NOTIFY_EVENT = "NOTIFY_EVENT";
 
-    public Event(AreaFly areaFly) {
+    Event(AreaFly areaFly) {
         this.areaFly = areaFly;
     }
 
-    public Event(AreaFly areaFly, int period) {
+    Event(AreaFly areaFly, int period) {
         this.areaFly = areaFly;
         this.UPDATE_EVENT_DELAY = period;
     }
@@ -39,60 +43,63 @@ class Event implements Serializable {
      *
      * @return update period in millis
      */
-    public int getUpdatePeriod() {
+    int getUpdatePeriod() {
         return UPDATE_EVENT_DELAY;
     }
 
-    public void setUpdateDelay(int period) {
+    void setUpdateDelay(int period) {
         this.UPDATE_EVENT_DELAY = period;
     }
 
     /**
      * Init and set Event. It has to be protected
+     *
      * @param eventListener is the listener to use for the connection
      */
-    protected void init(final Common.OnAreaFlyEventListener eventListener) {
-//        handler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//
-//                data = msg.getData();
-//                String description = data.getString(EVENT_DESCRIPTION);
-//                setDescription(description);
+    final protected void receiver(final Common.OnAreaFlyEventListener eventListener) {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
 
-                if (eventListener != null) {
-                    eventListener.OnEventReceived(areaFly);
-
-                    // Re join listening
-//                    init(eventListener);
+                switch (msg.what) {
+                    case __ID_OK:
+                        if (eventListener != null) eventListener.OnEventReceived(areaFly);
+                        break;
                 }
-//            }
-//        };
+            }
+        };
     }
 
     /**
      * Return the handler used for handling connectino between AreaFly -> Event
+     *
      * @return the handler used by Event
      */
-//    public Handler getHandler() {
-//        return handler;
-//    }
+    Handler getHandler() {
+        return handler;
+    }
 
     /**
      * Return the <b>last</b> description event occurred.
      *
      * @return event description
      */
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
     /**
      * Set the description event.
      */
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
+        this.notifyEvent();
+    }
+
+    private void notifyEvent() {
+        Handler handler = this.getHandler();
+        if (handler != null) handler.sendEmptyMessage(Event.__ID_OK);
     }
 
     /**
@@ -105,11 +112,11 @@ class Event implements Serializable {
         return this.description;
     }
 
-    public boolean isUpdaterEnabled() {
+    boolean isUpdaterEnabled() {
         return isUpdaterEnabled;
     }
 
-    public AreaFly getAreaFly() {
+    AreaFly getAreaFly() {
         return areaFly;
     }
 }
