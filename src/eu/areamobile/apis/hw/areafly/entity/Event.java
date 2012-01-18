@@ -1,7 +1,6 @@
 package eu.areamobile.apis.hw.areafly.entity;
 
 import android.os.Handler;
-import android.os.Message;
 import eu.areamobile.apis.hw.areafly.services.Updater;
 
 import java.io.Serializable;
@@ -52,26 +51,6 @@ class Event implements Serializable {
     }
 
     /**
-     * Init and set Event. It has to be protected
-     *
-     * @param eventListener is the listener to use for the connection
-     */
-    final protected void receiver(final Common.OnAreaFlyEventListener eventListener) {
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                switch (msg.what) {
-                    case __ID_OK:
-                        if (eventListener != null) eventListener.OnEventReceived(areaFly);
-                        break;
-                }
-            }
-        };
-    }
-
-    /**
      * Return the handler used for handling connectino between AreaFly -> Event
      *
      * @return the handler used by Event
@@ -94,12 +73,6 @@ class Event implements Serializable {
      */
     void setDescription(String description) {
         this.description = description;
-        this.notifyEvent();
-    }
-
-    private void notifyEvent() {
-        Handler handler = this.getHandler();
-        if (handler != null) handler.sendEmptyMessage(Event.__ID_OK);
     }
 
     /**

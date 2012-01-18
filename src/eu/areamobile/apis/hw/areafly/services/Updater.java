@@ -19,7 +19,7 @@ import java.util.TimerTask;
  * Created by AreaMobile
  * Date: 31/12/11
  * <p/>
- * This service is developed to work as an updater for areafly's events.
+ * This service is developed to work as an updater for  a single AreaFly\'s events.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  * @see Service
@@ -68,6 +68,7 @@ public class Updater extends Service {
         super.onCreate();
         mWifi = (WifiManager) areaFly.getContext().getSystemService(Context.WIFI_SERVICE);
         discoverer.setWifiManager(mWifi);
+        discoverer.setContext(areaFly.getContext());
 
 
         try {
@@ -75,9 +76,7 @@ public class Updater extends Service {
             socket.setBroadcast(true);
             socket.setSoTimeout(Discoverer.TIMEOUT_MS);
             discoverer.setSocket(socket);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
+        } catch (SocketException e) { e.printStackTrace(); }
 
         timer.schedule(new TimerTask() {
             @Override

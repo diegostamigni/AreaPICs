@@ -13,23 +13,23 @@ import eu.areamobile.apis.hw.areafly.HWSpecs;
  */
 
 public abstract class Common implements HWSpecs {
-    private OnAreaFlyEventListener listener;
     private Event event;
     private Context mContext;
     private String mac_address;
     private String ip_address;
     private String netbios_name;
     public final static String ATTR_SEPARATOR = "*";
+    private OnAreaFlyEventListener listener;
 
     public static interface OnAreaFlyEventListener {
         /**
          * Event received listener.
          *
-         * @param areaFly is the Common about the Event
+         * @param comm is the Common about the Event
          * @see Common
-         * @see Common#setOnAreaFlyEventListener(Common.OnAreaFlyEventListener, int)
+         * @see Common#setOnAreaFlyEventListener(Common.OnAreaFlyEventListener)
          */
-        public void OnEventReceived(AreaFly areaFly);
+        public void OnEventReceived(Common comm);
     }
 
     /**
@@ -39,21 +39,23 @@ public abstract class Common implements HWSpecs {
      * @param period   in millis, means the delay between every areafly event update
      * @see OnAreaFlyEventListener
      */
-    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {}
+//    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {}
 
     /**
-     * Set the obj listening for events
+     * Set the obj listening for events, need the service
      *
      * @param listener instance of OnAreaFlyEventListener
      * @see OnAreaFlyEventListener
      */
-    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {}
+    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
+        this.listener = listener;
+    }
 
     //TODO code this and improve javadoc
     /**
      * When an event is received ...
      */
-    public void notifyEventReceived() {}
+    void notifyEventReceived() {}
 
     public Context getContext() {
         return mContext;
@@ -92,5 +94,9 @@ public abstract class Common implements HWSpecs {
     @Override
     public String toString() {
         return this.netbios_name + ATTR_SEPARATOR + this.mac_address + ATTR_SEPARATOR;
+    }
+
+    OnAreaFlyEventListener getOnAreaFlyEventListener() {
+        return listener;
     }
 }
