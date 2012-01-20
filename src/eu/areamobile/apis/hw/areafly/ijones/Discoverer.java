@@ -146,15 +146,11 @@ public class Discoverer extends Thread {
      * @see eu.areamobile.apis.hw.areafly.ijones.Discoverer#getAreaFlyCollection()
      */
     public synchronized Collection<AreaFly> scan() throws IOException {
-//        int tmpTM = this.TIMEOUT_MS;
-//        int mTimeOut = 4000;
-//        this.socket.setSoTimeout(mTimeOut);
-        this.sendMessage(socket, AreaFly.WELCOME);
         this.areaFlyCollection = this.listenForAllResponses(socket);
-//        this.socket.setSoTimeout(tmpTM);
         return this.areaFlyCollection;
     }
 
+    //TODO review
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves. It use the inner socket, created by Discoverer.
@@ -176,6 +172,7 @@ public class Discoverer extends Thread {
         socket.send(packet);
     }
 
+    //TODO review
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves.
@@ -196,6 +193,7 @@ public class Discoverer extends Thread {
         socket.send(packet);
     }
 
+    //TODO review
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves. The destAreaFly is the destination AreaFly device.
@@ -213,11 +211,12 @@ public class Discoverer extends Thread {
         String af_netbios = destAreaFly.getNetBiosName();
         String af_macaddress = destAreaFly.getMacAddress();
 
-        String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + "D";
+        String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + msg;
         DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
         socket.send(packet);
     }
 
+    //TODO review
     /**
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves. The destAreaFly is the destination AreaFly device. It use the inner socket, created by Discoverer.
@@ -236,7 +235,7 @@ public class Discoverer extends Thread {
         String af_netbios = destAreaFly.getNetBiosName();
         String af_macaddress = destAreaFly.getMacAddress();
 
-        String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + "D";
+        String message = destAreaFly.getMacAddress() + AreaFly.SEPARATOR + msg;
         DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), AreaFly.PORT);
         socket.send(packet);
     }
