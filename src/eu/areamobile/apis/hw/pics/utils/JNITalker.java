@@ -1,4 +1,4 @@
-package eu.areamobile.apis.hw.areafly.utils;
+package eu.areamobile.apis.hw.pics.utils;
 
 /**
  * Created by AreaMobile

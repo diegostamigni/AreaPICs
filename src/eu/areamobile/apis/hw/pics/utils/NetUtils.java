@@ -1,8 +1,8 @@
-package eu.areamobile.apis.hw.areafly.utils;
+package eu.areamobile.apis.hw.pics.utils;
 
 import android.net.DhcpInfo;
 import android.util.Log;
-import eu.areamobile.apis.hw.areafly.ijones.Discoverer;
+import eu.areamobile.apis.hw.pics.ijones.Discoverer;
 
 import java.io.IOException;
 import java.net.InetAddress;

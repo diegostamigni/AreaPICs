@@ -1,48 +1,45 @@
-package eu.areamobile.apis.hw.areafly.entity;
+package eu.areamobile.apis.hw.pics.entity.areafly;
 
 import android.content.Context;
 import android.content.Intent;
-import eu.areamobile.apis.hw.areafly.HWSpecs;
-import eu.areamobile.apis.hw.areafly.services.Updater;
+import eu.areamobile.apis.hw.pics.HWSpecs;
+import eu.areamobile.apis.hw.pics.entity.Common;
+import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
+import eu.areamobile.apis.hw.pics.services.Updater;
 
 /**
  * Created by AreaMobile
  * Date: 28/12/11
  * <p/>
  * AreaFly, the derivation of FlyPort, this is the class you've to use for connection on it.
- * It already instance a connection between {@link eu.areamobile.apis.hw.areafly.entity.AreaFly}
- * -> {@link eu.areamobile.apis.hw.areafly.entity.Event}.
+ * It already instance a connection between {@link AreaFly}
+ * -> {@link eu.areamobile.apis.hw.pics.entity.areafly.event.Event}.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
- * @see eu.areamobile.apis.hw.areafly.services.Updater
+ * @see eu.areamobile.apis.hw.pics.services.Updater
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
-    public final static String WELCOME = "D";
-    public final static String AREAFLY_NETBIOS_NAME = "PICUS";
-
-    /**
-     * Used as a separator for parsing stuffs
-     */
-    public static final String SEPARATOR = Common.ATTR_SEPARATOR;
-
-    //
+    private int PORT = 30303;
+    public final static int DEFAULT_PORT = 30303;
     private final String TAG = this.getClass().getName();
     private final Context mContext;
-    //    private final int BEFORE = -1;
+//    private final int BEFORE = -1;
 //    private final int EQUAL = 0;
 //    private final int AFTER = 1;
     private Updater updaterService;
-    private Event event;
-    private OnAreaFlyEventListener listener = null;
+    private OnCommonEventListener listener = null;
+    private AreaFlyJSonFactory.AreaFlyIOStream areaFlyIOStream;
+    private AreaFlyJSonFactory jsonFact;
+
+    public AreaFly(AreaFlyJSonFactory jsonFact, Context mContext) {
+        super(jsonFact);
+        this.mContext = mContext;
+        this.jsonFact = jsonFact;
+    }
 
     public AreaFly(Context ctx) {
-        super();
-
         this.mContext = ctx;
-
-        event = new Event(this);
-        this.setEvent(event);
     }
 
 //    public AreaFly(Context ctx, int period) {
@@ -70,34 +67,37 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
         return this.compareTo(areaFly);
     }
 
-    public static boolean isAreaFly(String s) {
-        return s.equalsIgnoreCase(AREAFLY_NETBIOS_NAME);
-    }
-
     @Override
     public Context getContext() {
         super.getContext();
         return mContext;
     }
 
-    public void setEventDescription(String eventDescription) {
-        event.setDescription(eventDescription);
+//    @Override
+    public void setDescription(AreaFlyJSonFactory.AreaFlyIOStream fromJson) {
+        super.setDescription(fromJson);
+
+        this.areaFlyIOStream = fromJson;
 
         //TODO check this form of listener, works when you set the EventDescription
-        if (listener == null) listener = getOnAreaFlyEventListener();
+        if (listener == null) listener = getListener();
         if (listener != null) this.listener.OnEventReceived(AreaFly.this);
+    }
+
+    @Override
+    public AreaFlyJSonFactory.AreaFlyIOStream getDescription() {
+        super.getDescription();
+        return this.areaFlyIOStream;
     }
 
     /**
      * Service Updater enabler.<br></br>
      * Be careful to have added these line to your manifest:<br></br><br></br>
      * <pre>
-     * &lt;service android:name="eu.areamobile.apis.hw.areafly.services.Updater" /&gt;
+     * &lt;service android:name="eu.areamobile.apis.hw.pics.services.Updater" /&gt;
      * </pre>
      *
-     *
-     * @see eu.areamobile.apis.hw.areafly.entity.Event#isUpdaterEnabled()
-     * @see eu.areamobile.apis.hw.areafly.services.Updater
+     * @see eu.areamobile.apis.hw.pics.services.Updater
      */
     public void enableUpdater(Context mContext) {
         final Intent intent;
@@ -116,24 +116,17 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
         return updaterService;
     }
 
-    /**
-     * @return the event
-     * @see Event
-     */
-    Event getEvent() {
-        return event;
-    }
-
-    void setEvent(Event event) {
-        this.event = event;
-    }
-
     @Override
-    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener) {
+    public void setOnAreaFlyEventListener(OnCommonEventListener listener) {
         super.setOnAreaFlyEventListener(listener);
     }
 
-    public String getEventDescription() {
-        return event.getDescription();
+    @Override
+    public AreaFlyJSonFactory getJSonFactory() {
+        return this.jsonFact;
+    }
+
+    public void setJSonFactory(AreaFlyJSonFactory factory) {
+        this.jsonFact = factory;
     }
 }

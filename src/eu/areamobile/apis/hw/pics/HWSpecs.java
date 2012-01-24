@@ -1,4 +1,6 @@
-package eu.areamobile.apis.hw.areafly;
+package eu.areamobile.apis.hw.pics;
+
+import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 
 /**
  * Created by AreaMobile
@@ -11,7 +13,6 @@ package eu.areamobile.apis.hw.areafly;
 
 
 public interface HWSpecs {
-    final static int PORT = 30303;
 
     abstract String getMacAddress();
 
@@ -21,7 +22,11 @@ public interface HWSpecs {
 
     abstract void setIPAddress(String ip_address);
     
-    abstract String getNetBiosName();
+//    abstract String getNetBiosName();
 
-    abstract void setNetBiosName(String netbios_name);
+//    abstract void setNetBiosName(String netbios_name);
+
+    abstract void setDescription(HWJSonIOSpecs fromJson);
+
+    abstract HWJSonIOSpecs getDescription();
 }

@@ -1,7 +1,8 @@
-package eu.areamobile.apis.hw.areafly.entity;
+package eu.areamobile.apis.hw.pics.entity.areafly.event;
 
 import android.os.Handler;
-import eu.areamobile.apis.hw.areafly.services.Updater;
+import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
+import eu.areamobile.apis.hw.pics.services.Updater;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
  * @see Updater
  */
 
+@Deprecated
 class Event implements Serializable {
     public final static String EVENT_DESCRIPTION = "EVENT_TYPE_TAG";
     private String description;
