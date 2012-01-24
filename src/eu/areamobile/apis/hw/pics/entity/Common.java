@@ -15,13 +15,38 @@ import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
  */
 
 public class Common implements HWSpecs {
+    /**
+	 * @uml.property  name="pORT"
+	 */
     public int PORT = 8080;
+    /**
+	 * @uml.property  name="mContext"
+	 * @uml.associationEnd  readOnly="true"
+	 */
     private Context mContext;
+    /**
+	 * @uml.property  name="mac_address"
+	 */
     private String mac_address;
+    /**
+	 * @uml.property  name="ip_address"
+	 */
     private String ip_address;
     private final static String ATTR_SEPARATOR = ":";
+    /**
+	 * @uml.property  name="listener"
+	 * @uml.associationEnd  
+	 */
     private OnCommonEventListener listener;
+    /**
+	 * @uml.property  name="mCommonIOStream"
+	 * @uml.associationEnd  
+	 */
     private HWJSonIOSpecs mCommonIOStream;
+    /**
+	 * @uml.property  name="mJSonFactory"
+	 * @uml.associationEnd  
+	 */
     private JSonFactory mJSonFactory;
 
     public Common(JSonFactory jsonFact) {
@@ -97,6 +122,10 @@ public class Common implements HWSpecs {
         return this.mac_address + ATTR_SEPARATOR + this.ip_address;
     }
 
+    /**
+	 * @return
+	 * @uml.property  name="listener"
+	 */
     protected OnCommonEventListener getListener() {
         return listener;
     }

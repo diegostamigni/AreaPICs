@@ -12,6 +12,9 @@ import java.io.Serializable;
  */
 
 public class JSonFactory extends HWJSonIOSpecs implements Serializable {
+    /**
+	 * @uml.property  name="input"
+	 */
     private String input;
 
     public JSonFactory() {

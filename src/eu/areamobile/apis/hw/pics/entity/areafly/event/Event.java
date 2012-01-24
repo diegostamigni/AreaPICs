@@ -19,13 +19,30 @@ import java.io.Serializable;
 @Deprecated
 class Event implements Serializable {
     public final static String EVENT_DESCRIPTION = "EVENT_TYPE_TAG";
+    /**
+	 * @uml.property  name="description"
+	 */
     private String description;
+    /**
+	 * @uml.property  name="handler"
+	 * @uml.associationEnd  readOnly="true"
+	 */
     private Handler handler;
     //    private Bundle data;
+    /**
+	 * @uml.property  name="areaFly"
+	 * @uml.associationEnd  multiplicity="(1 1)"
+	 */
     private final AreaFly areaFly;
 
     // Default period value
+    /**
+	 * @uml.property  name="uPDATE_EVENT_DELAY"
+	 */
     private int UPDATE_EVENT_DELAY = 10000;
+    /**
+	 * @uml.property  name="isUpdaterEnabled"
+	 */
     private boolean isUpdaterEnabled;
     protected final static int __ID_OK = 0;
     protected final static String NOTIFY_EVENT = "NOTIFY_EVENT";
@@ -53,26 +70,27 @@ class Event implements Serializable {
     }
 
     /**
-     * Return the handler used for handling connectino between AreaFly -> Event
-     *
-     * @return the handler used by Event
-     */
+	 * Return the handler used for handling connectino between AreaFly -> Event
+	 * @return  the handler used by Event
+	 * @uml.property  name="handler"
+	 */
     Handler getHandler() {
         return handler;
     }
 
     /**
-     * Return the <b>last</b> description event occurred.
-     *
-     * @return event description
-     */
+	 * Return the <b>last</b> description event occurred.
+	 * @return  event description
+	 * @uml.property  name="description"
+	 */
     String getDescription() {
         return description;
     }
 
     /**
-     * Set the description event.
-     */
+	 * Set the description event.
+	 * @uml.property  name="description"
+	 */
     void setDescription(String description) {
         this.description = description;
     }
@@ -87,10 +105,18 @@ class Event implements Serializable {
         return this.description;
     }
 
+    /**
+	 * @return
+	 * @uml.property  name="isUpdaterEnabled"
+	 */
     boolean isUpdaterEnabled() {
         return isUpdaterEnabled;
     }
 
+    /**
+	 * @return
+	 * @uml.property  name="areaFly"
+	 */
     AreaFly getAreaFly() {
         return areaFly;
     }

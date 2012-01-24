@@ -27,13 +27,40 @@ import java.util.TimerTask;
  */
 
 public class Updater extends Service {
+    /**
+	 * @uml.property  name="timer"
+	 */
     private final Timer timer;
+    /**
+	 * @uml.property  name="pERIOD"
+	 */
     private int PERIOD = 10000;
+    /**
+	 * @uml.property  name="socket"
+	 */
     private DatagramSocket socket;
+    /**
+	 * @uml.property  name="mCommon"
+	 * @uml.associationEnd  multiplicity="(1 1)"
+	 */
     private final Common mCommon;
+    /**
+	 * @uml.property  name="mWifi"
+	 * @uml.associationEnd  
+	 */
     private WifiManager mWifi;
+    /**
+	 * @uml.property  name="sTATUS_MSG"
+	 */
     private final String STATUS_MSG = "STATUS";
+    /**
+	 * @uml.property  name="packet"
+	 */
     private DatagramPacket packet;
+    /**
+	 * @uml.property  name="discoverer"
+	 * @uml.associationEnd  multiplicity="(1 1)"
+	 */
     private Discoverer discoverer;
 
     /**
@@ -114,15 +141,20 @@ public class Updater extends Service {
         return null;
     }
 
+    /**
+	 * @return
+	 * @uml.property  name="discoverer"
+	 */
     public Discoverer getDiscoverer() {
         return discoverer;
     }
 
     /**
-     * Return the socket used by this service.
-     * @return socket
-     * @see DatagramSocket
-     */
+	 * Return the socket used by this service.
+	 * @return  socket
+	 * @see  DatagramSocket
+	 * @uml.property  name="socket"
+	 */
     public DatagramSocket getSocket() {
         return socket;
     }

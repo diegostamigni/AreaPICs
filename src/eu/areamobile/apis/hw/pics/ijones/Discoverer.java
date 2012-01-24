@@ -30,12 +30,33 @@ public class Discoverer extends Thread {
     private static final String REMOTE_KEY = "";
 
     public static final int TIMEOUT_MS = 500;
+    /**
+	 * @uml.property  name="mWifi"
+	 * @uml.associationEnd  
+	 */
     private WifiManager mWifi;
+    /**
+	 * @uml.property  name="commonCollection" multiplicity="(0 -1)"
+	 */
     private Collection<Common> CommonCollection;
+    /**
+	 * @uml.property  name="socket"
+	 */
     private DatagramSocket socket;
+    /**
+	 * @uml.property  name="mJSonFactory"
+	 * @uml.associationEnd  multiplicity="(1 1)"
+	 */
     private JSonFactory mJSonFactory;
 
+    /**
+	 * @uml.property  name="mContext"
+	 * @uml.associationEnd  
+	 */
     private Context mContext;
+    /**
+	 * @uml.property  name="port"
+	 */
     private int port = -1;
 
     /**
@@ -138,15 +159,19 @@ public class Discoverer extends Thread {
     }
 
     /**
-     * Get the current socket, created by Discoverer
-     *
-     * @return the socket
-     * @see DatagramSocket
-     */
+	 * Get the current socket, created by Discoverer
+	 * @return  the socket
+	 * @see  DatagramSocket
+	 * @uml.property  name="socket"
+	 */
     public DatagramSocket getSocket() {
         return socket;
     }
 
+    /**
+	 * @param socket
+	 * @uml.property  name="socket"
+	 */
     public void setSocket(DatagramSocket socket) {
         this.socket = socket;
     }
