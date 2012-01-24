@@ -8,17 +8,19 @@ package eu.areamobile.apis.hw.pics.utils;
  */
 
 public class JNITalker {
-    public final static String LIB_NAME = "alg-clx";
-
-    public JNITalker() {}
-
-    /**
-     * From JNI code
-     * @return boolean
-     */
-    public native boolean attaching();
+//    public final static String LIB_NAME = "alg-clx";
+//
+//    public JNITalker() {}
+//
+//    /**
+//     * From JNI code
+//     * @return boolean
+//     */
+//    public native boolean attaching();
 
     static {
-        System.loadLibrary(LIB_NAME);
+        System.loadLibrary("alg-clx");
     }
+
+    public native void init (int j, int x);
 }
