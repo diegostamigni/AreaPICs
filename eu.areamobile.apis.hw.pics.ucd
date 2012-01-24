@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" size="895,984" id="eu.areamobile.apis.hw.pics" metadata="uml2-1.0" initialized="true" scrolledY="62" tag="10" key="32303037303533312D3130204172656150494373">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0" name="HWJSonIOSpecs" location="435,240" size="123,403" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,90">
+      <children xsi:type="editmodel:MethodEditModel" name="parseFromStream" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#parseFromStream(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="parseFromStream" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#parseFromStream(Ljava.lang.String;Ljava.lang.Class;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#toString()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="transfertStream" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#transfertStream(Leu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="transfertStream" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#transfertStream(Leu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;Ljava.lang.Class;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="94,244">
+      <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0" name="Args" location="1692,1557" size="67,29" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$Args">
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+      </children>
+      <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.1" name="ExecValue" location="1785,909" size="94,211" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue">
+        <children xsi:type="editmodel:CompartmentEditModel" size="69,90">
+          <children xsi:type="editmodel:AttributeEditModel" name="ack" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#ack"/>
+          <children xsi:type="editmodel:AttributeEditModel" name="argc" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#argc"/>
+          <children xsi:type="editmodel:AttributeEditModel" name="op" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#op"/>
+          <children xsi:type="editmodel:AttributeEditModel" name="pwd" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#pwd"/>
+          <children xsi:type="editmodel:AttributeEditModel" name="time" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#time"/>
+        </children>
+        <children xsi:type="editmodel:CompartmentEditModel" size="65,72">
+          <children xsi:type="editmodel:MethodEditModel" name="getDevice" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#getDevice()"/>
+          <children xsi:type="editmodel:MethodEditModel" name="getGroup" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#getGroup()"/>
+          <children xsi:type="editmodel:MethodEditModel" name="setDevice" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#setDevice(Ljava.lang.String;)"/>
+          <children xsi:type="editmodel:MethodEditModel" name="setGroup" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#setGroup(B)"/>
+        </children>
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+      </children>
+    </children>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$Args@args+eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@" source="//@children.0" target="//@children.0/@children.2/@children.0" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,10" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="123,393" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$Args@args+eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@|eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="args" location="10,0" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$Args@args+eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@|eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$Args#args" multiplicityLabel="//@children.0/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.0/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - args" location="421,374" size="27,10" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="462,374" size="16,10" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue@exec+eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@" source="//@children.0" target="//@children.0/@children.2/@children.1" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,10" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="123,393" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue@exec+eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@|eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="exec" location="10,0" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue@exec+eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@|eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs$ExecValue#exec" multiplicityLabel="//@children.0/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.0/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - exec" location="420,405" size="28,10" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="462,405" size="16,10" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@mCommonIOStream+eu.areamobile.apis.hw.pics.entity/Common@" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.2/@children.2" label="//@children.0/@sourceConnections.2/@children.0" sourceEnd="//@children.0/@sourceConnections.2/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,10" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="mCommonIOStream" location="0,201" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@mCommonIOStream+eu.areamobile.apis.hw.pics.entity/Common@|eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#mCommonIOStream" attachSource="true" multiplicityLabel="//@children.0/@sourceConnections.2/@children.1/@children.1" roleLabel="//@children.0/@sourceConnections.2/@children.1/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - mCommonIOStream" location="340,424" size="88,10" anchorKind="FirstPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="412,448" size="16,10" anchorKind="FirstPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="196,256" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@mCommonIOStream+eu.areamobile.apis.hw.pics.entity/Common@|eu.areamobile.apis.hw.pics.entity/Common#"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="AreaFly" location="71,765" size="153,257" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly">
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="dEFAULT_PORT" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#dEFAULT_PORT"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="130,180">
+      <children xsi:type="editmodel:MethodEditModel" name="AreaFly" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#AreaFly(Landroid.content.Context;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="AreaFly" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#AreaFly(Leu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;Landroid.content.Context;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="compareTo" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#compareTo(Leu.areamobile.apis.hw.pics.entity.areafly.AreaFly;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="enableUpdater" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#enableUpdater(Landroid.content.Context;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getContext" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#getContext()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDescription" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#getDescription()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getJSonFactory" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#getJSonFactory()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDescription" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#setDescription(Leu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory.AreaFlyIOStream;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setJSonFactory" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#setJSonFactory(Leu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOnAreaFlyEventListener" id="eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#setOnAreaFlyEventListener(Leu.areamobile.apis.hw.pics.entity.Common.OnCommonEventListener;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity/Common&lt;-eu.areamobile.apis.hw.pics.entity.areafly/AreaFly" source="//@children.1" target="//@children.3" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="76,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="97,472"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener@listener+eu.areamobile.apis.hw.pics.entity.areafly/AreaFly@" source="//@children.1" target="//@children.3/@children.2/@children.0" targetEnd="//@children.1/@sourceConnections.1/@children.2" label="//@children.1/@sourceConnections.1/@children.0" sourceEnd="//@children.1/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,10" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="153,247" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener@listener+eu.areamobile.apis.hw.pics.entity.areafly/AreaFly@|eu.areamobile.apis.hw.pics.entity.areafly/AreaFly#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="listener" location="10,0" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener@listener+eu.areamobile.apis.hw.pics.entity.areafly/AreaFly@|eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener#listener" multiplicityLabel="//@children.1/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.1/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - listener" location="24,553" size="39,10" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="1" location="77,553" size="6,10" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics/HWSpecs&lt;-eu.areamobile.apis.hw.pics.entity.areafly/AreaFly" source="//@children.1" target="//@children.2" targetEnd="//@children.1/@sourceConnections.2/@children.1" sourceEnd="//@children.1/@sourceConnections.2/@children.0" connectionRouterKind="Manual" anchorType="ChopBox">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="107,0" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="48,85"/>
+      <bendpoints location="241,632" secondRelativeDimension="67,547" firstRelativeDimension="67,-71"/>
+      <bendpoints secondRelativeDimension="-13,220" firstRelativeDimension="184,-528"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.3/@sourceConnections.0 //@children.1/@sourceConnections.2" name="HWSpecs" location="285,45" size="118,85" id="eu.areamobile.apis.hw.pics/HWSpecs">
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="iPAddress" id="eu.areamobile.apis.hw.pics/HWSpecs#iPAddress"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="macAddress" id="eu.areamobile.apis.hw.pics/HWSpecs#macAddress"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@description+eu.areamobile.apis.hw.pics/HWSpecs@" source="//@children.2" target="//@children.0" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,10" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="108,85" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@description+eu.areamobile.apis.hw.pics/HWSpecs@|eu.areamobile.apis.hw.pics/HWSpecs#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="description" location="0,10" id="eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs@description+eu.areamobile.apis.hw.pics/HWSpecs@|eu.areamobile.apis.hw.pics.entity.json/HWJSonIOSpecs#description" multiplicityLabel="//@children.2/@sourceConnections.0/@children.2/@children.1" roleLabel="//@children.2/@sourceConnections.0/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" + description" location="373,257" size="55,10" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="412,233" size="16,10" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.2 //@children.1/@sourceConnections.0" name="Common" location="50,185" size="196,472" id="eu.areamobile.apis.hw.pics.entity/Common">
+    <children xsi:type="editmodel:CompartmentEditModel" size="56,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="pORT" id="eu.areamobile.apis.hw.pics.entity/Common#pORT"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="130,306">
+      <children xsi:type="editmodel:MethodEditModel" name="Common" id="eu.areamobile.apis.hw.pics.entity/Common#Common()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Common" id="eu.areamobile.apis.hw.pics.entity/Common#Common(Leu.areamobile.apis.hw.pics.entity.json.JSonFactory;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getContext" id="eu.areamobile.apis.hw.pics.entity/Common#getContext()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDescription" id="eu.areamobile.apis.hw.pics.entity/Common#getDescription()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIPAddress" id="eu.areamobile.apis.hw.pics.entity/Common#getIPAddress()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getJSonFactory" id="eu.areamobile.apis.hw.pics.entity/Common#getJSonFactory()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMacAddress" id="eu.areamobile.apis.hw.pics.entity/Common#getMacAddress()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSocketPort" id="eu.areamobile.apis.hw.pics.entity/Common#getSocketPort()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isCommon" id="eu.areamobile.apis.hw.pics.entity/Common#isCommon(Leu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="notifyEventReceived" id="eu.areamobile.apis.hw.pics.entity/Common#notifyEventReceived()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDescription" id="eu.areamobile.apis.hw.pics.entity/Common#setDescription(Leu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIPAddress" id="eu.areamobile.apis.hw.pics.entity/Common#setIPAddress(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setJSonFactory" id="eu.areamobile.apis.hw.pics.entity/Common#setJSonFactory(Leu.areamobile.apis.hw.pics.entity.json.JSonFactory;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setMacAddress" id="eu.areamobile.apis.hw.pics.entity/Common#setMacAddress(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setOnAreaFlyEventListener" id="eu.areamobile.apis.hw.pics.entity/Common#setOnAreaFlyEventListener(Leu.areamobile.apis.hw.pics.entity.Common.OnCommonEventListener;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSocketPort" id="eu.areamobile.apis.hw.pics.entity/Common#setSocketPort(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="eu.areamobile.apis.hw.pics.entity/Common#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="173,79">
+      <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.1/@sourceConnections.1 //@children.3/@sourceConnections.1" name="OnCommonEventListener" location="783,1096" size="173,77" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener">
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <children xsi:type="editmodel:CompartmentEditModel" size="93,18">
+          <children xsi:type="editmodel:MethodEditModel" name="OnEventReceived" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener#OnEventReceived(Leu.areamobile.apis.hw.pics.entity.Common;)"/>
+        </children>
+        <children xsi:type="editmodel:CompartmentEditModel"/>
+        <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+      </children>
+    </children>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics/HWSpecs&lt;-eu.areamobile.apis.hw.pics.entity/Common" source="//@children.3" target="//@children.2" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="196,10" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="10,85" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" autoLocated="true" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener@listener+eu.areamobile.apis.hw.pics.entity/Common@" source="//@children.3" target="//@children.3/@children.2/@children.0" targetEnd="//@children.3/@sourceConnections.1/@children.2" label="//@children.3/@sourceConnections.1/@children.0" sourceEnd="//@children.3/@sourceConnections.1/@children.1" connectionRouterKind="Manhattan">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,10" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="196,462" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener@listener+eu.areamobile.apis.hw.pics.entity/Common@|eu.areamobile.apis.hw.pics.entity/Common#" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" name="listener" location="10,0" id="eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener@listener+eu.areamobile.apis.hw.pics.entity/Common@|eu.areamobile.apis.hw.pics.entity/Common$OnCommonEventListener#listener" multiplicityLabel="//@children.3/@sourceConnections.1/@children.2/@children.1" roleLabel="//@children.3/@sourceConnections.1/@children.2/@children.0" navigable="true">
+        <children xsi:type="editmodel:LabelEditModel" name=" - listener" location="24,553" size="39,10" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" name="0..1" location="77,553" size="16,10" anchorKind="LastPart"/>
+      </children>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=3;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>
