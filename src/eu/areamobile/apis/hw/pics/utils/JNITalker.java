@@ -1,5 +1,6 @@
 package eu.areamobile.apis.hw.pics.utils;
 
+
 /**
  * Created by AreaMobile
  * Date: 03/01/12
@@ -8,19 +9,17 @@ package eu.areamobile.apis.hw.pics.utils;
  */
 
 public class JNITalker {
-//    public final static String LIB_NAME = "alg-clx";
-//
-//    public JNITalker() {}
-//
-//    /**
-//     * From JNI code
-//     * @return boolean
-//     */
-//    public native boolean attaching();
+    public final static String LIB_NAME = "alg-clx";
 
+    public JNITalker() {}
+    
     static {
-        System.loadLibrary("alg-clx");
+        System.loadLibrary(LIB_NAME);
     }
 
-    public native void init (int j, int x);
+    /**
+     * From JNI code
+     * @return boolean
+     */
+    public native boolean attaching();
 }

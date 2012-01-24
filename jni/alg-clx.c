@@ -6,8 +6,5 @@
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-#include "alg-clx.h"__
-
-jboolean it_areamobile_apis_hw_areafly_utils_attaching(JNIEnv* env, jobject thiz) {
-    return true;
-}
+#include "alg-clx.h"
+typedef enum {false, true} boolean;
