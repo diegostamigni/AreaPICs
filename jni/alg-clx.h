@@ -4,18 +4,11 @@
 
 #ifndef _Included_eu_areamobile_apis_hw_pics_utils_JNITalker
 #define _Included_eu_areamobile_apis_hw_pics_utils_JNITalker
-#ifdef __cplusplus
-extern "C" {
-#endif
+
 /*
  * Class:     eu_areamobile_apis_hw_pics_utils_JNITalker
  * Method:    attaching
  * Signature: ()Z
  */
-JNIEXPORT jboolean JNICALL Java_eu_areamobile_apis_hw_pics_utils_JNITalker_attaching
-  (JNIEnv *, jobject);
-
-#ifdef __cplusplus
-}
-#endif
+JNIEXPORT jboolean JNICALL Java_eu_areamobile_apis_hw_pics_utils_JNITalker_attaching (JNIEnv *, jobject);
 #endif

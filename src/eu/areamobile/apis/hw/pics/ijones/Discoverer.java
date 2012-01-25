@@ -1,20 +1,23 @@
 package eu.areamobile.apis.hw.pics.ijones;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import eu.areamobile.apis.hw.pics.entity.Common;
-import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 import eu.areamobile.apis.hw.pics.utils.NetUtils;
-
-import java.io.IOException;
-import java.net.*;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by AreaMobile
@@ -38,7 +41,7 @@ public class Discoverer extends Thread {
     /**
 	 * @uml.property  name="commonCollection" multiplicity="(0 -1)"
 	 */
-    private Collection<Common> CommonCollection;
+    private List<Common> mCommonCollection;
     /**
 	 * @uml.property  name="socket"
 	 */
@@ -184,9 +187,9 @@ public class Discoverer extends Thread {
      * @throws IOException something goes wrong
      * @see eu.areamobile.apis.hw.pics.ijones.Discoverer#getAreaFliesCollection
      */
-    public synchronized Collection<Common> scan() throws IOException {
-        this.CommonCollection = this.scanResponses(socket);
-        return this.CommonCollection;
+    public synchronized List<Common> scan() throws IOException {
+        this.mCommonCollection = this.scanResponses(socket);
+        return this.mCommonCollection;
     }
 
     //TODO review
@@ -239,23 +242,24 @@ public class Discoverer extends Thread {
      * @return the collection of found areaFlies
      * @throws IOException something goes wrong
      */
-    private Collection<Common> scanResponses(DatagramSocket socket) throws IOException {
+    private List<Common> scanResponses(DatagramSocket socket) throws IOException {
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
         Common Common;
-        Collection<Common> areaFliesList = null;
+        List<Common> commonList = null;
 
         try {
-            areaFliesList = new ArrayList<Common>();
+            commonList = new ArrayList<Common>();
             while (true) {
-                AreaFly areaFly = new AreaFly(mContext);
+//                AreaFly areaFly = new AreaFly(mContext);
+                Common mCommon = new Common(mContext);
                 packet = new DatagramPacket(buf, buf.length);
 
                 socket.receive(packet);
 
                 //TODO it set the broadcast ip instead of a parsing. Check it out
-                areaFly.setIPAddress(packet.getAddress().getHostAddress());
+                mCommon.setIPAddress(packet.getAddress().getHostAddress());
 
                 //TODO We need a parser here for the data that I receive
                 s = new String(packet.getData(), 0, packet.getLength());
@@ -268,9 +272,9 @@ public class Discoverer extends Thread {
                 //////
 
 //                if (Common.isCommon(s)) {
-                areaFly.setMacAddress(mMacAddress);
-                areaFly.setDescription(null);
-                areaFliesList.add(areaFly);
+                mCommon.setMacAddress(mMacAddress);
+                mCommon.setDescription(null);
+                commonList.add(mCommon);
 
                 //we need to get/set Events
 //                }
@@ -279,7 +283,7 @@ public class Discoverer extends Thread {
             Log.d(TAG, "Receive timed out.");
         }
 
-        return areaFliesList;
+        return commonList;
     }
 
     //TODO review
@@ -292,23 +296,23 @@ public class Discoverer extends Thread {
      * @see java.net.DatagramPacket
      * @see Discoverer#TIMEOUT_MS
      */
-    public Collection<DatagramPacket> listenForResponse() throws IOException {
-        byte[] buf = new byte[1024];
-        Collection<DatagramPacket> list = new ArrayList<DatagramPacket>();
-        DatagramPacket packet = null;
-
-        try {
-            while (true) {
-                packet = new DatagramPacket(buf, buf.length);
-                socket.receive(packet);
-                list.add(packet);
-            }
-        } catch (SocketTimeoutException e) {
-            Log.d(TAG, "Receive timed out.");
-        }
-
-        return list;
-    }
+//    public Collection<DatagramPacket> listenForResponse() throws IOException {
+//        byte[] buf = new byte[1024];
+//        Collection<DatagramPacket> list = new ArrayList<DatagramPacket>();
+//        DatagramPacket packet = null;
+//
+//        try {
+//            while (true) {
+//                packet = new DatagramPacket(buf, buf.length);
+//                socket.receive(packet);
+//                list.add(packet);
+//            }
+//        } catch (SocketTimeoutException e) {
+//            Log.d(TAG, "Receive timed out.");
+//        }
+//
+//        return list;
+//    }
 
     //TODO review
     /**
@@ -322,39 +326,39 @@ public class Discoverer extends Thread {
      * @see java.net.DatagramPacket
      * @see Discoverer#TIMEOUT_MS
      */
-    public Common listenForResponse(Common mCommon) throws IOException {
-        String af_address = mCommon.getIPAddress();
-        String af_macaddress = mCommon.getMacAddress();
-        String s;
-
-        byte[] buf = new byte[1024];
-        DatagramPacket packet = null;
-        DatagramSocket socket = this.getSocket();
-
-        try {
-            while (true) {
-                packet = new DatagramPacket(buf, buf.length);
-                socket.receive(packet);
-
-                //TODO We need a parser here for the data that I receive
-                s = new String(packet.getData(), 0, packet.getLength());
-//                String expr = "\\*";
-//                String[] parsed = s.split(expr);
-                String parsed = s;
-                String mMacAddress = parsed;
-                //////
-
-//                if (Common.isCommon(null) && mMacAddress.equalsIgnoreCase(mCommon.getMacAddress())) {
-                //we need to get/set Events, if we're talking with the same Common we passed
-                mCommon.setDescription(null);
-//                }
-            }
-        } catch (SocketTimeoutException e) {
-            Log.d(TAG, "Receive timed out.");
-        }
-
-        return mCommon;
-    }
+//    public Common listenForResponse(Common mCommon) throws IOException {
+//        String af_address = mCommon.getIPAddress();
+//        String af_macaddress = mCommon.getMacAddress();
+//        String s;
+//
+//        byte[] buf = new byte[1024];
+//        DatagramPacket packet = null;
+//        DatagramSocket socket = this.getSocket();
+//
+//        try {
+//            while (true) {
+//                packet = new DatagramPacket(buf, buf.length);
+//                socket.receive(packet);
+//
+//                //TODO We need a parser here for the data that I receive
+//                s = new String(packet.getData(), 0, packet.getLength());
+////                String expr = "\\*";
+////                String[] parsed = s.split(expr);
+//                String parsed = s;
+//                String mMacAddress = parsed;
+//                //////
+//
+////                if (Common.isCommon(null) && mMacAddress.equalsIgnoreCase(mCommon.getMacAddress())) {
+//                //we need to get/set Events, if we're talking with the same Common we passed
+//                mCommon.setDescription(null);
+////                }
+//            }
+//        } catch (SocketTimeoutException e) {
+//            Log.d(TAG, "Receive timed out.");
+//        }
+//
+//        return mCommon;
+//    }
 
     /**
      * Calculate the signature we need to send with the request. It is a string
@@ -363,7 +367,7 @@ public class Discoverer extends Thread {
      * @param challenge to compare
      * @return signature string
      */
-    private String getSignature(String challenge) throws NoSuchAlgorithmException {
+    private String getSignature(final String challenge) throws NoSuchAlgorithmException {
         MessageDigest digest;
         byte[] md5sum;
 
@@ -390,12 +394,12 @@ public class Discoverer extends Thread {
      * @return the collection of Common already scanned before with this.scan()
      * @see Discoverer#scan()
      */
-    public Collection<Common> getAreaFliesCollection() {
-        return CommonCollection;
+    public List<Common> getCommonCollection() {
+        return mCommonCollection;
     }
 
-    private void setAreaFliesCollection(Collection<Common> list) {
-        this.CommonCollection = list;
+    private void setCommonCollection(final List<Common> list) {
+        this.mCommonCollection = list;
     }
 
 

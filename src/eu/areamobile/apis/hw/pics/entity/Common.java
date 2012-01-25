@@ -53,7 +53,7 @@ public class Common implements HWSpecs {
         this.mJSonFactory = jsonFact;
     }
 
-    public Common() {}
+    public Common(Context mContext) {}
 
     public static interface OnCommonEventListener {
         /**

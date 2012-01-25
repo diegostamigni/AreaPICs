@@ -58,13 +58,14 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
 	 */
     private AreaFlyJSonFactory jsonFact;
 
-    public AreaFly(AreaFlyJSonFactory jsonFact, Context mContext) {
+    public AreaFly( Context mContext, AreaFlyJSonFactory jsonFact) {
         super(jsonFact);
         this.mContext = mContext;
         this.jsonFact = jsonFact;
     }
 
     public AreaFly(Context ctx) {
+    	super(ctx);
         this.mContext = ctx;
     }
 

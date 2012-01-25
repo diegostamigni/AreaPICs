@@ -16,10 +16,6 @@ public class JNITalker {
     static {
         System.loadLibrary(LIB_NAME);
     }
-
-    /**
-     * From JNI code
-     * @return boolean
-     */
+    
     public native boolean attaching();
 }
