@@ -1,16 +1,5 @@
 package eu.areamobile.apis.hw.pics.ijones;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -18,6 +7,13 @@ import eu.areamobile.apis.hw.pics.entity.Common;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 import eu.areamobile.apis.hw.pics.utils.NetUtils;
+
+import java.io.IOException;
+import java.net.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by AreaMobile
@@ -184,7 +180,7 @@ public class Discoverer extends Thread {
      *
      * @return the collection of Common available
      * @throws IOException something goes wrong
-     * @see eu.areamobile.apis.hw.pics.ijones.Discoverer#getAreaFliesCollection
+     * @see Discoverer#getCommonCollection()
      */
     public synchronized List<Common> scan() throws IOException {
         byte[] buf = new byte[1024];

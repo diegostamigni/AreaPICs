@@ -1,5 +1,7 @@
 package eu.areamobile.apis.hw.pics.entity.json;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -9,27 +11,18 @@ import java.io.Serializable;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public abstract class HWJSonIOSpecs implements Serializable {
+public class HWJSonIOSpecs implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	//JSon value
+
+	@SerializedName("exec")
     private ExecValue exec;
-    private Args args;
-    
+
     public ExecValue getExec() {
         return exec;
     }
-    
+
     public void setExec(ExecValue exec) {
         this.exec = exec;
-    }
-    
-    public Args getArgs() {
-        return args;
-    }
-
-    public void setArgs(Args args) {
-        this.args = args;
     }
 
     @Override
@@ -41,14 +34,14 @@ public abstract class HWJSonIOSpecs implements Serializable {
     /**
 	 * @author Diego Stamigni
 	 */
-    public abstract static class ExecValue {
+    public static class ExecValue {
         private String dev;
         private String time;
         private String pwd;
         private byte grp;
         private byte op;
         private byte argc;
-        private Args[] args;
+        private Argv[] argv;
         private boolean ack;
 
         public String getDevice() {
@@ -99,12 +92,12 @@ public abstract class HWJSonIOSpecs implements Serializable {
             this.op = op;
         }
 
-        public Args[] getArgs() {
-            return args;
+        public Argv[] getArgv() {
+            return argv;
         }
 
-        public void setArgs(Args[] args) {
-            this.args = args;
+        public void setArgv(Argv[] argv) {
+            this.argv = argv;
         }
 
         /**
@@ -124,33 +117,30 @@ public abstract class HWJSonIOSpecs implements Serializable {
         }
     }
 
-    //The args: it is dynamic, depends on {@link ExecValue#argc}
-    public abstract static class Args {
+    //The argv: it is dynamic, depends on {@link ExecValue#argc}
+    public static class Argv {
     	String type;
     	int value;
-    	
+
 		public String getType() {
 			return type;
 		}
-		
+
 		public void setType(String type) {
 			this.type = type;
 		}
-		
+
 		public int getValue() {
 			return value;
 		}
-		
+
 		public void setValue(int value) {
 			this.value = value;
 		}
+
+        @Override
+        public String toString() {
+            return '[' + type + ", " + value + ']';
+        }
     }
-
-    public abstract HWJSonIOSpecs parseFromStream(String data, Class<HWJSonIOSpecs> jSonClass);
-
-    public abstract String transfertStream(HWJSonIOSpecs stream, Class<HWJSonIOSpecs> jSonClass);
-
-    public abstract HWJSonIOSpecs parseFromStream(String data);
-
-    public abstract String transfertStream(HWJSonIOSpecs stream);
 }
