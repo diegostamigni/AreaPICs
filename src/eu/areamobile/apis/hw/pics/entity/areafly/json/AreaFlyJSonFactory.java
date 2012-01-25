@@ -1,6 +1,7 @@
 package eu.areamobile.apis.hw.pics.entity.areafly.json;
 
 import com.google.gson.Gson;
+
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 
@@ -24,8 +25,7 @@ public class AreaFlyJSonFactory extends JSonFactory {
 	 */
     private Gson gson;
 
-    public abstract static class AreaFlyIOStream extends HWJSonIOSpecs {
-    }
+    public abstract static class AreaFlyIOStream extends HWJSonIOSpecs {}
 
     public AreaFlyJSonFactory() {
         super();

@@ -1,5 +1,12 @@
 package eu.areamobile.apis.hw.pics.services;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -8,13 +15,6 @@ import android.os.IBinder;
 import eu.areamobile.apis.hw.pics.entity.Common;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 import eu.areamobile.apis.hw.pics.ijones.Discoverer;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by AreaMobile

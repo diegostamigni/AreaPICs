@@ -1,11 +1,11 @@
 package eu.areamobile.apis.hw.pics.utils;
 
+import java.io.IOException;
+import java.net.InetAddress;
+
 import android.net.DhcpInfo;
 import android.util.Log;
 import eu.areamobile.apis.hw.pics.ijones.Discoverer;
-
-import java.io.IOException;
-import java.net.InetAddress;
 
 /**
  * Created by AreaMobile

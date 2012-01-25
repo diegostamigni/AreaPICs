@@ -1,8 +1,8 @@
 package eu.areamobile.apis.hw.pics.entity.json;
 
-import com.google.gson.Gson;
-
 import java.io.Serializable;
+
+import com.google.gson.Gson;
 
 /**
  * Created by AreaMobile
@@ -15,15 +15,8 @@ public class JSonFactory extends HWJSonIOSpecs implements Serializable {
     /**
 	 * @uml.property  name="input"
 	 */
-    private String input;
-
     public JSonFactory() {
         super();
-    }
-
-    public JSonFactory(String toParse) {
-        super();
-        this.input = toParse;
     }
 
     @Override
