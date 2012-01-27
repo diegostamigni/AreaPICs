@@ -29,33 +29,11 @@ public class Discoverer extends Thread {
     private static final String REMOTE_KEY = "";
 
     public static final int TIMEOUT_MS = 500;
-    /**
-	 * @uml.property  name="mWifi"
-	 * @uml.associationEnd  
-	 */
     private WifiManager mWifi;
-    /**
-	 * @uml.property  name="commonCollection" multiplicity="(0 -1)"
-	 */
     private List<Common> mCommonCollection;
-    /**
-	 * @uml.property  name="socket"
-	 */
     private DatagramSocket socket;
-    /**
-	 * @uml.property  name="mJSonFactory"
-	 * @uml.associationEnd  multiplicity="(1 1)"
-	 */
     private JSonFactory mJSonFactory;
-
-    /**
-	 * @uml.property  name="mContext"
-	 * @uml.associationEnd  
-	 */
     private Context mContext;
-    /**
-	 * @uml.property  name="port"
-	 */
     private int port = -1;
 
     /**
@@ -157,35 +135,47 @@ public class Discoverer extends Thread {
     }
 
     /**
-	 * Get the current socket, created by Discoverer
-	 * @return  the socket
-	 * @see  DatagramSocket
-	 * @uml.property  name="socket"
-	 */
+     * Get the current socket, created by Discoverer
+     *
+     * @return the socket
+     * @uml.property name="socket"
+     * @see DatagramSocket
+     */
     public DatagramSocket getSocket() {
         return socket;
     }
 
     /**
-	 * @param socket
-	 * @uml.property  name="socket"
-	 */
+     * @param socket
+     * @uml.property name="socket"
+     */
     public void setSocket(DatagramSocket socket) {
         this.socket = socket;
     }
 
-    /**
-     * Scan the current wifi network to search any kind of Common.
-     * This method is synchronized and set the local collection of AreaFlies.
-     *
-     * @return the collection of Common available
-     * @throws IOException something goes wrong
-     * @see Discoverer#getCommonCollection()
-     */
+    private HWJSonIOSpecs createHelloMessage() {
+        HWJSonIOSpecs sayHiAll = new HWJSonIOSpecs();
+        HWJSonIOSpecs.ExecValue exec = new HWJSonIOSpecs.ExecValue();
+        HWJSonIOSpecs.Argv[] argv = new HWJSonIOSpecs.Argv[0];
+
+        exec.setAck(true);
+        exec.setArgc((byte) argv.length);
+        exec.setDevice("fff");
+        exec.setArgv(argv);
+        exec.setGroup(HWJSonIOSpecs.GROUP_ALL);
+        exec.setOp(HWJSonIOSpecs.OPCODE_SCAN);
+        exec.setPwd("xxx");
+        exec.setTime(System.currentTimeMillis());
+        sayHiAll.setExec(exec);
+        return sayHiAll;
+    }
+
     public synchronized List<Common> scan() throws IOException {
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
+
+        this.sendMessage(createHelloMessage());
 
         try {
             this.mCommonCollection = new ArrayList<Common>();
@@ -200,14 +190,14 @@ public class Discoverer extends Thread {
 
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
-//                if (Common.isCommon(s)) {
+                //                if (Common.isCommon(s)) {
                 mCommon.setMacAddress(ioSpecs.getExec().getDevice());
                 mCommon.setDescription(ioSpecs);
-                
+
                 mCommonCollection.add(mCommon);
 
                 //we need to get/set Events
-//                }
+                //                }
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
@@ -248,13 +238,13 @@ public class Discoverer extends Thread {
      * @param stream     the data you'd like to send throw the socket
      * @throws IOException something goes wrong
      */
-    public void sendMessage(Common destCommon, HWJSonIOSpecs stream) throws IOException {
-        DatagramSocket socket = this.getSocket();
+//    public void sendMessage(Common destCommon, HWJSonIOSpecs stream) throws IOException {
+//        DatagramSocket socket = this.getSocket();
 //        String dest_macaddress = stream.getExec().getDevice();
-        String message = mJSonFactory.transfertStream(stream);
-        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), getDiscovererPort());
-        socket.send(packet);
-    }
+//        String message = mJSonFactory.transfertStream(stream);
+//        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), getDiscovererPort());
+//        socket.send(packet);
+//    }
 
     /**
      * Listen on socket for all responses, timing out after TIMEOUT_MS.

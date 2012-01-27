@@ -13,8 +13,41 @@ import java.io.Serializable;
 
 public class HWJSonIOSpecs implements Serializable {
 	private static final long serialVersionUID = 1L;
+    /**
+     * Scan the current wifi network to search any kind of Common.
+     * This method is synchronized and set the local collection of AreaFlies.
+     *
+     * @return the collection of Common available
+     * @throws java.io.IOException something goes wrong
+     * @see eu.areamobile.apis.hw.pics.ijones.Discoverer#getCommonCollection()
+     */
 
-	@SerializedName("exec")
+    // GROUPs
+    public final static byte GROUP_ALL = 0;
+
+    // OPCODE
+    public final static byte OPCODE_SCAN = 0;
+    public final static byte OPCODE_IOPUT = 1;
+    public final static byte OPCODE_IOINIT = 2;
+    public final static byte OPCODE_IOGET = 3;
+    public final static byte OPCODE_IOBUTTONSTATE = 4;
+    public final static byte OPCODE_ADCINIT = 5;
+    public final static byte OPCODE_ADCVAL = 6;
+    public final static byte OPCODE_UARTINIT = 7;
+    public final static byte OPCODE_UART_ON = 8;
+    public final static byte OPCODE_UART_OFF = 9;
+    public final static byte OPCODE_UART_FLUSH = 10;
+    public final static byte OPCODE_UART_BUFFER_SIZE = 11;
+    public final static byte OPCODE_UART_READ = 12;
+    public final static byte OPCODE_UART_WRITE = 13;
+    public final static byte OPCODE_UART_WRITE_CH = 14;
+    public final static byte OPCODE_PWM_INIT = 15;
+    public final static byte OPCODE_PWM_ON = 16;
+    public final static byte OPCODE_PWM_DUTY = 17;
+    public final static byte OPCODE_PWM_OFF = 18;
+
+
+    @SerializedName("exec")
     private ExecValue exec;
 
     public ExecValue getExec() {
@@ -34,9 +67,9 @@ public class HWJSonIOSpecs implements Serializable {
     /**
 	 * @author Diego Stamigni
 	 */
-    public static class ExecValue {
+    public static class ExecValue implements Serializable {
         private String dev;
-        private String time;
+        private long time;
         private String pwd;
         private byte grp;
         private byte op;
@@ -52,11 +85,11 @@ public class HWJSonIOSpecs implements Serializable {
             this.dev = dev;
         }
 
-        public String getTime() {
+        public long getTime() {
             return time;
         }
 
-        public void setTime(String time) {
+        public void setTime(long time) {
             this.time = time;
         }
 
@@ -118,7 +151,7 @@ public class HWJSonIOSpecs implements Serializable {
     }
 
     //The argv: it is dynamic, depends on {@link ExecValue#argc}
-    public static class Argv {
+    public static class Argv implements Serializable {
     	String type;
     	int value;
 

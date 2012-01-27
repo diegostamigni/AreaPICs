@@ -1,20 +1,20 @@
 package eu.areamobile.apis.hw.pics.services;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import eu.areamobile.apis.hw.pics.entity.Common;
-import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
+import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.ijones.Discoverer;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by AreaMobile
@@ -106,6 +106,8 @@ public class Updater extends Service {
             discoverer.setSocket(socket);
         } catch (SocketException e) { e.printStackTrace(); }
 
+        final HWJSonIOSpecs sayHiAll = mCommon.getDescription();
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -113,7 +115,7 @@ public class Updater extends Service {
                 try {
                     byte[] buf = new byte[1024];
                     //TODO review
-                    discoverer.sendMessage(null);
+                    discoverer.sendMessage(sayHiAll);
                     String s;
 
                     while (true) {
@@ -121,12 +123,11 @@ public class Updater extends Service {
                         socket.receive(packet);
 
                         s = new String(packet.getData(), 0, packet.getLength());
-                        JSonFactory factory = mCommon.getJSonFactory();
+                        HWJSonIOSpecs ioSpecs = mCommon.getJSonFactory().parseFromStream(s);
 
-                        //TODO review
 //                        if (Common.isCommon(s)) {
                             //we need to get/set Events, if we're talking with the same common we passed
-                            mCommon.setDescription(null);
+                            mCommon.setDescription(ioSpecs);
 //                        }
                     }
                 } catch (IOException e) {
