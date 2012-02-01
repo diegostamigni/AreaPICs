@@ -153,13 +153,12 @@ public class Discoverer extends Thread {
         this.socket = socket;
     }
 
-    private HWJSonIOSpecs createHelloMessage() {
+    private HWJSonIOSpecs createNetworkScanMessage() {
         HWJSonIOSpecs sayHiAll = new HWJSonIOSpecs();
         HWJSonIOSpecs.ExecValue exec = new HWJSonIOSpecs.ExecValue();
         HWJSonIOSpecs.Argv[] argv = new HWJSonIOSpecs.Argv[0];
 
         exec.setAck(true);
-        exec.setArgc((byte) argv.length);
         exec.setDevice("fff");
         exec.setArgv(argv);
         exec.setGroup(HWJSonIOSpecs.GROUP_ALL);
@@ -175,7 +174,7 @@ public class Discoverer extends Thread {
         DatagramPacket packet;
         String s;
 
-        this.sendMessage(createHelloMessage());
+        this.sendMessage(createNetworkScanMessage());
 
         try {
             this.mCommonCollection = new ArrayList<Common>();
@@ -222,7 +221,6 @@ public class Discoverer extends Thread {
      */
     public void sendMessage(HWJSonIOSpecs stream) throws IOException {
         DatagramSocket socket = this.getSocket();
-//        String dest_macaddress = stream.getExec().getDevice();
         String msg = mJSonFactory.transfertStream(stream);
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getDiscovererPort());
         socket.send(packet);

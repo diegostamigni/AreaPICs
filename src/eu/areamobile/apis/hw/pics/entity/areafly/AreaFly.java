@@ -20,42 +20,17 @@ import eu.areamobile.apis.hw.pics.services.Updater;
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
-    /**
-	 * @uml.property  name="pORT"
-	 */
     private int PORT = 30303;
     public final static int DEFAULT_PORT = 30303;
-    /**
-	 * @uml.property  name="tAG"
-	 */
     private final String TAG = this.getClass().getName();
-    /**
-	 * @uml.property  name="mContext"
-	 * @uml.associationEnd  multiplicity="(1 1)"
-	 */
     private final Context mContext;
 //    private final int BEFORE = -1;
 //    private final int EQUAL = 0;
 //    private final int AFTER = 1;
-    /**
-	 * @uml.property  name="updaterService"
-	 * @uml.associationEnd  
-	 */
+
     private Updater updaterService;
-    /**
-	 * @uml.property  name="listener"
-	 * @uml.associationEnd  
-	 */
     private OnCommonEventListener listener = null;
-    /**
-	 * @uml.property  name="areaFlyIOStream"
-	 * @uml.associationEnd  
-	 */
     private AreaFlyJSonFactory.AreaFlyIOStream areaFlyIOStream;
-    /**
-	 * @uml.property  name="jsonFact"
-	 * @uml.associationEnd  
-	 */
     private AreaFlyJSonFactory jsonFact;
 
     public AreaFly( Context mContext, AreaFlyJSonFactory jsonFact) {

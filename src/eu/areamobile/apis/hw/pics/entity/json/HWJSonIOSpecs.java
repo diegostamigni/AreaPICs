@@ -97,10 +97,6 @@ public class HWJSonIOSpecs implements Serializable {
 			return argc;
 		}
 
-		public void setArgc(byte argc) {
-			this.argc = argc;
-		}
-
 		public String getPwd() {
             return pwd;
         }
@@ -130,6 +126,7 @@ public class HWJSonIOSpecs implements Serializable {
         }
 
         public void setArgv(Argv[] argv) {
+            this.argc = (byte) argv.length;
             this.argv = argv;
         }
 
