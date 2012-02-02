@@ -23,7 +23,13 @@ public class HWJSonIOSpecs implements Serializable {
      */
 
     // GROUPs
-    public final static byte GROUP_ALL = 0;
+    public final static short GROUP_SINGLE = 0;
+    public final static short GROUP_ALL = 255;
+
+    //IOPut Value
+    public final static byte VALUE_IOPUT_ON = 1;
+    public final static byte VALUE_IOPUT_OFF = 0;
+    public final static byte VALUE_IOPUT_TOGGLE = 2;
 
     // OPCODE
     public final static byte OPCODE_SCAN = 0;
@@ -71,7 +77,7 @@ public class HWJSonIOSpecs implements Serializable {
         private String dev;
         private long time;
         private String pwd;
-        private byte grp;
+        private short grp;
         private byte op;
         private byte argc;
         private Argv[] argv;
@@ -105,11 +111,11 @@ public class HWJSonIOSpecs implements Serializable {
             this.pwd = pwd;
         }
 
-        public byte getGroup() {
+        public short getGroup() {
             return grp;
         }
 
-        public void setGroup(byte grp) {
+        public void setGroup(short grp) {
             this.grp = grp;
         }
 

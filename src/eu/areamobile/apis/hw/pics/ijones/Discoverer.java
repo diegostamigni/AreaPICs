@@ -159,7 +159,7 @@ public class Discoverer extends Thread {
         HWJSonIOSpecs.Argv[] argv = new HWJSonIOSpecs.Argv[0];
 
         exec.setAck(true);
-        exec.setDevice("fff");
+        exec.setDevice("");
         exec.setArgv(argv);
         exec.setGroup(HWJSonIOSpecs.GROUP_ALL);
         exec.setOp(HWJSonIOSpecs.OPCODE_SCAN);
