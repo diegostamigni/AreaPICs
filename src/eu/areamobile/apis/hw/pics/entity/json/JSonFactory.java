@@ -1,11 +1,11 @@
 package eu.areamobile.apis.hw.pics.entity.json;
 
+import com.google.gson.Gson;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
-
-import com.google.gson.Gson;
 
 /**
  * Created by AreaMobile
@@ -34,7 +34,6 @@ public class JSonFactory extends HWJSonIOSpecs implements Serializable {
         Reader r = new InputStreamReader(new ByteArrayInputStream(data.getBytes()));
         HWJSonIOSpecs specs = gson.fromJson(r, HWJSonIOSpecs.class);
         return specs;
-//        return gson.fromJson(r, HWJSonIOSpecs.class);
     }
 
     public String transfertStream(HWJSonIOSpecs stream) {

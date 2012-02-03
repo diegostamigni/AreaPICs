@@ -54,14 +54,25 @@ public class HWJSonIOSpecs implements Serializable {
 
 
     @SerializedName("exec")
-    private ExecValue exec;
+    private Exec exec;
 
-    public ExecValue getExec() {
+    @SerializedName("status")
+    private Status status;
+
+    private Exec getExec() {
         return exec;
     }
 
-    public void setExec(ExecValue exec) {
+    public void setExec(Exec exec) {
         this.exec = exec;
+    }
+
+    private Status setStatys() {
+        return status;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     @Override
@@ -69,11 +80,11 @@ public class HWJSonIOSpecs implements Serializable {
         return this.getExec().getDevice() + ":" + this.getExec().getGroup();
     }
 
-    //The exec value
     /**
+     * The exec value
 	 * @author Diego Stamigni
 	 */
-    public static class ExecValue implements Serializable {
+    public static class Exec implements Serializable {
         private String dev;
         private long time;
         private String pwd;
@@ -150,6 +161,48 @@ public class HWJSonIOSpecs implements Serializable {
 		 */
         public void setAck(boolean ack) {
             this.ack = ack;
+        }
+    }
+
+    /**
+     * The status value
+	 * @author Diego Stamigni
+	 */
+    public static class Status implements Serializable {
+        private String dev;
+        private long time;
+        private String type;
+        private String subt;
+        private byte argc;
+        private Argv[] argv;
+
+        public String getDevice() {
+            return dev;
+        }
+
+        public void setDevice(String dev) {
+            this.dev = dev;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public void setTime(long time) {
+            this.time = time;
+        }
+
+        public byte getArgc() {
+			return argc;
+		}
+
+        public Argv[] getArgv() {
+            return argv;
+        }
+
+        public void setArgv(Argv[] argv) {
+            this.argc = (byte) argv.length;
+            this.argv = argv;
         }
     }
 

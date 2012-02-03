@@ -9,18 +9,6 @@ import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 
 
 public interface HWSpecs {
-
-    /**
-	 * @uml.property  name="macAddress"
-	 */
-    abstract String getMacAddress();
-
-    /**
-	 * @param mac_address
-	 * @uml.property  name="macAddress"
-	 */
-    abstract void setMacAddress(String mac_address);
-
     /**
 	 * @uml.property  name="iPAddress"
 	 */

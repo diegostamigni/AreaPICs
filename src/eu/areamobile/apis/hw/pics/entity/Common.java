@@ -18,7 +18,7 @@ public class Common implements HWSpecs {
     /**
 	 * @uml.property  name="pORT"
 	 */
-    public int PORT = 8080;
+    public int PORT = 30303;
     /**
 	 * @uml.property  name="mContext"
 	 * @uml.associationEnd  readOnly="true"
@@ -98,16 +98,6 @@ public class Common implements HWSpecs {
     }
 
     @Override
-    public String getMacAddress() {
-        return mac_address;
-    }
-
-    @Override
-    public void setMacAddress(String mac_address) {
-        this.mac_address = mac_address;
-    }
-
-    @Override
     public String getIPAddress() {
         return ip_address;
     }
@@ -140,8 +130,10 @@ public class Common implements HWSpecs {
         return this.mCommonIOStream;
     }
 
-    //TODO to code, check with MAC_ADDRESS
+    //TODO modify in a real control..
     public static boolean isCommon(HWJSonIOSpecs s) {
+        if (s.getStatus() != null)
+            return true;
         return false;
     }
 

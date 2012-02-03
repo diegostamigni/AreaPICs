@@ -155,7 +155,7 @@ public class Discoverer extends Thread {
 
     private HWJSonIOSpecs createNetworkScanMessage() {
         HWJSonIOSpecs sayHiAll = new HWJSonIOSpecs();
-        HWJSonIOSpecs.ExecValue exec = new HWJSonIOSpecs.ExecValue();
+        HWJSonIOSpecs.Exec exec = new HWJSonIOSpecs.Exec();
         HWJSonIOSpecs.Argv[] argv = new HWJSonIOSpecs.Argv[0];
 
         exec.setAck(true);
@@ -189,14 +189,11 @@ public class Discoverer extends Thread {
 
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
-                //                if (Common.isCommon(s)) {
-                mCommon.setMacAddress(ioSpecs.getExec().getDevice());
-                mCommon.setDescription(ioSpecs);
-
-                mCommonCollection.add(mCommon);
-
-                //we need to get/set Events
-                //                }
+                if (Common.isCommon(ioSpecs)) {
+                    mCommon.setDescription(ioSpecs);
+                    mCommonCollection.add(mCommon);
+                    //we need to get/set Events
+                }
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
