@@ -1,0 +1,10 @@
+gen/
+gen/*
+bin/
+bin/*
+.classpath
+.settings
+out
+.idea
+*.iml
+project.*
