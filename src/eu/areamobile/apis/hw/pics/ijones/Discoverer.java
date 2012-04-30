@@ -31,13 +31,14 @@ public class Discoverer extends Thread {
     public static final int TIMEOUT_MS = 500;
     private WifiManager mWifi;
     private List<Common> mCommonCollection;
-    private DatagramSocket socket;
+    private DatagramSocket mainSocket;
     private JSonFactory mJSonFactory;
     private Context mContext;
-    private int port = -1;
+    private int socketPort = -1;
 
     /**
      * It's a receiver interface, not fully implemented yet.
+     * //TODO code
      */
     public interface DiscoveryReceiver {
         void addAnnouncedServers(InetAddress[] host, int port[]);
@@ -48,45 +49,16 @@ public class Discoverer extends Thread {
      * <ol>
      * <li>Context</li>
      * <li>WifiManager</li>
-     * <li>Discoverer port: where to find</li>
+     * <li>Discoverer socketPort: where to listen</li>
+     * <li>Discoverer senderPort: where to send</li>
      * </ol>
      *
      * @see Discoverer#setContext(android.content.Context)
      * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
-     * @see Discoverer#setDiscovererPort(int)
+     * @see Discoverer#setSocketPort
      */
     public Discoverer() {
         mJSonFactory = new JSonFactory();
-    }
-
-    /**
-     * Half constructor. You've to set:<br></br>
-     * <ol>
-     * <li>WifiManager</li>
-     * </ol>
-     *
-     * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
-     */
-    public Discoverer(Context ctx, int port) throws SocketException {
-        this.mContext = ctx;
-        mJSonFactory = new JSonFactory();
-        this.port = port;
-        initSocket();
-    }
-
-    /**
-     * Half constructor. You've to set:<br></br>
-     * <ol>
-     * <li>Context</li>
-     * </ol>
-     *
-     * @see Discoverer#setContext(android.content.Context)
-     */
-    public Discoverer(android.net.wifi.WifiManager wifi, int port) throws SocketException {
-        this.mWifi = wifi;
-        mJSonFactory = new JSonFactory();
-        this.port = port;
-        initSocket();
     }
 
     /**
@@ -94,15 +66,15 @@ public class Discoverer extends Thread {
      *
      * @param ctx  is the context
      * @param wifi is the android.net.wifi.WifiManager
-     * @param port is the discoverer port
-     * @throws SocketException Something goes wrong in the init of the socket. Are you connected ?
+     * @param socketPort is the discoverer socketPort where it listen
+     * @throws SocketException Something goes wrong in the init of the mainSocket. Are you connected ?
      * @see Discoverer#scan()
      */
-    public Discoverer(Context ctx, android.net.wifi.WifiManager wifi, int port) throws SocketException {
+    public Discoverer(Context ctx, android.net.wifi.WifiManager wifi, int socketPort) throws SocketException {
         this.mContext = ctx;
         mWifi = wifi;
         mJSonFactory = new JSonFactory();
-        this.port = port;
+        this.socketPort = socketPort;
         initSocket();
     }
 
@@ -123,34 +95,31 @@ public class Discoverer extends Thread {
     }
 
     /**
-     * @throws SocketException something goes wrong declaring the socket
+     * @throws SocketException something goes wrong declaring the mainSocket
      */
     private void initSocket() throws SocketException {
-        if (socket != null && !socket.isClosed())
-            socket.close();
-
-        socket = new DatagramSocket(this.port);
-        socket.setBroadcast(true);
-        socket.setSoTimeout(TIMEOUT_MS);
+        if (mainSocket != null && !mainSocket.isClosed()) mainSocket.close();
+        mainSocket = new DatagramSocket(this.socketPort);
+        mainSocket.setBroadcast(true);
+        mainSocket.setSoTimeout(TIMEOUT_MS);
     }
 
     /**
-     * Get the current socket, created by Discoverer
+     * Get the current socket, used by Discoverer
      *
-     * @return the socket
-     * @uml.property name="socket"
+     * @return the receiverSocket
      * @see DatagramSocket
      */
-    public DatagramSocket getSocket() {
-        return socket;
+    public DatagramSocket getSocketDiscoverer() {
+        return mainSocket;
     }
 
     /**
-     * @param socket
-     * @uml.property name="socket"
+     * Set the current receiverSocket, used by Discoverer
+     * @param mainSocket
      */
-    public void setSocket(DatagramSocket socket) {
-        this.socket = socket;
+    public void setSocketDiscoverer(DatagramSocket mainSocket) {
+        this.mainSocket = mainSocket;
     }
 
     private HWJSonIOSpecs createNetworkScanMessage() {
@@ -169,7 +138,7 @@ public class Discoverer extends Thread {
         return sayHiAll;
     }
 
-    public synchronized List<Common> scan() throws IOException {
+    public List<Common> scan() throws IOException {
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
@@ -180,9 +149,9 @@ public class Discoverer extends Thread {
             this.mCommonCollection = new ArrayList<Common>();
             while (true) {
                 Common mCommon = new Common(mContext);
-                packet = new DatagramPacket(buf, buf.length);
+                packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
 
-                socket.receive(packet);
+                mainSocket.receive(packet);
                 mCommon.setIPAddress(packet.getAddress().getHostAddress());
 
                 s = new String(packet.getData(), 0, packet.getLength());
@@ -204,45 +173,37 @@ public class Discoverer extends Thread {
 
     /**
      * Send a broadcast UDP packet containing a request for service to
-     * announce themselves. It use the inner socket, created by Discoverer.
-     * <br></br><br></br>
-     * Be careful: you're developing you're own message, it means that it needs to be parsed as the example below:<br></br>
-     * <br></br>
-     * <ul>
-     * <li><b>LOREM</b> + <u>Common.SEPARATOR</u> + <b>IPSUM</b></li>
-     * </ul>
+     * announce themselves. It use the inner mainSocket, created by Discoverer.
      *
-     * @param stream the data you'd like to send throw the socket
+     * @param stream the data you'd like to send throw the mainSocket
      * @throws IOException something goes wrong
      * @see Discoverer#sendMessage(eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs)
      */
     public void sendMessage(HWJSonIOSpecs stream) throws IOException {
-        DatagramSocket socket = this.getSocket();
+        DatagramSocket socket = this.getSocketDiscoverer();
         String msg = mJSonFactory.transfertStream(stream);
-        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getDiscovererPort());
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getSocketPort());
         socket.send(packet);
     }
 
     /**
      * Send a broadcast UDP packet containing a request for service to
-     * announce themselves. The destCommon is the destination Common device. It use the inner socket, created by Discoverer.
-     * <br></br><br></br>
-     * Actually I send a message in this format: <b>LOREM</b> + <u>Common.SEPARATOR</u> + <b>IPSUM</b>
+     * announce themselves. The destCommon is the destination Common device. It use the inner mainSocket, created by Discoverer.
      *
      * @param destCommon is the Common you would send the data
-     * @param stream     the data you'd like to send throw the socket
+     * @param stream     the data you'd like to send throw the mainSocket
      * @throws IOException something goes wrong
      */
 //    public void sendMessage(Common destCommon, HWJSonIOSpecs stream) throws IOException {
-//        DatagramSocket socket = this.getSocket();
+//        DatagramSocket mainSocket = this.getSocketDestination();
 //        String dest_macaddress = stream.getExec().getDevice();
 //        String message = mJSonFactory.transfertStream(stream);
 //        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), getDiscovererPort());
-//        socket.send(packet);
+//        mainSocket.send(packet);
 //    }
 
     /**
-     * Listen on socket for all responses, timing out after TIMEOUT_MS.
+     * Listen on mainSocket for all responses, timing out after TIMEOUT_MS.
      * <br></br>
      *
      * @return a collection of net raw packet, to be parsed
@@ -258,7 +219,7 @@ public class Discoverer extends Thread {
         try {
             while (true) {
                 packet = new DatagramPacket(buf, buf.length);
-                socket.receive(packet);
+                mainSocket.receive(packet);
                 list.add(packet);
             }
         } catch (SocketTimeoutException e) {
@@ -270,7 +231,7 @@ public class Discoverer extends Thread {
 
     //TODO review
     /**
-     * Listen on socket for responses of a specific Common, timing out after TIMEOUT_MS. It use inner socket created
+     * Listen on mainSocket for responses of a specific Common, timing out after TIMEOUT_MS. It use inner mainSocket created
      * by Discoverer.
      * <br></br>
      * <b>NOTE:</b> The Common passed will be updated from data received.
@@ -287,12 +248,12 @@ public class Discoverer extends Thread {
 //
 //        byte[] buf = new byte[1024];
 //        DatagramPacket packet = null;
-//        DatagramSocket socket = this.getSocket();
+//        DatagramSocket mainSocket = this.getSocketDestination();
 //
 //        try {
 //            while (true) {
 //                packet = new DatagramPacket(buf, buf.length);
-//                socket.receive(packet);
+//                mainSocket.receive(packet);
 //
 //                //TODO We need a parser here for the data that I receive
 //                s = new String(packet.getData(), 0, packet.getLength());
@@ -357,11 +318,11 @@ public class Discoverer extends Thread {
 //    }
 
 
-    public void setDiscovererPort(int port) {
-        this.port = port;
+    public void setSocketPort(int port) {
+        this.socketPort = port;
     }
 
-    public int getDiscovererPort() {
-        return this.port;
+    public int getSocketPort() {
+        return this.socketPort;
     }
 }

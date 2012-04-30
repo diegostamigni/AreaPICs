@@ -103,7 +103,7 @@ public class Updater extends Service {
             socket = new DatagramSocket(mCommon.getSocketPort());
             socket.setBroadcast(true);
             socket.setSoTimeout(Discoverer.TIMEOUT_MS);
-            discoverer.setSocket(socket);
+            discoverer.setSocketDiscoverer(socket);
         } catch (SocketException e) { e.printStackTrace(); }
 
         final HWJSonIOSpecs sayHiAll = mCommon.getDescription();

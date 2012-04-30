@@ -12,21 +12,14 @@ import eu.areamobile.apis.hw.pics.services.Updater;
  * Date: 28/12/11
  * <p/>
  * AreaFly, the derivation of FlyPort, this is the class you've to use for connection on it.
- * It already instance a connection between {@link AreaFly}
- * -> {@link eu.areamobile.apis.hw.pics.entity.areafly.event.Event}.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  * @see eu.areamobile.apis.hw.pics.services.Updater
  */
 
 public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
-    private int PORT = 30303;
-    public final static int DEFAULT_PORT = 30303;
     private final String TAG = this.getClass().getName();
     private final Context mContext;
-//    private final int BEFORE = -1;
-//    private final int EQUAL = 0;
-//    private final int AFTER = 1;
 
     private Updater updaterService;
     private OnCommonEventListener listener = null;
@@ -60,12 +53,6 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
 
     @Override
     public int compareTo(AreaFly areaFly) {
-//        if (areaFly.toString().toLowerCase().equals(this.toString().toLowerCase()))
-//            return EQUAL;
-//        else if (areaFly.toString().toLowerCase().length() > this.toString().toLowerCase().length())
-//            return AFTER;
-//        else
-//            return BEFORE;
         return this.compareTo(areaFly);
     }
 
