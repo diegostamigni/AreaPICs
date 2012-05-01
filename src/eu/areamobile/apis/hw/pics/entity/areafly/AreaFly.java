@@ -5,6 +5,7 @@ import android.content.Intent;
 import eu.areamobile.apis.hw.pics.HWSpecs;
 import eu.areamobile.apis.hw.pics.entity.Common;
 import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
+import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.services.Updater;
 
 /**
@@ -17,7 +18,7 @@ import eu.areamobile.apis.hw.pics.services.Updater;
  * @see eu.areamobile.apis.hw.pics.services.Updater
  */
 
-public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
+public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, AreaFlyOperations {
     private final String TAG = this.getClass().getName();
     private final Context mContext;
 
@@ -26,7 +27,7 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
     private AreaFlyJSonFactory.AreaFlyIOStream areaFlyIOStream;
     private AreaFlyJSonFactory jsonFact;
 
-    public AreaFly( Context mContext, AreaFlyJSonFactory jsonFact) {
+    public AreaFly(Context mContext, AreaFlyJSonFactory jsonFact) {
         super(jsonFact);
         this.mContext = mContext;
         this.jsonFact = jsonFact;
@@ -97,9 +98,8 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
 
     /**
 	 * Is is important to get the UpdaterService variable used by enableUpdater(Context, Areafly)
-	 * @return
 	 * @see  AreaFly#enableUpdater(android.content.Context)
-	 * @uml.property  name="updaterService"
+	 * @return
 	 */
     public Updater getUpdaterService() {
         return updaterService;
@@ -117,5 +117,113 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs {
 
     public void setJSonFactory(AreaFlyJSonFactory factory) {
         this.jsonFact = factory;
+    }
+
+    @Override
+    public AreaFlyJSonFactory io_put(int pin, int value) {
+        AreaFlyJSonFactory ioput = new AreaFlyJSonFactory();
+        AreaFlyJSonFactory.Exec exec = new AreaFlyJSonFactory.Exec();
+
+        AreaFlyJSonFactory.Argv[] argv = new AreaFlyJSonFactory.Argv[2];
+        argv[0] = new AreaFlyJSonFactory.Argv();
+        argv[0].setType("int"); argv[0].setValue(pin);
+
+        argv[1] = new AreaFlyJSonFactory.Argv();
+        argv[1].setType("int"); argv[1].setValue(value);
+
+        exec.setAck(false);
+        exec.setDevice(this.getDescription().getStatus().getDevice());
+        exec.setArgv(argv);
+        exec.setGroup(HWJSonIOSpecs.GROUP_ALL);
+        exec.setOp(HWJSonIOSpecs.OPCODE_IOPUT);
+        exec.setPwd("xxx");
+        exec.setTime(System.currentTimeMillis());
+        ioput.setExec(exec);
+        return ioput;
+    }
+
+    @Override
+    public AreaFlyJSonFactory io_init(int pin, int value) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory io_get(int pin) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory io_button_state(int pin) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory adc_init() {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory adc_val(int channel) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_init(int port, long baud) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_on(int port) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_off(int port) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_flush(int port) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_buffer_size(int port) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_read(int port, int n) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_write(int port, String str) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory uart_write_ch(int port, char ch) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory pwm_init(byte n, float freq, float duty) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory pwm_on(byte pin, byte pwm) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory pwm_duty(float duty, byte pwm) {
+        return null;
+    }
+
+    @Override
+    public AreaFlyJSonFactory pwm_off(byte pwm) {
+        return null;
     }
 }

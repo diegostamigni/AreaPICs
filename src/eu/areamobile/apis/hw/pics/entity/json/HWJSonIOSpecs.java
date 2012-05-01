@@ -13,14 +13,6 @@ import java.io.Serializable;
 
 public class HWJSonIOSpecs implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /**
-     * Scan the current wifi network to search any kind of Common.
-     * This method is synchronized and set the local collection of AreaFlies.
-     *
-     * @return the collection of Common available
-     * @throws java.io.IOException something goes wrong
-     * @see eu.areamobile.apis.hw.pics.ijones.Discoverer#getCommonCollection()
-     */
 	
 	// PIN NUMBERS
 	public final static short NUMBER_PIN_1 = 1;

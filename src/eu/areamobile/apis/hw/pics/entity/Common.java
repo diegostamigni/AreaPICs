@@ -14,22 +14,28 @@ import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public class Common implements HWSpecs {
+public abstract class Common implements HWSpecs, Operations {
     public static int SOCK_PORT = 50000;
 //    public static int RECEIVER_PORT = 50001;
     private Context mContext;
-    private String mac_address;
     private String ip_address;
     private final static String ATTR_SEPARATOR = ":";
     private OnCommonEventListener listener;
     private HWJSonIOSpecs mCommonIOStream;
     private JSonFactory mJSonFactory;
+    private String macDevice;
 
     public Common(JSonFactory jsonFact) {
         this.mJSonFactory = jsonFact;
     }
 
-    public Common(Context mContext) {}
+    public Common(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public void setDevice(String device) {
+        this.macDevice = device;
+    };
 
     public static interface OnCommonEventListener {
         /**
@@ -62,7 +68,6 @@ public class Common implements HWSpecs {
     }
 
     //TODO code this and improve javadoc
-
     /**
      * When an event is received ...
      */
@@ -83,11 +88,6 @@ public class Common implements HWSpecs {
         this.ip_address = ip_address;
     }
 
-    @Override
-    public String toString() {
-        return this.mac_address + ATTR_SEPARATOR + this.ip_address;
-    }
-
     protected OnCommonEventListener getListener() {
         return listener;
     }
@@ -102,11 +102,13 @@ public class Common implements HWSpecs {
         return this.mCommonIOStream;
     }
 
-    //TODO modify in a real control..
-    public static boolean isCommon(HWJSonIOSpecs s) {
-        if (s.getStatus() != null)
-            return true;
-        return false;
+    /**
+     * Check if is a response (Status). This method already check if stream is not null
+     * @param stream json parsed string from stream
+     * @return true if is a response
+     */
+    public static boolean isCommon(HWJSonIOSpecs stream) {
+        return stream != null && stream.getStatus() != null;
     }
 
     public JSonFactory getJSonFactory() {
@@ -119,5 +121,9 @@ public class Common implements HWSpecs {
 
     public int getSocketPort() {
         return SOCK_PORT;
+    }
+
+    public String getDevice() {
+        return this.macDevice;
     }
 }

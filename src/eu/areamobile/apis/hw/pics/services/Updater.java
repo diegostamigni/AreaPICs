@@ -114,22 +114,14 @@ public class Updater extends Service {
                 // Stuff here
                 try {
                     byte[] buf = new byte[1024];
-                    //TODO review
-                    discoverer.sendMessage(sayHiAll);
-                    String s;
 
-                    while (true) {
-                        packet = new DatagramPacket(buf, buf.length);
-                        socket.receive(packet);
-
-                        s = new String(packet.getData(), 0, packet.getLength());
-                        HWJSonIOSpecs ioSpecs = mCommon.getJSonFactory().parseFromStream(s);
-
-//                        if (Common.isCommon(s)) {
-                            //we need to get/set Events, if we're talking with the same common we passed
-                            mCommon.setDescription(ioSpecs);
-//                        }
-                    }
+                    discoverer.sendMessage(sayHiAll, new Discoverer.OnResponseListener() {
+                        @Override
+                        public void onMessageReceived(HWJSonIOSpecs.Status status) {
+                            //TODO review
+                            mCommon.setDescription(null);
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

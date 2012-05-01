@@ -4,8 +4,10 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import eu.areamobile.apis.hw.pics.entity.Common;
+import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
+import eu.areamobile.apis.hw.pics.exceptions.UnknownDeviceException;
 import eu.areamobile.apis.hw.pics.utils.NetUtils;
 
 import java.io.IOException;
@@ -24,13 +26,13 @@ import java.util.List;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public class Discoverer extends Thread {
+public class Discoverer<T> extends Thread {
     public static final String TAG = Discoverer.class.getName();
     private static final String REMOTE_KEY = "";
 
     public static final int TIMEOUT_MS = 500;
     private WifiManager mWifi;
-    private List<Common> mCommonCollection;
+//    private List<Common> mCommonCollection;
     private DatagramSocket mainSocket;
     private JSonFactory mJSonFactory;
     private Context mContext;
@@ -42,6 +44,14 @@ public class Discoverer extends Thread {
      */
     public interface DiscoveryReceiver {
         void addAnnouncedServers(InetAddress[] host, int port[]);
+    }
+
+    public interface OnResponseListener {
+        void onMessageReceived(HWJSonIOSpecs.Status status);
+    }
+
+    public interface OnScanResponseListener {
+        void onScanFinished(List<Common> list);
     }
 
     /**
@@ -68,7 +78,7 @@ public class Discoverer extends Thread {
      * @param wifi is the android.net.wifi.WifiManager
      * @param socketPort is the discoverer socketPort where it listen
      * @throws SocketException Something goes wrong in the init of the mainSocket. Are you connected ?
-     * @see Discoverer#scan()
+     * @see Discoverer#scan(Class, eu.areamobile.apis.hw.pics.ijones.Discoverer.OnScanResponseListener)
      */
     public Discoverer(Context ctx, android.net.wifi.WifiManager wifi, int socketPort) throws SocketException {
         this.mContext = ctx;
@@ -138,17 +148,30 @@ public class Discoverer extends Thread {
         return sayHiAll;
     }
 
-    public List<Common> scan() throws IOException {
+    /**
+     * Scan the specified pics
+     * @param type what you want to scan
+     * @param listener return from the stream
+     * @return a collection of scanned device, needs to be son of Common
+     * @throws IOException
+     */
+    public void scan(Class<T> type, OnScanResponseListener listener) throws UnknownDeviceException, IOException {
+        Common mCommon = null;
+        List<Common> mCommonCollection = new ArrayList<Common>(0);
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
 
-        this.sendMessage(createNetworkScanMessage());
+        DatagramSocket socket = this.getSocketDiscoverer();
+        String msg = mJSonFactory.transfertStream(createNetworkScanMessage());
+        packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getSocketPort());
+        socket.send(packet);
 
         try {
-            this.mCommonCollection = new ArrayList<Common>();
             while (true) {
-                Common mCommon = new Common(mContext);
+                if (type.getClass().equals(AreaFly.class.getClass())) mCommon = new AreaFly(mContext);
+                // other devices --> else if() { ...Ê}
+                else { throw new UnknownDeviceException("What kind of device I've to scan for you?"); }
                 packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
 
                 mainSocket.receive(packet);
@@ -168,7 +191,7 @@ public class Discoverer extends Thread {
             Log.d(TAG, "Receive timed out.");
         }
 
-        return mCommonCollection;
+        if (listener != null) listener.onScanFinished(mCommonCollection);
     }
 
     /**
@@ -176,14 +199,25 @@ public class Discoverer extends Thread {
      * announce themselves. It use the inner mainSocket, created by Discoverer.
      *
      * @param stream the data you'd like to send throw the mainSocket
+     * @param listener return from the stream
      * @throws IOException something goes wrong
-     * @see Discoverer#sendMessage(eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs)
+     * @see eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs
      */
-    public void sendMessage(HWJSonIOSpecs stream) throws IOException {
+    public void sendMessage(HWJSonIOSpecs stream, OnResponseListener listener) throws IOException {
         DatagramSocket socket = this.getSocketDiscoverer();
         String msg = mJSonFactory.transfertStream(stream);
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getSocketPort());
         socket.send(packet);
+
+        try {
+            mainSocket.receive(packet);
+            String s = new String(packet.getData(), 0, packet.getLength());
+            HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
+
+            if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null)
+                listener.onMessageReceived(ioSpecs.getStatus());
+
+        } catch (SocketTimeoutException e) { Log.d(TAG, "Receive timed out."); }
     }
 
     /**
@@ -211,7 +245,7 @@ public class Discoverer extends Thread {
      * @see java.net.DatagramPacket
      * @see Discoverer#TIMEOUT_MS
      */
-    public List<DatagramPacket> listenForResponse() throws IOException {
+    private List<DatagramPacket> listenForResponse() throws IOException {
         byte[] buf = new byte[1024];
         List<DatagramPacket> list = new ArrayList<DatagramPacket>();
         DatagramPacket packet = null;
@@ -229,7 +263,6 @@ public class Discoverer extends Thread {
         return list;
     }
 
-    //TODO review
     /**
      * Listen on mainSocket for responses of a specific Common, timing out after TIMEOUT_MS. It use inner mainSocket created
      * by Discoverer.
@@ -302,21 +335,9 @@ public class Discoverer extends Thread {
         return hexString.toString();
     }
 
-    /**
-     * Get the Common collection, already scanned.<br></br>
-     * <b>Note: </b>This collection may be old, you've to rescan you're collection of AreaFlies.
-     *
-     * @return the collection of Common already scanned before with this.scan()
-     * @see Discoverer#scan()
-     */
-    public List<Common> getCommonCollection() {
-        return mCommonCollection;
-    }
-
 //    private void setCommonCollection(final List<Common> list) {
 //        this.mCommonCollection = list;
 //    }
-
 
     public void setSocketPort(int port) {
         this.socketPort = port;
