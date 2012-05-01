@@ -14,15 +14,7 @@ import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 
 public class AreaFlyJSonFactory extends JSonFactory {
     //JSon Value
-    /**
-	 * @uml.property  name="areaFlyIOStream"
-	 * @uml.associationEnd  readOnly="true"
-	 */
     private AreaFlyIOStream areaFlyIOStream;
-    /**
-	 * @uml.property  name="gson"
-	 * @uml.associationEnd  multiplicity="(1 1)"
-	 */
     private Gson gson;
 
     public abstract static class AreaFlyIOStream extends HWJSonIOSpecs {}

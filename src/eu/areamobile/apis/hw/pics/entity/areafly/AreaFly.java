@@ -63,23 +63,6 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Are
         return mContext;
     }
 
-//    @Override
-    public void setDescription(AreaFlyJSonFactory.AreaFlyIOStream fromJson) {
-        super.setDescription(fromJson);
-
-        this.areaFlyIOStream = fromJson;
-
-        //TODO check this form of listener, works when you set the EventDescription
-        if (listener == null) listener = getListener();
-        if (listener != null) this.listener.OnEventReceived(AreaFly.this);
-    }
-
-    @Override
-    public AreaFlyJSonFactory.AreaFlyIOStream getDescription() {
-        super.getDescription();
-        return this.areaFlyIOStream;
-    }
-
     /**
      * Service Updater enabler.<br></br>
      * Be careful to have added these line to your manifest:<br></br><br></br>
@@ -119,6 +102,9 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Are
         this.jsonFact = factory;
     }
 
+    /* ###################################################
+     *                  OPERATIONS
+     * ################################################### */
     @Override
     public AreaFlyJSonFactory io_put(int pin, int value) {
         AreaFlyJSonFactory ioput = new AreaFlyJSonFactory();

@@ -33,9 +33,6 @@ public abstract class Common implements HWSpecs, Operations {
         this.mContext = mContext;
     }
 
-    public void setDevice(String device) {
-        this.macDevice = device;
-    };
 
     public static interface OnCommonEventListener {
         /**
@@ -67,7 +64,10 @@ public abstract class Common implements HWSpecs, Operations {
         this.listener = listener;
     }
 
-    //TODO code this and improve javadoc
+    public void setDevice(String device) {
+        this.macDevice = device;
+    };
+
     /**
      * When an event is received ...
      */
