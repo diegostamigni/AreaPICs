@@ -1,6 +1,6 @@
 package eu.areamobile.apis.hw.pics.entity.areafly;
 
-import eu.areamobile.apis.hw.pics.entity.Operations;
+import eu.areamobile.apis.hw.pics.entity.HWOperations;
 import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
 
 /**
@@ -10,13 +10,13 @@ import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-interface AreaFlyOperations extends Operations {
+interface AreaFlyHWOperations extends HWOperations {
     /**
      * Turn pin to off/on
      * @param pin the pin you would like to control
      * @param value 0, 1 to set the specific pin to on/off
      */
-    AreaFlyJSonFactory io_put(int pin, int value);
+    AreaFlyJSonFactory io_put(int first_type, int pin, int second_type, Object value);
 
     /**
      * Instantiate the pin with the specified value

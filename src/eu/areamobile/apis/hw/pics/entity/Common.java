@@ -14,7 +14,7 @@ import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public abstract class Common implements HWSpecs, Operations {
+public abstract class Common implements HWSpecs, HWOperations {
     public static int SOCK_PORT = 50000;
 //    public static int RECEIVER_PORT = 50001;
     private Context mContext;

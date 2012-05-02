@@ -2,10 +2,10 @@ package eu.areamobile.apis.hw.pics.entity.areafly;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import eu.areamobile.apis.hw.pics.HWSpecs;
 import eu.areamobile.apis.hw.pics.entity.Common;
 import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
-import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.services.Updater;
 
 /**
@@ -18,7 +18,7 @@ import eu.areamobile.apis.hw.pics.services.Updater;
  * @see eu.areamobile.apis.hw.pics.services.Updater
  */
 
-public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, AreaFlyOperations {
+public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, AreaFlyHWOperations {
     private final String TAG = this.getClass().getName();
     private final Context mContext;
 
@@ -106,24 +106,25 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Are
      *                  OPERATIONS
      * ################################################### */
     @Override
-    public AreaFlyJSonFactory io_put(int pin, int value) {
+    public AreaFlyJSonFactory io_put(int first_type, int pin, int second_type, Object value) {
         AreaFlyJSonFactory ioput = new AreaFlyJSonFactory();
         AreaFlyJSonFactory.Exec exec = new AreaFlyJSonFactory.Exec();
-
         AreaFlyJSonFactory.Argv[] argv = new AreaFlyJSonFactory.Argv[2];
+
         argv[0] = new AreaFlyJSonFactory.Argv();
-        argv[0].setType("int"); argv[0].setValue(pin);
+        argv[0].setType(first_type); argv[0].setValue(pin);
 
         argv[1] = new AreaFlyJSonFactory.Argv();
-        argv[1].setType("int"); argv[1].setValue(value);
+        argv[1].setType(second_type); argv[1].setValue(value);
 
-        exec.setAck(false);
-        exec.setDevice(this.getDescription().getStatus().getDevice());
+        exec.setAck(true);
+        exec.setSender(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
+        exec.setReceiver(this.getDescription().getStatus().getDevice());
         exec.setArgv(argv);
-        exec.setGroup(HWJSonIOSpecs.GROUP_ALL);
-        exec.setOp(HWJSonIOSpecs.OPCODE_IOPUT);
+        exec.setGroup(GROUP_SINGLE);
+        exec.setOp(OPCODE_IOPUT);
         exec.setPwd("xxx");
-        exec.setTime(System.currentTimeMillis());
+        exec.setTime(System.currentTimeMillis()+"");
         ioput.setExec(exec);
         return ioput;
     }

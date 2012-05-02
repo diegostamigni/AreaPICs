@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import eu.areamobile.apis.hw.pics.entity.Common;
+import eu.areamobile.apis.hw.pics.entity.HWOperations;
 import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
@@ -32,19 +33,10 @@ public class Discoverer<T> extends Thread {
 
     public static final int TIMEOUT_MS = 500;
     private WifiManager mWifi;
-//    private List<Common> mCommonCollection;
     private DatagramSocket mainSocket;
     private JSonFactory mJSonFactory;
     private Context mContext;
     private int socketPort = -1;
-
-    /**
-     * It's a receiver interface, not fully implemented yet.
-     * //TODO code
-     */
-    public interface DiscoveryReceiver {
-        void addAnnouncedServers(InetAddress[] host, int port[]);
-    }
 
     public interface OnResponseListener {
         void onMessageReceived(HWJSonIOSpecs.Status status);
@@ -52,6 +44,7 @@ public class Discoverer<T> extends Thread {
 
     public interface OnScanResponseListener {
         void onScanFinished(List<Common> list);
+        void onScanInProgress(Common device, int position);
     }
 
     /**
@@ -137,13 +130,14 @@ public class Discoverer<T> extends Thread {
         HWJSonIOSpecs.Exec exec = new HWJSonIOSpecs.Exec();
         HWJSonIOSpecs.Argv[] argv = new HWJSonIOSpecs.Argv[0];
 
-        exec.setAck(true);
-        exec.setDevice("");
+        exec.setAck(false);
+        exec.setSender(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
+        exec.setReceiver("ff:ff:ff:ff:ff:ff");
         exec.setArgv(argv);
-        exec.setGroup(HWJSonIOSpecs.GROUP_ALL);
-        exec.setOp(HWJSonIOSpecs.OPCODE_SCAN);
+        exec.setGroup(HWOperations.GROUP_ALL);
+        exec.setOp(HWOperations.OPCODE_SCAN);
         exec.setPwd("xxx");
-        exec.setTime(System.currentTimeMillis());
+        exec.setTime(System.currentTimeMillis()+"");
         sayHiAll.setExec(exec);
         return sayHiAll;
     }
@@ -167,6 +161,7 @@ public class Discoverer<T> extends Thread {
         packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getSocketPort());
         socket.send(packet);
 
+        int position = 0;
         try {
             while (true) {
                 if (type.getClass().equals(AreaFly.class.getClass())) mCommon = new AreaFly(mContext);
@@ -186,6 +181,8 @@ public class Discoverer<T> extends Thread {
                     mCommonCollection.add(mCommon);
                     //we need to get/set Events
                 }
+                if (listener != null) listener.onScanInProgress(mCommon, position);
+                position++;
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
@@ -219,94 +216,6 @@ public class Discoverer<T> extends Thread {
 
         } catch (SocketTimeoutException e) { Log.d(TAG, "Receive timed out."); }
     }
-
-    /**
-     * Send a broadcast UDP packet containing a request for service to
-     * announce themselves. The destCommon is the destination Common device. It use the inner mainSocket, created by Discoverer.
-     *
-     * @param destCommon is the Common you would send the data
-     * @param stream     the data you'd like to send throw the mainSocket
-     * @throws IOException something goes wrong
-     */
-//    public void sendMessage(Common destCommon, HWJSonIOSpecs stream) throws IOException {
-//        DatagramSocket mainSocket = this.getSocketDestination();
-//        String dest_macaddress = stream.getExec().getDevice();
-//        String message = mJSonFactory.transfertStream(stream);
-//        DatagramPacket packet = new DatagramPacket(message.getBytes(), message.length(), NetUtils.getBroadcastAddress(mWifi), getDiscovererPort());
-//        mainSocket.send(packet);
-//    }
-
-    /**
-     * Listen on mainSocket for all responses, timing out after TIMEOUT_MS.
-     * <br></br>
-     *
-     * @return a collection of net raw packet, to be parsed
-     * @throws IOException something goes wrong
-     * @see java.net.DatagramPacket
-     * @see Discoverer#TIMEOUT_MS
-     */
-    private List<DatagramPacket> listenForResponse() throws IOException {
-        byte[] buf = new byte[1024];
-        List<DatagramPacket> list = new ArrayList<DatagramPacket>();
-        DatagramPacket packet = null;
-
-        try {
-            while (true) {
-                packet = new DatagramPacket(buf, buf.length);
-                mainSocket.receive(packet);
-                list.add(packet);
-            }
-        } catch (SocketTimeoutException e) {
-            Log.d(TAG, "Receive timed out.");
-        }
-
-        return list;
-    }
-
-    /**
-     * Listen on mainSocket for responses of a specific Common, timing out after TIMEOUT_MS. It use inner mainSocket created
-     * by Discoverer.
-     * <br></br>
-     * <b>NOTE:</b> The Common passed will be updated from data received.
-     *
-     * @return the Common passed
-     * @throws IOException something goes wrong
-     * @see java.net.DatagramPacket
-     * @see Discoverer#TIMEOUT_MS
-     */
-//    public Common listenForResponse(Common mCommon) throws IOException {
-//        String af_address = mCommon.getIPAddress();
-//        String af_macaddress = mCommon.getMacAddress();
-//        String s;
-//
-//        byte[] buf = new byte[1024];
-//        DatagramPacket packet = null;
-//        DatagramSocket mainSocket = this.getSocketDestination();
-//
-//        try {
-//            while (true) {
-//                packet = new DatagramPacket(buf, buf.length);
-//                mainSocket.receive(packet);
-//
-//                //TODO We need a parser here for the data that I receive
-//                s = new String(packet.getData(), 0, packet.getLength());
-////                String expr = "\\*";
-////                String[] parsed = s.split(expr);
-//                String parsed = s;
-//                String mMacAddress = parsed;
-//                //////
-//
-////                if (Common.isCommon(null) && mMacAddress.equalsIgnoreCase(mCommon.getMacAddress())) {
-//                //we need to get/set Events, if we're talking with the same Common we passed
-//                mCommon.setDescription(null);
-////                }
-//            }
-//        } catch (SocketTimeoutException e) {
-//            Log.d(TAG, "Receive timed out.");
-//        }
-//
-//        return mCommon;
-//    }
 
     /**
      * Calculate the signature we need to send with the request. It is a string

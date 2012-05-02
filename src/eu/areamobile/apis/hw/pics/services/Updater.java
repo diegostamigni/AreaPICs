@@ -25,7 +25,7 @@ import java.util.TimerTask;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  * @see Service
  */
-
+@Deprecated
 public class Updater extends Service {
     /**
 	 * @uml.property  name="timer"
