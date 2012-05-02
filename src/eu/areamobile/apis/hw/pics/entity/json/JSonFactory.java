@@ -1,6 +1,7 @@
 package eu.areamobile.apis.hw.pics.entity.json;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import eu.areamobile.apis.hw.pics.entity.Common;
 
 import java.io.ByteArrayInputStream;
@@ -22,14 +23,9 @@ public class JSonFactory extends HWJSonIOSpecs implements Serializable {
         super();
     }
 
-    public HWJSonIOSpecs parseFromStream(String data, Class<HWJSonIOSpecs> jSonClass) {
+    public HWJSonIOSpecs parseFromStream(String data, Class<? extends HWJSonIOSpecs> jSonClass) {
         Gson gson = new Gson();
         return gson.fromJson(data, jSonClass);
-    }
-
-    public String transfertStream(HWJSonIOSpecs stream, Class<HWJSonIOSpecs> jSonClass) {
-        Gson gson = new Gson();
-        return gson.toJson(stream, jSonClass);
     }
 
     public HWJSonIOSpecs parseFromStream(String data) {
@@ -41,8 +37,13 @@ public class JSonFactory extends HWJSonIOSpecs implements Serializable {
         } catch (Exception e) { e.printStackTrace(); return null; }
     }
 
+    public String transfertStream(HWJSonIOSpecs stream, Class<? extends HWJSonIOSpecs> jSonClass) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(HWJSonIOSpecs.class, new HWExecJsonSerializer()).create();
+        return gson.toJson(stream, jSonClass);
+    }
+
     public String transfertStream(HWJSonIOSpecs stream) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapter(HWJSonIOSpecs.class, new HWExecJsonSerializer()).create();
         return gson.toJson(stream, HWJSonIOSpecs.class);
     }
 }

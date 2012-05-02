@@ -8,6 +8,23 @@ package eu.areamobile.apis.hw.pics.entity;
  */
 
 public interface HWOperations {
+    // TYPE
+    /*
+        #define B_YTE 0
+        #define INT 1
+        #define FLOAT 2
+        #define DOUBLE 3
+        #define CHAR 4
+        #define LONG 5
+        #define STRING 6
+     */
+    public short TYPE_BYTE = 0;
+    public short TYPE_INT = 1;
+    public short TYPE_FLOAT = 2;
+    public short TYPE_DOUBLE = 3;
+    public short TYPE_CHAR = 4;
+    public short TYPE_LONG = 5;
+    public short TYPE_STRING = 6;
 
     // PIN NUMBERS
     public short NUMBER_PIN_1 = 1;

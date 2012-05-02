@@ -13,8 +13,11 @@ import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
 interface AreaFlyHWOperations extends HWOperations {
     /**
      * Turn pin to off/on
+     * @param first_type is the type of the first parameter
      * @param pin the pin you would like to control
+     * @param second_type is the type of the second parameter
      * @param value 0, 1 to set the specific pin to on/off
+     * @see HWOperations
      */
     AreaFlyJSonFactory io_put(int first_type, int pin, int second_type, Object value);
 

@@ -18,26 +18,4 @@ public class AreaFlyJSonFactory extends JSonFactory {
     private Gson gson;
 
     public abstract static class AreaFlyIOStream extends HWJSonIOSpecs {}
-
-    public AreaFlyJSonFactory() {
-        super();
-        gson = new Gson();
-    }
-
-    @Override
-    public AreaFlyIOStream parseFromStream(String data) {
-        super.parseFromStream(data);
-        return gson.fromJson(data, AreaFlyIOStream.class);
-    }
-
-    @Override
-    public String transfertStream(HWJSonIOSpecs stream) {
-        super.transfertStream(stream);
-        return gson.toJson(stream, AreaFlyIOStream.class);
-
-    }
-
-    public Gson getGSonObject() {
-        return gson;
-    }
 }

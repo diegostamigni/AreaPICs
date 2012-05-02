@@ -1,8 +1,10 @@
 package eu.areamobile.apis.hw.pics.entity.json;
 
+import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 /**
  * Created by AreaMobile
@@ -11,17 +13,39 @@ import java.io.Serializable;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-//TODO review
 public class HWJSonIOSpecs implements Serializable {
-	private static final long serialVersionUID = 1L;
+    // EXEC SerializedName
+    private static final String EXEC = "exec";
+    private static final String EXEC_SDR = "sdr";
+    private static final String EXEC_RCV = "rcv";
+    private static final String EXEC_TIME = "time";
+    private static final String EXEC_OP = "op";
+    private static final String EXEC_GROUP = "grp";
+    private static final String EXEC_PWD = "pwd";
+    private static final String EXEC_ACK = "ack";
 
-    @SerializedName("exec")
+    // STAT SerializedName
+    private static final String STAT = "stat";
+    private static final String STAT_SDR = "sdr";
+    private static final String STAT_RCV = "rcv";
+    private static final String STAT_TIME = "time";
+    private static final String STAT_TYPE = "type";
+    private static final String STAT_SUBT = "subt";
+
+    // ARGV SerializedName
+    private static final String ARGV = "argv";
+    private static final String ARGV_TYPE = "type";
+    private static final String ARGV_VAL = "val";
+
+    private static final long serialVersionUID = 1L;
+
+    @SerializedName(EXEC)
     private Exec exec;
 
-    @SerializedName("stat")
+    @SerializedName(STAT)
     private Status status;
 
-    private Exec getExec() {
+    public Exec getExec() {
         return exec;
     }
 
@@ -39,19 +63,34 @@ public class HWJSonIOSpecs implements Serializable {
     }
 
     /**
-     * The exec value
+     * The exec val
 	 * @author Diego Stamigni
 	 */
     public static class Exec implements Serializable {
         // android wifi mac address
+        @SerializedName(EXEC_SDR)
         private String sdr;
+
         // areafly mac address
+        @SerializedName(EXEC_RCV)
         private String rcv;
+
+        @SerializedName(EXEC_TIME)
         private String time;
+
+        @SerializedName(EXEC_PWD)
         private String pwd;
+
+        @SerializedName(EXEC_GROUP)
         private short grp;
+
+        @SerializedName(EXEC_OP)
         private byte op;
+
+        @SerializedName(ARGV)
         private Argv[] argv;
+
+        @SerializedName(EXEC_ACK)
         private boolean ack;
 
         public String getSender() {
@@ -110,35 +149,38 @@ public class HWJSonIOSpecs implements Serializable {
             this.argv = argv;
         }
 
-        /**
-		 * @return
-		 * @uml.property  name="ack"
-		 */
         public boolean isAck() {
             return ack;
         }
 
-        /**
-		 * @param ack
-		 * @uml.property  name="ack"
-		 */
         public void setAck(boolean ack) {
             this.ack = ack;
         }
     }
 
     /**
-     * The status value
+     * The status val
 	 * @author Diego Stamigni
 	 */
     public static class Status implements Serializable {
         // areafly wifi mac address
+        @SerializedName(STAT_SDR)
         private String sdr;
+
         // android mac address
+        @SerializedName(STAT_RCV)
         private String rcv;
+
+        @SerializedName(STAT_TIME)
         private long time;
+
+        @SerializedName(STAT_TYPE)
         private int type;
+
+        @SerializedName(STAT_SUBT)
         private int subt;
+
+        @SerializedName(ARGV)
         private Argv[] argv;
 
         public String getDevice() {
@@ -148,10 +190,6 @@ public class HWJSonIOSpecs implements Serializable {
         public void setDevice(String dev) {
             this.sdr = dev;
         }
-
-//        public void setReceiver(String value) {
-//            this.rcv = value;
-//        }
 
         public void setType(int value) {
             this.type = value;
@@ -168,10 +206,6 @@ public class HWJSonIOSpecs implements Serializable {
         public int getSubType() {
             return this.subt;
         }
-
-//        public String getReceiver() {
-//            return rcv;
-//        }
 
         public long getTime() {
             return time;
@@ -192,9 +226,11 @@ public class HWJSonIOSpecs implements Serializable {
 
     //The argv: it is dynamic, depends on {@link ExecValue#argc}
     public static class Argv implements Serializable {
-    	int type;
-        @SerializedName("val")
-    	Object value;
+        @SerializedName(ARGV_TYPE)
+        int type;
+
+        @SerializedName(ARGV_VAL)
+    	Object val;
 
 		public int getType() {
 			return type;
@@ -205,16 +241,66 @@ public class HWJSonIOSpecs implements Serializable {
 		}
 
 		public Object getValue() {
-			return value;
+			return val;
 		}
 
 		public void setValue(Object value) {
-			this.value = value;
+			this.val = value;
 		}
 
         @Override
         public String toString() {
-            return '[' + type + ", " + value + ']';
+            return '[' + type + ", " + val + ']';
+        }
+    }
+
+    /* Exec sample
+        { "exec":	{
+                "sdr":	"mac_sender",
+                "rcv":	"mac_receiver",
+                "time":	"1234567890",
+                "pwd":	"xxx",
+                "grp":	0,
+                "op":	1,
+                "ack":	true,
+                "argv":	[{
+                        "type":	1,
+                        "val":	19
+                    }, {
+                        "type":	1,
+                        "val":	0
+                ]}
+         }
+    */
+    class HWExecJsonSerializer implements JsonSerializer<HWJSonIOSpecs> {
+        @Override
+        public JsonElement serialize(HWJSonIOSpecs jsonSpecs, Type type, JsonSerializationContext context) {
+            JsonObject exec = new JsonObject();
+            JsonObject execBody = new JsonObject();
+            JsonArray argvBody = new JsonArray();
+
+            Exec jsonSpecsExec = jsonSpecs.getExec();
+            Argv[] argv = jsonSpecsExec.getArgv();
+
+            execBody.add(EXEC_SDR, context.serialize(jsonSpecsExec.getSender()));
+            execBody.add(EXEC_RCV, context.serialize(jsonSpecsExec.getReceiver()));
+            execBody.add(EXEC_TIME, context.serialize(jsonSpecsExec.getTime()));
+            execBody.add(EXEC_PWD, context.serialize(jsonSpecsExec.getPwd()));
+            execBody.add(EXEC_GROUP, context.serialize(jsonSpecsExec.getGroup()));
+            execBody.add(EXEC_OP, context.serialize(jsonSpecsExec.getOp()));
+            execBody.add(EXEC_ACK, context.serialize(jsonSpecsExec.isAck()));
+
+
+            for (int i = 0; i < argv.length; i++) {
+                JsonObject argvElement = new JsonObject();
+                argvElement.add(ARGV_TYPE, context.serialize(argv[i].getType()));
+                argvElement.add(ARGV_VAL, context.serialize(argv[i].getValue()));
+                argvBody.add(argvElement);
+            }
+
+            execBody.add(ARGV, argvBody);
+            exec.add(EXEC, execBody);
+            return exec;
         }
     }
 }
