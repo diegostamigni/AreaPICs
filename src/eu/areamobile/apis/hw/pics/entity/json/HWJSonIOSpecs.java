@@ -45,7 +45,7 @@ public class HWJSonIOSpecs implements Serializable {
     @SerializedName(STAT)
     private Status status;
 
-    public Exec getExec() {
+    private Exec getExec() {
         return exec;
     }
 
@@ -301,6 +301,34 @@ public class HWJSonIOSpecs implements Serializable {
             execBody.add(ARGV, argvBody);
             exec.add(EXEC, execBody);
             return exec;
+        }
+    }
+
+    /* STAT Example
+        {
+            "stat":	{
+                "sdr":	"00:1E:C0:06:AF:DD",
+                "rcv":	"a0:0b:ba:c4:01:9c",
+                "time":	"1336032382003",
+                "type":	1,
+                "subt":	0,
+                "argv":	[{
+                        "type":	6,
+                        "val":	"PICUS2DOT2     \r\n",
+                        "type":	6,
+                        "val":	"00:1E:C0:06:AF:DD",
+                        "type":	6,
+                        "val":	"W",
+                        "type":	1,
+                        "val":	0
+                    }]
+            }
+        }
+    */
+    class HWStatJsonDeserializer implements JsonDeserializer<HWJSonIOSpecs> {
+        @Override
+        public HWJSonIOSpecs deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
+            return null;
         }
     }
 }

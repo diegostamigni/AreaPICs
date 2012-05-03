@@ -139,4 +139,7 @@ public interface HWOperations {
     public int VALUE_BAUD_MEDIUM = 38400;
     public int VALUE_BAUD_MEDIUMHIGH = 57600;
     public int VALUE_BAUD_HIGH = 115200;
+
+    public int ON = 1;
+    public int OFF = 0;
 }
