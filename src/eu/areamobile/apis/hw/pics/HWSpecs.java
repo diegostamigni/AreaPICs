@@ -9,30 +9,17 @@ import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 
 
 public interface HWSpecs {
-    /**
-	 * @uml.property  name="iPAddress"
-	 */
     abstract String getIPAddress();
 
     /**
 	 * @param ip_address
-	 * @uml.property  name="iPAddress"
 	 */
     abstract void setIPAddress(String ip_address);
-    
-//    abstract String getNetBiosName();
-
-//    abstract void setNetBiosName(String netbios_name);
 
     /**
 	 * @param fromJson
-	 * @uml.property  name="description"
 	 */
     abstract void setDescription(HWJSonIOSpecs fromJson);
 
-    /**
-	 * @uml.property  name="description"
-	 * @uml.associationEnd  
-	 */
     abstract HWJSonIOSpecs getDescription();
 }
