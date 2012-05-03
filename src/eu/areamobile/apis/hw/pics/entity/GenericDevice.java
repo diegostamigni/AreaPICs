@@ -14,7 +14,7 @@ import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public abstract class Common implements HWSpecs, HWOperations {
+public abstract class GenericDevice implements HWSpecs, HWOperations {
     public static int SOCK_PORT = 50000;
 //    public static int RECEIVER_PORT = 50001;
     private Context mContext;
@@ -25,11 +25,11 @@ public abstract class Common implements HWSpecs, HWOperations {
     private JSonFactory mJSonFactory;
     private String macDevice;
 
-    public Common(JSonFactory jsonFact) {
+    public GenericDevice(JSonFactory jsonFact) {
         this.mJSonFactory = jsonFact;
     }
 
-    public Common(Context mContext) {
+    public GenericDevice(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -39,10 +39,10 @@ public abstract class Common implements HWSpecs, HWOperations {
          * Event received listener.
          *
          * @param comm is the Common about the Event
-         * @see Common
-         * @see Common#setOnAreaFlyEventListener(eu.areamobile.apis.hw.pics.entity.Common.OnCommonEventListener)
+         * @see GenericDevice
+         * @see GenericDevice#setOnAreaFlyEventListener(GenericDevice.OnCommonEventListener)
          */
-        public void OnEventReceived(Common comm);
+        public void OnEventReceived(GenericDevice comm);
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class Common implements HWSpecs, HWOperations {
      *
      * @param listener instance of OnAreaFlyEventListener
      * @param period   in millis, means the delay between every pics event update
-     * @see eu.areamobile.apis.hw.pics.entity.Common.OnCommonEventListener
+     * @see GenericDevice.OnCommonEventListener
      */
 //    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {}
 
@@ -58,7 +58,7 @@ public abstract class Common implements HWSpecs, HWOperations {
      * Set the obj listening for events, need the service
      *
      * @param listener instance of OnAreaFlyEventListener
-     * @see eu.areamobile.apis.hw.pics.entity.Common.OnCommonEventListener
+     * @see GenericDevice.OnCommonEventListener
      */
     public void setOnAreaFlyEventListener(OnCommonEventListener listener) {
         this.listener = listener;

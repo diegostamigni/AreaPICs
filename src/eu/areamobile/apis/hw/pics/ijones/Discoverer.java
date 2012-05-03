@@ -3,7 +3,7 @@ package eu.areamobile.apis.hw.pics.ijones;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
-import eu.areamobile.apis.hw.pics.entity.Common;
+import eu.areamobile.apis.hw.pics.entity.GenericDevice;
 import eu.areamobile.apis.hw.pics.entity.HWOperations;
 import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
@@ -43,8 +43,8 @@ public class Discoverer<T> extends Thread {
     }
 
     public interface OnScanResponseListener {
-        void onScanFinished(List<Common> list);
-        void onScanInProgress(Common device, int position);
+        void onScanFinished(List<GenericDevice> list);
+        void onScanInProgress(GenericDevice device, int position);
     }
 
     /**
@@ -150,8 +150,8 @@ public class Discoverer<T> extends Thread {
      * @throws IOException
      */
     public void scan(Class<T> type, OnScanResponseListener listener) throws UnknownDeviceException, IOException {
-        Common mCommon = null;
-        List<Common> mCommonCollection = new ArrayList<Common>(0);
+        GenericDevice mGenericDevice = null;
+        List<GenericDevice> mGenericDeviceCollection = new ArrayList<GenericDevice>(0);
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
@@ -164,31 +164,31 @@ public class Discoverer<T> extends Thread {
         int position = 0;
         try {
             while (true) {
-                if (type.getClass().equals(AreaFly.class.getClass())) mCommon = new AreaFly(mContext);
+                if (type.getClass().equals(AreaFly.class.getClass())) mGenericDevice = new AreaFly(mContext);
                 // other devices --> else if() { ...Ê}
                 else { throw new UnknownDeviceException("What kind of device I've to scan for you?"); }
                 packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
 
                 mainSocket.receive(packet);
-                mCommon.setIPAddress(packet.getAddress().getHostAddress());
+                mGenericDevice.setIPAddress(packet.getAddress().getHostAddress());
 
                 s = new String(packet.getData(), 0, packet.getLength());
 
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
-                if (Common.isCommon(ioSpecs)) {
-                    mCommon.setDescription(ioSpecs);
-                    mCommonCollection.add(mCommon);
+                if (GenericDevice.isCommon(ioSpecs)) {
+                    mGenericDevice.setDescription(ioSpecs);
+                    mGenericDeviceCollection.add(mGenericDevice);
                     //we need to get/set Events
                 }
-                if (listener != null) listener.onScanInProgress(mCommon, position);
+                if (listener != null) listener.onScanInProgress(mGenericDevice, position);
                 position++;
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
         }
 
-        if (listener != null) listener.onScanFinished(mCommonCollection);
+        if (listener != null) listener.onScanFinished(mGenericDeviceCollection);
     }
 
     /**
@@ -243,10 +243,6 @@ public class Discoverer<T> extends Thread {
             }
         return hexString.toString();
     }
-
-//    private void setCommonCollection(final List<Common> list) {
-//        this.mCommonCollection = list;
-//    }
 
     public void setSocketPort(int port) {
         this.socketPort = port;

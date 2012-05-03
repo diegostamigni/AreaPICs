@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import eu.areamobile.apis.hw.pics.HWSpecs;
-import eu.areamobile.apis.hw.pics.entity.Common;
+import eu.areamobile.apis.hw.pics.entity.GenericDevice;
+import eu.areamobile.apis.hw.pics.entity.HWOperations;
 import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
 import eu.areamobile.apis.hw.pics.services.Updater;
 
@@ -18,7 +19,7 @@ import eu.areamobile.apis.hw.pics.services.Updater;
  * @see eu.areamobile.apis.hw.pics.services.Updater
  */
 
-public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, AreaFlyHWOperations {
+public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpecs, AreaFlyHWOperations {
     private final String TAG = this.getClass().getName();
     private final Context mContext;
 
@@ -106,7 +107,18 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Are
      *                  OPERATIONS
      * ################################################### */
     @Override
-    public AreaFlyJSonFactory io_put(int first_type, int pin, int second_type, Object value) {
+    public AreaFlyJSonFactory io_put(int pin, Object value) {
+        int first_type = HWOperations.TYPE_INT;
+        int second_type = -1;
+
+        if (value instanceof Byte) second_type = HWOperations.TYPE_BYTE;
+        else if (value instanceof Integer) second_type = HWOperations.TYPE_INT;
+        else if (value instanceof Float) second_type = HWOperations.TYPE_FLOAT;
+        else if (value instanceof Double) second_type = HWOperations.TYPE_DOUBLE;
+        else if (value instanceof Long) second_type = HWOperations.TYPE_LONG;
+        else if (value instanceof Character) second_type = HWOperations.TYPE_CHAR;
+        else if (value instanceof String) second_type = HWOperations.TYPE_STRING;
+
         AreaFlyJSonFactory ioput = new AreaFlyJSonFactory();
         AreaFlyJSonFactory.Exec exec = new AreaFlyJSonFactory.Exec();
         AreaFlyJSonFactory.Argv[] argv = new AreaFlyJSonFactory.Argv[2];
@@ -121,8 +133,8 @@ public class AreaFly extends Common implements Comparable<AreaFly>, HWSpecs, Are
         exec.setSender(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
         exec.setReceiver(this.getDescription().getStatus().getDevice());
         exec.setArgv(argv);
-        exec.setGroup(GROUP_SINGLE);
-        exec.setOp(OPCODE_IOPUT);
+        exec.setGroup(HWOperations.GROUP_SINGLE);
+        exec.setOp(HWOperations.OPCODE_IOPUT);
         exec.setPwd("xxx");
         exec.setTime(System.currentTimeMillis()+"");
         ioput.setExec(exec);

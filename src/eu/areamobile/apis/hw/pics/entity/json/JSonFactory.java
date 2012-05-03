@@ -2,7 +2,7 @@ package eu.areamobile.apis.hw.pics.entity.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import eu.areamobile.apis.hw.pics.entity.Common;
+import eu.areamobile.apis.hw.pics.entity.GenericDevice;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 
 public class JSonFactory extends HWJSonIOSpecs implements Serializable {
-    private Common mCommon;
+    private GenericDevice mGenericDevice;
 
     public JSonFactory() {
         super();
