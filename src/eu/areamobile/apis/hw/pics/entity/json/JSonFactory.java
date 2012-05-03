@@ -38,12 +38,12 @@ public class JSonFactory extends HWJSonIOSpecs implements Serializable {
     }
 
     public String transfertStream(HWJSonIOSpecs stream, Class<? extends HWJSonIOSpecs> jSonClass) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(HWJSonIOSpecs.class, new HWStatJsonDeserializer()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(HWJSonIOSpecs.class, new HWExecJsonSerializer()).create();
         return gson.toJson(stream, jSonClass);
     }
 
     public String transfertStream(HWJSonIOSpecs stream) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(HWJSonIOSpecs.class, new HWStatJsonDeserializer()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(HWJSonIOSpecs.class, new HWExecJsonSerializer()).create();
         return gson.toJson(stream, HWJSonIOSpecs.class);
     }
 }
