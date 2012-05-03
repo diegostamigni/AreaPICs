@@ -164,7 +164,7 @@ public class Discoverer<T> extends Thread {
         int position = 0;
         try {
             while (true) {
-                if (type.getClass().equals(AreaFly.class.getClass())) mGenericDevice = new AreaFly(mContext);
+                if (type.getClass().equals(AreaFly.class.getClass())) mGenericDevice = new AreaFly(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
                 // other devices --> else if() { ...Ê}
                 else { throw new UnknownDeviceException("What kind of device I've to scan for you?"); }
                 packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());

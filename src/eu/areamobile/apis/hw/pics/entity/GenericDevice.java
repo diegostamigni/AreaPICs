@@ -1,9 +1,10 @@
 package eu.areamobile.apis.hw.pics.entity;
 
-import android.content.Context;
 import eu.areamobile.apis.hw.pics.HWSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
+
+import java.io.Serializable;
 
 /**
  * Created by AreaMobile
@@ -14,68 +15,28 @@ import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public abstract class GenericDevice implements HWSpecs, HWOperations {
+public abstract class GenericDevice implements Serializable, HWSpecs, HWOperations {
     public static int SOCK_PORT = 50000;
-    private Context mContext;
     private String ip_address;
 
-    private OnCommonEventListener listener;
     private HWJSonIOSpecs mCommonIOStream;
     private JSonFactory mJSonFactory;
     private String macDevice;
+
+    public GenericDevice() {
+    }
+
+    public GenericDevice(String macDevice) {
+        this.macDevice = macDevice;
+    }
 
     public GenericDevice(JSonFactory jsonFact) {
         this.mJSonFactory = jsonFact;
     }
 
-    public GenericDevice(Context mContext) {
-        this.mContext = mContext;
-    }
-
-
-    public static interface OnCommonEventListener {
-        /**
-         * Event received listener.
-         *
-         * @param comm is the Common about the Event
-         * @see GenericDevice
-         * @see GenericDevice#setOnAreaFlyEventListener(GenericDevice.OnCommonEventListener)
-         */
-        public void OnEventReceived(GenericDevice comm);
-    }
-
-    /**
-     * Set the obj listening for events
-     *
-     * @param listener instance of OnAreaFlyEventListener
-     * @param period   in millis, means the delay between every pics event update
-     * @see GenericDevice.OnCommonEventListener
-     */
-//    public void setOnAreaFlyEventListener(OnAreaFlyEventListener listener, int period) {}
-
-    /**
-     * Set the obj listening for events, need the service
-     *
-     * @param listener instance of OnAreaFlyEventListener
-     * @see GenericDevice.OnCommonEventListener
-     */
-    public void setOnAreaFlyEventListener(OnCommonEventListener listener) {
-        this.listener = listener;
-    }
-
     public void setDevice(String device) {
         this.macDevice = device;
     };
-
-    /**
-     * When an event is received ...
-     */
-    void notifyEventReceived() {
-    }
-
-    public Context getContext() {
-        return mContext;
-    }
 
     @Override
     public String getIPAddress() {
@@ -85,10 +46,6 @@ public abstract class GenericDevice implements HWSpecs, HWOperations {
     @Override
     public void setIPAddress(String ip_address) {
         this.ip_address = ip_address;
-    }
-
-    protected OnCommonEventListener getListener() {
-        return listener;
     }
 
     @Override

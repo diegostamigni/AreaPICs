@@ -1,10 +1,9 @@
 package eu.areamobile.apis.hw.pics.entity.areafly.event;
 
-import java.io.Serializable;
-
 import android.os.Handler;
 import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
-import eu.areamobile.apis.hw.pics.services.Updater;
+
+import java.io.Serializable;
 
 /**
  * Created by AreaMobile
@@ -13,7 +12,6 @@ import eu.areamobile.apis.hw.pics.services.Updater;
  * Event of an AreaFly; include service usage.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
- * @see Updater
  */
 
 @Deprecated
