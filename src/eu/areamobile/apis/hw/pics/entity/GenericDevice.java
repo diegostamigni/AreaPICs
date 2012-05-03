@@ -58,15 +58,6 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
         return this.mCommonIOStream;
     }
 
-    /**
-     * Check if is a response (Status). This method already check if stream is not null
-     * @param stream json parsed string from stream
-     * @return true if is a response
-     */
-    public static boolean isCommon(HWJSonIOSpecs stream) {
-        return stream != null && stream.getStatus() != null;
-    }
-
     public JSonFactory getJSonFactory() {
         return this.mJSonFactory;
     }

@@ -120,7 +120,7 @@ public interface HWOperations {
     public final static byte OPCODE_IOBUTTONSTATE = 4;
     public final static byte OPCODE_ADCINIT = 5;
     public final static byte OPCODE_ADCVAL = 6;
-    public final static byte OPCODE_UARTINIT = 7;
+    public final static byte OPCODE_UART_INIT = 7;
     public final static byte OPCODE_UART_ON = 8;
     public final static byte OPCODE_UART_OFF = 9;
     public final static byte OPCODE_UART_FLUSH = 10;

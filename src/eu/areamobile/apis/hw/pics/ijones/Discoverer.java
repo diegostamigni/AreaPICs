@@ -150,7 +150,7 @@ public class Discoverer<T> extends Thread {
      * @throws IOException
      */
     public void scan(Class<T> type, OnScanResponseListener listener) throws UnknownDeviceException, IOException {
-        GenericDevice mGenericDevice = null;
+        GenericDevice mCurrentGenericDevice = null;
         List<GenericDevice> mGenericDeviceCollection = new ArrayList<GenericDevice>(0);
         byte[] buf = new byte[1024];
         DatagramPacket packet;
@@ -164,25 +164,28 @@ public class Discoverer<T> extends Thread {
         int position = 0;
         try {
             while (true) {
-                if (type.getClass().equals(AreaFly.class.getClass())) mGenericDevice = new AreaFly(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
+                if (type.getClass().equals(AreaFly.class.getClass())) mCurrentGenericDevice = new AreaFly(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
                 // other devices --> else if() { ...Ê}
                 else { throw new UnknownDeviceException("What kind of device I've to scan for you?"); }
                 packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
 
                 mainSocket.receive(packet);
-                mGenericDevice.setIPAddress(packet.getAddress().getHostAddress());
+                mCurrentGenericDevice.setIPAddress(packet.getAddress().getHostAddress());
 
                 s = new String(packet.getData(), 0, packet.getLength());
 
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
-                if (GenericDevice.isCommon(ioSpecs)) {
-                    mGenericDevice.setDescription(ioSpecs);
-                    mGenericDeviceCollection.add(mGenericDevice);
-                    //we need to get/set Events
-                }
-                if (listener != null) listener.onScanInProgress(mGenericDevice, position);
-                position++;
+                // check if already exist
+                if (ioSpecs != null && ioSpecs.getStatus() != null)
+                    for (GenericDevice genericDevice : mGenericDeviceCollection) {
+                        if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(genericDevice.getDescription().getStatus().getDevice()))) {
+                            mCurrentGenericDevice.setDescription(ioSpecs);
+                            mGenericDeviceCollection.add(mCurrentGenericDevice);
+                            if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
+                            position++;
+                        }
+                    }
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");

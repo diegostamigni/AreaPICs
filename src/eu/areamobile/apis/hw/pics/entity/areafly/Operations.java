@@ -12,127 +12,300 @@ import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
 
 interface AreaFlyHWOperations extends HWOperations {
     /**
-     * Turn pin to off/on
+     * Turn pin to off/on. Acknowledge is false.
      * @param pin the pin you would like to control
      * @param value 0, 1 to set the specific pin to on/off
      * @see HWOperations
      */
-//    AreaFlyJSonFactory io_put(int first_type, int pin, int second_type, Object value);
-    AreaFlyJSonFactory io_put(int pin, Object value);
+    AreaFlyJSonFactory io_put(int pin, int value);
+
+    /**
+     * Turn pin to off/on
+     * @param pin the pin you would like to control
+     * @param value 0, 1 to set the specific pin to on/off
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory io_put(int pin, int value, boolean acknowledge);
+
+    /**
+     * Instantiate the pin with the specified value. Acknowledge is false.
+     * @param pin the pin you would like to control
+     * @param value for the pin
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory io_init(int pin, int value);
 
     /**
      * Instantiate the pin with the specified value
      * @param pin the pin you would like to control
      * @param value for the pin
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
      */
-    AreaFlyJSonFactory io_init(int pin, int value);
+    AreaFlyJSonFactory io_init(int pin, int value, boolean acknowledge);
 
     /**
-     * Read the state of the specified pin
+     * Read the state of the specified pin. Acknowledge is false.
      * @param pin
+     * @see HWOperations
      * @return 0, 1 for off/on
      */
     AreaFlyJSonFactory io_get(int pin);
 
     /**
-     * Returns if a button was pressed or released
+     * Read the state of the specified pin.
+     * @param pin
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     * @return 0, 1 for off/on
+     */
+    AreaFlyJSonFactory io_get(int pin, boolean acknowledge);
+
+    /**
+     * Returns if a button was pressed or released. Acknowledge is false.
      * @param pin the pin you would like to control
-     * @deprecated NEEDS TO BE IMPROVED OR REPLACED WITH EVENTS
+     * @see HWOperations
      */
     AreaFlyJSonFactory io_button_state(int pin);
 
     /**
-     * Initialize the ADC<br></br>
+     * Returns if a button was pressed or released.
+     * @param pin the pin you would like to control
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory io_button_state(int pin, boolean acknowledge);
+
+    /**
+     * Initialize the ADC<br></br>Acknowledge is false.
      * <b>Note:</b> the AreaFly initialize the ADCs itself
+     * @see HWOperations
      */
     AreaFlyJSonFactory adc_init();
 
     /**
-     * Read the value of one of the analogical channels
+     * Initialize the ADC<br></br>
+     * <b>Note:</b> the AreaFly initialize the ADCs itself
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory adc_init(boolean acknowledge);
+
+    /**
+     * Read the value of one of the analogical channels. Acknowledge is false.
      * @param channel is the channel
      * @return - (int) value of the channel between [0-1023]
+     * @see HWOperations
      */
     AreaFlyJSonFactory adc_val(int channel);
 
     /**
-     * Initialize the port indicated with the value baud
+     * Read the value of one of the analogical channels.
+     * @param channel is the channel
+     * @param acknowledge if you want the acknowledge
+     * @return - (int) value of the channel between [0-1023]
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory adc_val(int channel, boolean acknowledge);
+
+    /**
+     * Initialize the port indicated with the value baud. Acknowledge is false.
      * @param port you would like change
      * @param baud is the value for the port
+     * @see HWOperations
      */
     AreaFlyJSonFactory uart_init(int port, long baud);
 
     /**
-     * Activate the serial port
+     * Initialize the port indicated with the value baud.
+     * @param port you would like change
+     * @param baud is the value for the port
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_init(int port, long baud, boolean acknowledge);
+
+    /**
+     * Activate the serial port. Acknowledge is false.
      * @param port
+     * @see HWOperations
      */
     AreaFlyJSonFactory uart_on(int port);
 
     /**
-     * Deactivate the serial port
+     * Activate the serial port.
      * @param port
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_on(int port, boolean acknowledge);
+
+    /**
+     * Deactivate the serial port. Acknowledge is false.
+     * @param port
+     * @see HWOperations
      */
     AreaFlyJSonFactory uart_off(int port);
 
     /**
-     * Clean the buffer of the port
+     * Deactivate the serial port
      * @param port
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_off(int port, boolean acknowledge);
+
+    /**
+     * Clean the buffer of the port. Acknowledge is false.
+     * @param port
+     * @see HWOperations
      */
     AreaFlyJSonFactory uart_flush(int port);
 
     /**
-     * Number of characters arrived at the port
+     * Clean the buffer of the port
+     * @param port
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_flush(int port, boolean acknowledge);
+
+    /**
+     * Number of characters arrived at the port. Acknowledge is false.
      * @param port
      * @return the number of the characters in the buffer
+     * @see HWOperations
      */
     AreaFlyJSonFactory uart_buffer_size(int port);
+
+    /**
+     * Number of characters arrived at the port.
+     * @param port
+     * @param acknowledge if you want the acknowledge
+     * @return the number of the characters in the buffer
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_buffer_size(int port, boolean acknowledge);
+
+    /**
+     * Read n characters from the buffer of the port. Acknowledge is false.
+     * @param port of the buffer
+     * @param n is the number of characters you'd like to read from the buffer
+     * @return the string of the characters read
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_read(int port, int n);
 
     /**
      * Read n characters from the buffer of the port
      * @param port of the buffer
      * @param n is the number of characters you'd like to read from the buffer
+     * @param acknowledge if you want the acknowledge
      * @return the string of the characters read
+     * @see HWOperations
      */
-    AreaFlyJSonFactory uart_read(int port, int n);
+    AreaFlyJSonFactory uart_read(int port, int n, boolean acknowledge);
+
+    /**
+     * Write the string str on the port. Acknowledge is false.
+     * @param port
+     * @param str
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_write(int port, String str);
 
     /**
      * Write the string str on the port
      * @param port
      * @param str
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
      */
-    AreaFlyJSonFactory uart_write(int port, String str);
+    AreaFlyJSonFactory uart_write(int port, String str, boolean acknowledge);
+
+    /**
+     * Write the character ch on hte port. Acknowledge is false.
+     * @param port
+     * @param ch
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory uart_write_ch(int port, char ch);
 
     /**
      * Write the character ch on hte port
      * @param port
      * @param ch
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
      */
-    AreaFlyJSonFactory uart_write_ch(int port, char ch);
+    AreaFlyJSonFactory uart_write_ch(int port, char ch, boolean acknowledge);
 
     /**
-     * Initialize the <b>pwm</b> at the <b>freq</b> with the <b>duty</b> cycle
+     * Initialize the <b>pwm</b> at the <b>freq</b> with the <b>duty</b> cycle. Acknowledge is false.
      * @param n
      * @param freq
      * @param duty
+     * @see HWOperations
      */
     AreaFlyJSonFactory pwm_init(byte n, float freq, float duty);
+
+    /**
+     * Initialize the <b>pwm</b> at the <b>freq</b> with the <b>duty</b> cycle.
+     * @param n
+     * @param freq
+     * @param duty
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory pwm_init(byte n, float freq, float duty, boolean acknowledge);
+
+    /**
+     * Activate the wave indicated by pwm on the pin. Acknowledge is false.
+     * @param pin
+     * @param pwm
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory pwm_on (byte pin, byte pwm);
 
     /**
      * Activate the wave indicated by pwm on the pin
      * @param pin
      * @param pwm
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
      */
-    AreaFlyJSonFactory pwm_on (byte pin, byte pwm);
+    AreaFlyJSonFactory pwm_on (byte pin, byte pwm, boolean acknowledge);
+
+    /**
+     * Set the duty cycle of the pwm. Acknowledge is false.
+     * @param duty
+     * @param pwm
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory pwm_duty(float duty, byte pwm);
 
     /**
      * Set the duty cycle of the pwm
      * @param duty
      * @param pwm
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
      */
-    AreaFlyJSonFactory pwm_duty(float duty, byte pwm);
+    AreaFlyJSonFactory pwm_duty(float duty, byte pwm, boolean acknowledge);
+
+    /**
+     * Turn-off the pwm. Acknowledge is false.
+     * @param pwm
+     * @see HWOperations
+     */
+    AreaFlyJSonFactory pwm_off(byte pwm);
 
     /**
      * Turn-off the pwm
      * @param pwm
+     * @param acknowledge if you want the acknowledge
+     * @see HWOperations
      */
-    AreaFlyJSonFactory pwm_off(byte pwm);
+    AreaFlyJSonFactory pwm_off(byte pwm, boolean acknowledge);
 }
