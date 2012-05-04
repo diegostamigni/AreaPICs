@@ -16,18 +16,18 @@ import eu.areamobile.apis.hw.pics.entity.areafly.json.AreaFlyJSonFactory;
 
 public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpecs, AreaFlyHWOperations {
     private final String TAG = this.getClass().getName();
-    private String macAddress;
+    private String macAddress, mNetBiosName;
     private AreaFlyJSonFactory.AreaFlyIOStream areaFlyIOStream;
     private AreaFlyJSonFactory jsonFact;
 
-    public AreaFly(String wifiMacAddress, AreaFlyJSonFactory jsonFact) {
-        super(jsonFact);
+    public AreaFly(String mNetBiosName, String wifiMacAddress, AreaFlyJSonFactory jsonFact) {
+        this.mNetBiosName = mNetBiosName;
         this.macAddress = wifiMacAddress;
         this.jsonFact = jsonFact;
     }
 
-    public AreaFly(String wifiMacAddress) {
-        this.macAddress = wifiMacAddress;
+    public AreaFly(String macDevice) {
+        this.macAddress = macAddress;
     }
 
     @Override

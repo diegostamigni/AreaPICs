@@ -177,15 +177,25 @@ public class Discoverer<T> extends Thread {
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
                 // check if already exist
-                if (ioSpecs != null && ioSpecs.getStatus() != null)
-                    for (GenericDevice genericDevice : mGenericDeviceCollection) {
-                        if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(genericDevice.getDescription().getStatus().getDevice()))) {
-                            mCurrentGenericDevice.setDescription(ioSpecs);
-                            mGenericDeviceCollection.add(mCurrentGenericDevice);
-                            if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
-                            position++;
+                if (ioSpecs != null && ioSpecs.getStatus() != null) {
+                    if (mGenericDeviceCollection.size() > 0) {
+                        for (GenericDevice genericDevice : mGenericDeviceCollection) {
+                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(genericDevice.getDescription().getStatus().getDevice()))) {
+                                mCurrentGenericDevice.setDescription(ioSpecs);
+                                mCurrentGenericDevice.setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                                mGenericDeviceCollection.add(mCurrentGenericDevice);
+                                if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
+                                position++;
+                            }
                         }
+                    } else {
+                        mCurrentGenericDevice.setDescription(ioSpecs);
+                        mCurrentGenericDevice.setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                        mGenericDeviceCollection.add(mCurrentGenericDevice);
+                        if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
+                        position++;
                     }
+                }
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
