@@ -190,11 +190,14 @@ public class Discoverer extends Thread {
                             }
                         }
                     } else {
-                        ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
-                        ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
-                        mGenericDeviceCollection.add(mCurrentGenericDevice);
-                        if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
-                        position++;
+                        HWJSonIOSpecs.Argv[] argv = ioSpecs.getStatus().getArgv();
+                        if (argv.length > 0) {
+                            ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                            ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
+                            mGenericDeviceCollection.add(mCurrentGenericDevice);
+                            if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
+                            position++;
+                        }
                     }
                 }
             }
