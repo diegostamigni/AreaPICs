@@ -5,14 +5,17 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
 import eu.areamobile.apis.hw.pics.entity.HWOperations;
-import eu.areamobile.apis.hw.pics.entity.areafly.AreaFly;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 import eu.areamobile.apis.hw.pics.exceptions.UnknownDeviceException;
 import eu.areamobile.apis.hw.pics.utils.NetUtils;
 
 import java.io.IOException;
-import java.net.*;
+import java.lang.reflect.InvocationTargetException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -27,7 +30,7 @@ import java.util.List;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public class Discoverer<T> extends Thread {
+public class Discoverer extends Thread {
     public static final String TAG = Discoverer.class.getName();
     private static final String REMOTE_KEY = "";
 
@@ -42,9 +45,9 @@ public class Discoverer<T> extends Thread {
         void onMessageReceived(HWJSonIOSpecs.Status status);
     }
 
-    public interface OnScanResponseListener {
-        void onScanFinished(List<GenericDevice> list);
-        void onScanInProgress(GenericDevice device, int position);
+    public interface OnScanResponseListener<T> {
+        void onScanFinished(List<T> list);
+        void onScanInProgress(T device, int position);
     }
 
     /**
@@ -144,14 +147,13 @@ public class Discoverer<T> extends Thread {
 
     /**
      * Scan the specified pics
-     * @param type what you want to scan
+     * @param type the type of the device to be scanned
      * @param listener return from the stream
-     * @return a collection of scanned device, needs to be son of Common
      * @throws IOException
      */
-    public void scan(Class<T> type, OnScanResponseListener listener) throws UnknownDeviceException, IOException {
-        GenericDevice mCurrentGenericDevice = null;
-        List<GenericDevice> mGenericDeviceCollection = new ArrayList<GenericDevice>(0);
+    public <T> void scan(Class<T> type, OnScanResponseListener<T> listener) throws IOException, UnknownDeviceException {
+        T mCurrentGenericDevice = null;
+        List<T> mGenericDeviceCollection = new ArrayList<T>(0);
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
@@ -164,13 +166,12 @@ public class Discoverer<T> extends Thread {
         int position = 0;
         try {
             while (true) {
-                if (type.getClass().equals(AreaFly.class.getClass())) mCurrentGenericDevice = new AreaFly(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
-                // other devices --> else if() { ...Ê}
-                else { throw new UnknownDeviceException("What kind of device I've to scan for you?"); }
+                mCurrentGenericDevice = type.getConstructor(String.class).newInstance(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
+
                 packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
 
                 mainSocket.receive(packet);
-                mCurrentGenericDevice.setIPAddress(packet.getAddress().getHostAddress());
+                ((GenericDevice) mCurrentGenericDevice).setIPAddress(packet.getAddress().getHostAddress());
 
                 s = new String(packet.getData(), 0, packet.getLength());
 
@@ -179,18 +180,18 @@ public class Discoverer<T> extends Thread {
                 // check if already exist
                 if (ioSpecs != null && ioSpecs.getStatus() != null) {
                     if (mGenericDeviceCollection.size() > 0) {
-                        for (GenericDevice genericDevice : mGenericDeviceCollection) {
-                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(genericDevice.getDescription().getStatus().getDevice()))) {
-                                mCurrentGenericDevice.setDescription(ioSpecs);
-                                mCurrentGenericDevice.setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                        for (T genericDevice : mGenericDeviceCollection) {
+                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(((GenericDevice)genericDevice).getDescription().getStatus().getDevice()))) {
+                                ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
+                                ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
                                 mGenericDeviceCollection.add(mCurrentGenericDevice);
-                                if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
+                                if (listener != null) listener.onScanInProgress(genericDevice, position);
                                 position++;
                             }
                         }
                     } else {
-                        mCurrentGenericDevice.setDescription(ioSpecs);
-                        mCurrentGenericDevice.setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                        ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
+                        ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
                         mGenericDeviceCollection.add(mCurrentGenericDevice);
                         if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
                         position++;
@@ -199,6 +200,18 @@ public class Discoverer<T> extends Thread {
             }
         } catch (SocketTimeoutException e) {
             Log.d(TAG, "Receive timed out.");
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
         }
 
         if (listener != null) listener.onScanFinished(mGenericDeviceCollection);
