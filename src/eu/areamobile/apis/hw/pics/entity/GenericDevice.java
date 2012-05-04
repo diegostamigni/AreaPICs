@@ -22,21 +22,29 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
     private HWJSonIOSpecs mCommonIOStream;
     private JSonFactory mJSonFactory;
     private String macDevice;
+    private String netBiosName;
 
-    public GenericDevice() {
-    }
+    public GenericDevice() {}
 
     public GenericDevice(String macDevice) {
         this.macDevice = macDevice;
     }
 
-    public GenericDevice(JSonFactory jsonFact) {
-        this.mJSonFactory = jsonFact;
+    public GenericDevice(String macDevice, String netBiosName) {
+        this.macDevice = macDevice;
+        this.netBiosName = netBiosName;
     }
 
-    public void setDevice(String device) {
-        this.macDevice = device;
-    };
+    public GenericDevice(String macDevice, JSonFactory jsonFact) {
+        this.mJSonFactory = jsonFact;
+        this.macDevice = macDevice;
+    }
+
+    public GenericDevice(String netBiosName, String macDevice, JSonFactory jsonFact) {
+        this.netBiosName = netBiosName;
+        this.mJSonFactory = jsonFact;
+        this.macDevice = macDevice;
+    }
 
     @Override
     public String getIPAddress() {
@@ -70,7 +78,18 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
         return SOCK_PORT;
     }
 
+    @Override
     public String getDevice() {
         return this.macDevice;
+    }
+
+    @Override
+    public void setNetBiosName(String netBiosName) {
+        this.netBiosName = netBiosName;
+    }
+
+    @Override
+    public String getNetBiosName() {
+        return netBiosName;
     }
 }

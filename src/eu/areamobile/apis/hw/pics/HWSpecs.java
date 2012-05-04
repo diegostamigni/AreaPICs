@@ -9,6 +9,12 @@ import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 
 
 public interface HWSpecs {
+    abstract String getDevice();
+//    abstract void setDevice(String macAddress);
+
+    abstract String getNetBiosName();
+    abstract void setNetBiosName(String netBiosName);
+
     abstract String getIPAddress();
 
     /**
