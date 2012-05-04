@@ -27,7 +27,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
     }
 
     public AreaFly(String macDevice) {
-        this.macAddress = macAddress;
+        this.macAddress = macDevice;
     }
 
     @Override
