@@ -18,10 +18,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -170,10 +167,10 @@ public class Discoverer extends Thread {
         try {
             while (true) {
                 mCurrentGenericDevice = type.getConstructor(String.class).newInstance(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
-
                 packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
 
                 mainSocket.receive(packet);
+
                 ((GenericDevice) mCurrentGenericDevice).setIPAddress(packet.getAddress().getHostAddress());
 
                 s = new String(packet.getData(), 0, packet.getLength());
