@@ -1,21 +1,14 @@
 package eu.areamobile.apis.hw.pics.ijones;
 
-import android.content.Context;
-import android.net.wifi.WifiManager;
-import android.util.Log;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
 import eu.areamobile.apis.hw.pics.entity.HWOperations;
 import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
 import eu.areamobile.apis.hw.pics.exceptions.UnknownDeviceException;
-import eu.areamobile.apis.hw.pics.utils.NetUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
+import java.net.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
@@ -31,15 +24,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 
 public class Discoverer extends Thread {
-    public static final String TAG = Discoverer.class.getName();
     private static final String REMOTE_KEY = "";
 
     public static final int TIMEOUT_MS = 500;
-    private WifiManager mWifi;
     private DatagramSocket mainSocket;
     private JSonFactory mJSonFactory;
-    private Context mContext;
     private int socketPort = -1;
+    private String macAddress;
+    private InetAddress broadcastAddress;
 
     public interface OnResponseListener {
         void onMessageReceived(HWJSonIOSpecs.Status status);
@@ -51,53 +43,20 @@ public class Discoverer extends Thread {
     }
 
     /**
-     * Blank constructor. You've to set every fields:<br></br>
-     * <ol>
-     * <li>Context</li>
-     * <li>WifiManager</li>
-     * <li>Discoverer socketPort: where to listen</li>
-     * <li>Discoverer senderPort: where to send</li>
-     * </ol>
+     * It is an adventurer obj. Initialize it and use scan function to find any Common on the current net.
      *
-     * @see Discoverer#setContext(android.content.Context)
-     * @see Discoverer#setWifiManager(android.net.wifi.WifiManager)
-     * @see Discoverer#setSocketPort
-     */
-    public Discoverer() {
-        mJSonFactory = new JSonFactory();
-    }
-
-    /**
-     * It is an adventure obj. Initialize it and use scan function to find any Common on the current net.
-     *
-     * @param ctx  is the context
-     * @param wifi is the android.net.wifi.WifiManager
+     * @param broadcastAddress is you ip broadcast address
+     * @param yourNetMacAddress is your net-mac-address
      * @param socketPort is the discoverer socketPort where it listen
      * @throws SocketException Something goes wrong in the init of the mainSocket. Are you connected ?
      * @see Discoverer#scan(Class, eu.areamobile.apis.hw.pics.ijones.Discoverer.OnScanResponseListener)
      */
-    public Discoverer(Context ctx, android.net.wifi.WifiManager wifi, int socketPort) throws SocketException {
-        this.mContext = ctx;
-        mWifi = wifi;
+    public Discoverer(InetAddress broadcastAddress, String yourNetMacAddress, int socketPort) throws SocketException {
         mJSonFactory = new JSonFactory();
         this.socketPort = socketPort;
+        this.broadcastAddress = broadcastAddress;
+        macAddress = yourNetMacAddress;
         initSocket();
-    }
-
-    public WifiManager getWifiManager() {
-        return mWifi;
-    }
-
-    public Context getContext() {
-        return mContext;
-    }
-
-    public void setWifiManager(WifiManager mWifi) {
-        this.mWifi = mWifi;
-    }
-
-    public void setContext(Context mContext) {
-        this.mContext = mContext;
     }
 
     /**
@@ -134,7 +93,7 @@ public class Discoverer extends Thread {
         HWJSonIOSpecs.Argv[] argv = new HWJSonIOSpecs.Argv[0];
 
         exec.setAck(false);
-        exec.setSender(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
+        exec.setSender(this.macAddress);
         exec.setReceiver("ff:ff:ff:ff:ff:ff");
         exec.setArgv(argv);
         exec.setGroup(HWOperations.GROUP_ALL);
@@ -160,14 +119,14 @@ public class Discoverer extends Thread {
 
         DatagramSocket socket = this.getSocketDiscoverer();
         String msg = mJSonFactory.transfertStream(createNetworkScanMessage());
-        packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getSocketPort());
+        packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, this.getSocketPort());
         socket.send(packet);
 
         int position = 0;
         try {
             while (true) {
-                mCurrentGenericDevice = type.getConstructor(String.class).newInstance(((WifiManager) mContext.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress());
-                packet = new DatagramPacket(buf, buf.length, NetUtils.getBroadcastAddress(mWifi), getSocketDiscoverer().getLocalPort());
+                mCurrentGenericDevice = type.getConstructor(String.class).newInstance(this.macAddress);
+                packet = new DatagramPacket(buf, buf.length, this.broadcastAddress, this.getSocketDiscoverer().getLocalPort());
 
                 mainSocket.receive(packet);
 
@@ -202,7 +161,7 @@ public class Discoverer extends Thread {
                 }
             }
         } catch (SocketTimeoutException e) {
-            Log.d(TAG, "Receive timed out.");
+            System.out.print("Receive timed out.");
         } catch (InstantiationException e) {
             e.printStackTrace();
             throw new UnknownDeviceException("What kind of device I've to scan for you?");
@@ -232,7 +191,7 @@ public class Discoverer extends Thread {
     public void sendMessage(HWJSonIOSpecs stream, OnResponseListener listener) throws IOException {
         DatagramSocket socket = this.getSocketDiscoverer();
         String msg = mJSonFactory.transfertStream(stream);
-        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), NetUtils.getBroadcastAddress(mWifi), getSocketPort());
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, getSocketPort());
         socket.send(packet);
 
         try {
@@ -243,7 +202,7 @@ public class Discoverer extends Thread {
             if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null)
                 listener.onMessageReceived(ioSpecs.getStatus());
 
-        } catch (SocketTimeoutException e) { Log.d(TAG, "Receive timed out."); }
+        } catch (SocketTimeoutException e) { System.out.print("Receive timed out."); }
     }
 
     /**
@@ -279,5 +238,21 @@ public class Discoverer extends Thread {
 
     public int getSocketPort() {
         return this.socketPort;
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    public InetAddress getBroadcastAddress() {
+        return broadcastAddress;
+    }
+
+    public void setBroadcastAddress(InetAddress broadcastAddress) {
+        this.broadcastAddress = broadcastAddress;
     }
 }
