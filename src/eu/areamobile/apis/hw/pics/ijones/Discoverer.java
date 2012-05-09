@@ -20,6 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by AreaMobile
@@ -153,7 +154,7 @@ public class Discoverer extends Thread {
      */
     public <T> void scan(Class<T> type, OnScanResponseListener<T> listener) throws IOException, UnknownDeviceException {
         T mCurrentGenericDevice = null;
-        List<T> mGenericDeviceCollection = new ArrayList<T>(0);
+        List<T> mGenericDeviceCollection = new CopyOnWriteArrayList<T>();
         byte[] buf = new byte[1024];
         DatagramPacket packet;
         String s;
