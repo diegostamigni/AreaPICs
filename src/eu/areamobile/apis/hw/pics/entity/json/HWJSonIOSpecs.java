@@ -172,7 +172,7 @@ public class HWJSonIOSpecs implements Serializable {
         private String rcv;
 
         @SerializedName(STAT_TIME)
-        private long time;
+        private String time;
 
         @SerializedName(STAT_TYPE)
         private int type;
@@ -207,11 +207,11 @@ public class HWJSonIOSpecs implements Serializable {
             return this.subt;
         }
 
-        public long getTime() {
+        public String getTime() {
             return time;
         }
 
-        public void setTime(long time) {
+        public void setTime(String time) {
             this.time = time;
         }
 

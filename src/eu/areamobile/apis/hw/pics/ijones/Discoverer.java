@@ -182,7 +182,7 @@ public class Discoverer extends Thread {
                 if (ioSpecs != null && ioSpecs.getStatus() != null) {
                     if (mGenericDeviceCollection.size() > 0) {
                         for (T genericDevice : mGenericDeviceCollection) {
-                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(((GenericDevice)genericDevice).getDescription().getStatus().getDevice()))) {
+                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(((GenericDevice) genericDevice).getDescription().getStatus().getDevice()))) {
                                 ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
                                 ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
                                 mGenericDeviceCollection.add(mCurrentGenericDevice);
