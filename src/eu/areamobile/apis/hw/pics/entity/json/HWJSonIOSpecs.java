@@ -71,7 +71,7 @@ public class HWJSonIOSpecs implements Serializable {
         @SerializedName(EXEC_SDR)
         private String sdr;
 
-        // areafly mac address
+        // dooip mac address
         @SerializedName(EXEC_RCV)
         private String rcv;
 
@@ -163,7 +163,7 @@ public class HWJSonIOSpecs implements Serializable {
 	 * @author Diego Stamigni
 	 */
     public static class Status implements Serializable {
-        // areafly wifi mac address
+        // dooip wifi mac address
         @SerializedName(STAT_SDR)
         private String sdr;
 
