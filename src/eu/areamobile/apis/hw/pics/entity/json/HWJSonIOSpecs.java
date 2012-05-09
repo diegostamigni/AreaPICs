@@ -76,7 +76,7 @@ public class HWJSonIOSpecs implements Serializable {
         private String rcv;
 
         @SerializedName(EXEC_TIME)
-        private int time;
+        private String time;
 
         @SerializedName(EXEC_PWD)
         private String pwd;
@@ -109,11 +109,11 @@ public class HWJSonIOSpecs implements Serializable {
             this.sdr = dev;
         }
 
-        public int getTime() {
+        public String getTime() {
             return time;
         }
 
-        public void setTime(int time) {
+        public void setTime(String time) {
             this.time = time;
         }
 
@@ -172,7 +172,7 @@ public class HWJSonIOSpecs implements Serializable {
         private String rcv;
 
         @SerializedName(STAT_TIME)
-        private int time;
+        private String time;
 
         @SerializedName(STAT_TYPE)
         private int type;
@@ -207,11 +207,11 @@ public class HWJSonIOSpecs implements Serializable {
             return this.subt;
         }
 
-        public int getTime() {
+        public String getTime() {
             return time;
         }
 
-        public void setTime(int time) {
+        public void setTime(String time) {
             this.time = time;
         }
 

@@ -140,7 +140,7 @@ public class Discoverer extends Thread {
         exec.setGroup(HWOperations.GROUP_ALL);
         exec.setOp(HWOperations.OPCODE_SCAN);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         sayHiAll.setExec(exec);
         return sayHiAll;
     }
@@ -151,7 +151,7 @@ public class Discoverer extends Thread {
      * @param listener return from the stream
      * @throws IOException
      */
-    public synchronized <T> void scan(Class<T> type, OnScanResponseListener<T> listener) throws IOException, UnknownDeviceException {
+    public <T> void scan(Class<T> type, OnScanResponseListener<T> listener) throws IOException, UnknownDeviceException {
         T mCurrentGenericDevice = null;
         List<T> mGenericDeviceCollection = new ArrayList<T>(0);
         byte[] buf = new byte[1024];

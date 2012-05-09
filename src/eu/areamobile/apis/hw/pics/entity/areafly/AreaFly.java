@@ -75,7 +75,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_IOPUT);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         ioput.setExec(exec);
         return ioput;
     }
@@ -107,7 +107,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_IOINIT);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         ioinit.setExec(exec);
         return ioinit;
     }
@@ -135,7 +135,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_IOGET);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         ioget.setExec(exec);
         return ioget;
     }
@@ -163,7 +163,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_IOBUTTONSTATE);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         iobuttonstate.setExec(exec);
         return iobuttonstate;
     }
@@ -186,7 +186,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_ADCINIT);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         adcinit.setExec(exec);
         return adcinit;
     }
@@ -214,7 +214,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_ADCVAL);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         adcval.setExec(exec);
         return adcval;
     }
@@ -246,7 +246,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_INIT);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartinit.setExec(exec);
         return uartinit;
     }
@@ -274,7 +274,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_ON);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uarton.setExec(exec);
         return uarton;
     }
@@ -302,7 +302,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_OFF);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartoff.setExec(exec);
         return uartoff;
     }
@@ -330,7 +330,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_FLUSH);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartflush.setExec(exec);
         return uartflush;
     }
@@ -358,7 +358,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_BUFFER_SIZE);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartbs.setExec(exec);
         return uartbs;
     }
@@ -390,7 +390,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_READ);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartread.setExec(exec);
         return uartread;
     }
@@ -422,7 +422,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_WRITE);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartwrite.setExec(exec);
         return uartwrite;
     }
@@ -454,7 +454,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_UART_WRITE_CH);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         uartwritech.setExec(exec);
         return uartwritech;
     }
@@ -490,7 +490,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_PWM_INIT);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         pwminit.setExec(exec);
         return pwminit;
     }
@@ -522,7 +522,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_PWM_ON);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         pwmon.setExec(exec);
         return pwmon;
     }
@@ -554,7 +554,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_PWM_DUTY);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         pwmduty.setExec(exec);
         return pwmduty;
     }
@@ -582,7 +582,7 @@ public class AreaFly extends GenericDevice implements Comparable<AreaFly>, HWSpe
         exec.setGroup(HWOperations.GROUP_SINGLE);
         exec.setOp(HWOperations.OPCODE_PWM_OFF);
         exec.setPwd("xxx");
-        exec.setTime((int) System.currentTimeMillis()/1000);
+        exec.setTime(System.currentTimeMillis()+"");
         pwmoff.setExec(exec);
         return pwmoff;
     }
