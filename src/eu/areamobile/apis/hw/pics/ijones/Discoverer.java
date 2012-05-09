@@ -140,7 +140,7 @@ public class Discoverer extends Thread {
         exec.setGroup(HWOperations.GROUP_ALL);
         exec.setOp(HWOperations.OPCODE_SCAN);
         exec.setPwd("xxx");
-        exec.setTime(System.currentTimeMillis()+"");
+        exec.setTime((int) System.currentTimeMillis()/1000);
         sayHiAll.setExec(exec);
         return sayHiAll;
     }
@@ -151,7 +151,7 @@ public class Discoverer extends Thread {
      * @param listener return from the stream
      * @throws IOException
      */
-    public <T> void scan(Class<T> type, OnScanResponseListener<T> listener) throws IOException, UnknownDeviceException {
+    public synchronized <T> void scan(Class<T> type, OnScanResponseListener<T> listener) throws IOException, UnknownDeviceException {
         T mCurrentGenericDevice = null;
         List<T> mGenericDeviceCollection = new ArrayList<T>(0);
         byte[] buf = new byte[1024];
@@ -181,7 +181,7 @@ public class Discoverer extends Thread {
                 if (ioSpecs != null && ioSpecs.getStatus() != null) {
                     if (mGenericDeviceCollection.size() > 0) {
                         for (T genericDevice : mGenericDeviceCollection) {
-                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(((GenericDevice)genericDevice).getDescription().getStatus().getDevice()))) {
+                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(((GenericDevice) genericDevice).getDescription().getStatus().getDevice()))) {
                                 ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
                                 ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
                                 mGenericDeviceCollection.add(mCurrentGenericDevice);
