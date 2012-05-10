@@ -137,7 +137,7 @@ public class Discoverer extends Thread {
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
                 // check if already exist
-                if (ioSpecs != null && ioSpecs.getStatus() != null) {
+                if (ioSpecs != null && ioSpecs.getStatus() != null && ioSpecs.getStatus().getArgv().length > 0) {
                     ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
                     ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
                     mGenericDeviceCollection.add(mCurrentGenericDevice);
