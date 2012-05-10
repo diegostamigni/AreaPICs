@@ -1,8 +1,9 @@
 package eu.areamobile.apis.hw.pics.entity;
 
 import eu.areamobile.apis.hw.pics.HWSpecs;
-import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
-import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
+import eu.areamobile.apis.hw.pics.Operation;
+import eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs;
+import eu.areamobile.apis.hw.pics.proto.JSonFactory;
 
 import java.io.Serializable;
 
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public abstract class GenericDevice implements Serializable, HWSpecs, HWOperations {
+public abstract class GenericDevice implements Serializable, HWSpecs {
     public static int SOCK_PORT = 50000;
     private String ip_address;
 
@@ -23,6 +24,7 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
     private JSonFactory mJSonFactory;
     private String macDevice;
     private String netBiosName;
+    private Operation mOperation;
 
     public GenericDevice() {}
 
@@ -40,10 +42,11 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
         this.macDevice = macDevice;
     }
 
-    public GenericDevice(String netBiosName, String macDevice, JSonFactory jsonFact) {
+    public GenericDevice(String netBiosName, String macDevice, JSonFactory jsonFact, Operation mOperation) {
         this.netBiosName = netBiosName;
         this.mJSonFactory = jsonFact;
         this.macDevice = macDevice;
+        this.mOperation = mOperation;
     }
 
     @Override
@@ -106,5 +109,13 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void setOperation(Operation operation) {
+        this.mOperation = operation;
+    }
+
+    public Operation getOperation() {
+        return this.mOperation;
     }
 }

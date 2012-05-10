@@ -1,4 +1,4 @@
-package eu.areamobile.apis.hw.pics.entity.json;
+package eu.areamobile.apis.hw.pics.proto;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

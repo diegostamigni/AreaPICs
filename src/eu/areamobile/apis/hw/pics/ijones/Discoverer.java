@@ -1,10 +1,12 @@
 package eu.areamobile.apis.hw.pics.ijones;
 
+import eu.areamobile.apis.hw.pics.HWOperations;
+import eu.areamobile.apis.hw.pics.Operation;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
-import eu.areamobile.apis.hw.pics.entity.HWOperations;
-import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
-import eu.areamobile.apis.hw.pics.entity.json.JSonFactory;
+import eu.areamobile.apis.hw.pics.entity.dooip.DooIP;
 import eu.areamobile.apis.hw.pics.exceptions.UnknownDeviceException;
+import eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs;
+import eu.areamobile.apis.hw.pics.proto.JSonFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -94,7 +96,7 @@ public class Discoverer extends Thread {
 
         exec.setAck(false);
         exec.setSender(this.macAddress);
-        exec.setReceiver("ff:ff:ff:ff:ff:ff");
+        exec.setReceiver(HWOperations.MA_TO_BROADCAST);
         exec.setArgv(argv);
         exec.setGroup(HWOperations.GROUP_ALL);
         exec.setOp(HWOperations.OPCODE_SCAN);
@@ -168,14 +170,14 @@ public class Discoverer extends Thread {
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves. It use the inner mainSocket, created by Discoverer.
      *
-     * @param stream the data you'd like to send throw the mainSocket
+     * @param dooIP At who do you want to send?
      * @param listener return from the stream
      * @throws IOException something goes wrong
-     * @see eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs
+     * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
      */
-    public void sendMessage(HWJSonIOSpecs stream, OnResponseListener listener) throws IOException {
+    public void sendMessage(DooIP dooIP, OnResponseListener listener) throws IOException {
         DatagramSocket socket = this.getSocketDiscoverer();
-        String msg = mJSonFactory.transfertStream(stream);
+        String msg = mJSonFactory.transfertStream(dooIP.getOperation().getJsonSpecs());
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, getSocketPort());
         socket.send(packet);
 
@@ -185,14 +187,30 @@ public class Discoverer extends Thread {
             HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
             if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null)
-                listener.onMessageReceived(ioSpecs.getStatus());
+                if (ioSpecs.getStatus().getDevice().equalsIgnoreCase(dooIP.getOperation().getJsonSpecs().getStatus().getDevice()))
+                    listener.onMessageReceived(ioSpecs.getStatus());
 
         } catch (SocketTimeoutException e) { System.out.print("Receive timed out."); }
     }
 
     /**
+     * Send a broadcast UDP packet to-all containing a request for service to
+     * announce themselves. It use the inner mainSocket, created by Discoverer.
+     *
+     * @param operation the operation you'd like to send throw the mainSocket
+     * @throws IOException something goes wrong
+     * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
+     */
+    public void sendMessageToAll(Operation operation) throws IOException {
+        DatagramSocket socket = this.getSocketDiscoverer();
+        String msg = mJSonFactory.transfertStream(operation.getJsonSpecs());
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, getSocketPort());
+        socket.send(packet);
+    }
+
+    /**
      * Calculate the signature we need to send with the request. It is a string
-     * containing the hex md5sum of the challenge and remotekey.
+     * containing the hex md5sum of the challenge and remote key.
      *
      * @param challenge to compare
      * @return signature string

@@ -1,4 +1,4 @@
-package eu.areamobile.apis.hw.pics.entity.json;
+package eu.areamobile.apis.hw.pics.proto;
 
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
@@ -45,7 +45,7 @@ public class HWJSonIOSpecs implements Serializable {
     @SerializedName(STAT)
     private Status status;
 
-    private Exec getExec() {
+    public Exec getExec() {
         return exec;
     }
 

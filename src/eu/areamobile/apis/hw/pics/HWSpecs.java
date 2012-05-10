@@ -1,6 +1,6 @@
 package eu.areamobile.apis.hw.pics;
 
-import eu.areamobile.apis.hw.pics.entity.json.HWJSonIOSpecs;
+import eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs;
 
 /**
  * Created by AreaMobile Date: 29/12/11 This interface is a group of HardWare specifications. It's developed around the generically stuffs about it, and what we usually need.
