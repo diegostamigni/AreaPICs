@@ -138,26 +138,11 @@ public class Discoverer extends Thread {
 
                 // check if already exist
                 if (ioSpecs != null && ioSpecs.getStatus() != null) {
-                    if (mGenericDeviceCollection.size() > 0) {
-                        for (T genericDevice : mGenericDeviceCollection) {
-                            if (!(ioSpecs.getStatus().getDevice().equalsIgnoreCase(((GenericDevice) genericDevice).getDescription().getStatus().getDevice()))) {
-                                ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
-                                ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
-                                mGenericDeviceCollection.add(mCurrentGenericDevice);
-                                if (listener != null) listener.onScanInProgress(genericDevice, position);
-                                position++;
-                            }
-                        }
-                    } else {
-                        HWJSonIOSpecs.Argv[] argv = ioSpecs.getStatus().getArgv();
-                        if (argv.length > 0) {
-                            ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
-                            ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
-                            mGenericDeviceCollection.add(mCurrentGenericDevice);
-                            if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
-                            position++;
-                        }
-                    }
+                    ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                    ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
+                    mGenericDeviceCollection.add(mCurrentGenericDevice);
+                    if (listener != null) listener.onScanInProgress(mCurrentGenericDevice, position);
+                    position++;
                 }
             }
         } catch (SocketTimeoutException e) {

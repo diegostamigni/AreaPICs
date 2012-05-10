@@ -83,6 +83,11 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
         return this.macDevice;
     }
 
+//    @Override
+//    public void setDevice(String mac) {
+//         this.macDevice = mac;
+//    }
+
     @Override
     public void setNetBiosName(String netBiosName) {
         this.netBiosName = netBiosName;
@@ -91,5 +96,15 @@ public abstract class GenericDevice implements Serializable, HWSpecs, HWOperatio
     @Override
     public String getNetBiosName() {
         return netBiosName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        try {
+            return this.getDescription().getStatus().getDevice().equalsIgnoreCase(((GenericDevice) o).getDescription().getStatus().getDevice());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
