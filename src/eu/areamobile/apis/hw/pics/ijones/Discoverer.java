@@ -176,21 +176,25 @@ public class Discoverer extends Thread {
      * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
      */
     public void sendMessage(DooIP dooIP, OnResponseListener listener) throws IOException {
-        DatagramSocket socket = this.getSocketDiscoverer();
+        byte[] buf = new byte[1024];
         String msg = mJSonFactory.transfertStream(dooIP.getOperation().getJsonSpecs());
-        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, getSocketPort());
-        socket.send(packet);
+        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, this.getSocketPort());
+        mainSocket.send(packet);
 
         try {
-            mainSocket.receive(packet);
-            String s = new String(packet.getData(), 0, packet.getLength());
-            HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
+            while(true) {
+                DatagramPacket receivePacket = new DatagramPacket(buf, buf.length, this.broadcastAddress, this.getSocketPort());
+                mainSocket.receive(receivePacket);
 
-            if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null)
-                if (ioSpecs.getStatus().getDevice().equalsIgnoreCase(dooIP.getOperation().getJsonSpecs().getStatus().getDevice()))
+                String s = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
+
+                if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null && (ioSpecs.getStatus().getDevice().equalsIgnoreCase(dooIP.getDescription().getStatus().getDevice())))
                     listener.onMessageReceived(ioSpecs.getStatus());
-
-        } catch (SocketTimeoutException e) { System.out.print("Receive timed out."); }
+            }
+        } catch (SocketTimeoutException e) {
+            System.out.print("Receive timed out.");
+        }
     }
 
     /**
@@ -202,10 +206,9 @@ public class Discoverer extends Thread {
      * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
      */
     public void sendMessageToAll(Operation operation) throws IOException {
-        DatagramSocket socket = this.getSocketDiscoverer();
         String msg = mJSonFactory.transfertStream(operation.getJsonSpecs());
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, getSocketPort());
-        socket.send(packet);
+        mainSocket.send(packet);
     }
 
     /**

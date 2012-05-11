@@ -1,7 +1,7 @@
 package eu.areamobile.apis.hw.pics.entity.dooip;
 
-import eu.areamobile.apis.hw.pics.entity.Operation;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
+import eu.areamobile.apis.hw.pics.entity.Operation;
 import eu.areamobile.apis.hw.pics.proto.JSonFactory;
 
 /**
