@@ -25,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */
 
-public class Discoverer extends Thread {
+public class Discoverer {
     private static final String REMOTE_KEY = "";
 
     public static final int TIMEOUT_MS = 500;
