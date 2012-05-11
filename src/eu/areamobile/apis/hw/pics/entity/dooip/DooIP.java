@@ -1,6 +1,6 @@
 package eu.areamobile.apis.hw.pics.entity.dooip;
 
-import eu.areamobile.apis.hw.pics.Operation;
+import eu.areamobile.apis.hw.pics.entity.Operation;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
 import eu.areamobile.apis.hw.pics.proto.JSonFactory;
 
@@ -8,7 +8,7 @@ import eu.areamobile.apis.hw.pics.proto.JSonFactory;
  * Created by AreaMobile
  * Date: 28/12/11
  * <p/>
- * DooIP, the derivation of FlyPort, this is the class you've to use for connection on it.
+ * DooIP, the derivation of FlyPort, this is the class you've to use for staffs on it.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */

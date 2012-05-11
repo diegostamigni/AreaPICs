@@ -1,5 +1,6 @@
-package eu.areamobile.apis.hw.pics;
+package eu.areamobile.apis.hw.pics.entity;
 
+import eu.areamobile.apis.hw.pics.HWOperations;
 import eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.proto.JSonFactory;
 
@@ -614,6 +615,6 @@ public class Operation implements HWOperations, Serializable {
 
     public void setMacReceiver(String macReceiver) {
         this.macReceiver = macReceiver;
-//        this.getJsonSpecs().getExec().setReceiver(macReceiver);
+        this.getJsonSpecs().getExec().setReceiver(macReceiver);
     }
 }

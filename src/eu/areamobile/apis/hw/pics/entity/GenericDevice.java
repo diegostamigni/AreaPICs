@@ -1,7 +1,6 @@
 package eu.areamobile.apis.hw.pics.entity;
 
 import eu.areamobile.apis.hw.pics.HWSpecs;
-import eu.areamobile.apis.hw.pics.Operation;
 import eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.proto.JSonFactory;
 

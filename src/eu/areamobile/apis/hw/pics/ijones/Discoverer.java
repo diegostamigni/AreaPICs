@@ -1,7 +1,7 @@
 package eu.areamobile.apis.hw.pics.ijones;
 
 import eu.areamobile.apis.hw.pics.HWOperations;
-import eu.areamobile.apis.hw.pics.Operation;
+import eu.areamobile.apis.hw.pics.entity.Operation;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
 import eu.areamobile.apis.hw.pics.entity.dooip.DooIP;
 import eu.areamobile.apis.hw.pics.exceptions.UnknownDeviceException;
