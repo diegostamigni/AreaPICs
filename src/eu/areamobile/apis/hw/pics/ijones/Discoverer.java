@@ -1,9 +1,8 @@
 package eu.areamobile.apis.hw.pics.ijones;
 
 import eu.areamobile.apis.hw.pics.HWOperations;
-import eu.areamobile.apis.hw.pics.entity.Operation;
 import eu.areamobile.apis.hw.pics.entity.GenericDevice;
-import eu.areamobile.apis.hw.pics.entity.dooip.DooIP;
+import eu.areamobile.apis.hw.pics.entity.Operation;
 import eu.areamobile.apis.hw.pics.exceptions.UnknownDeviceException;
 import eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs;
 import eu.areamobile.apis.hw.pics.proto.JSonFactory;
@@ -170,14 +169,14 @@ public class Discoverer {
      * Send a broadcast UDP packet containing a request for service to
      * announce themselves. It use the inner mainSocket, created by Discoverer.
      *
-     * @param dooIP At who do you want to send?
+     * @param genericDevice At who do you want to send?
      * @param listener return from the stream
      * @throws IOException something goes wrong
      * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
      */
-    public void sendMessage(DooIP dooIP, OnResponseListener listener) throws IOException {
+    public void sendMessage(GenericDevice genericDevice, OnResponseListener listener) throws IOException {
         byte[] buf = new byte[1024];
-        String msg = mJSonFactory.transfertStream(dooIP.getOperation().getJsonSpecs());
+        String msg = mJSonFactory.transfertStream(genericDevice.getOperation().getJsonSpecs());
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, this.getSocketPort());
         mainSocket.send(packet);
 
@@ -189,7 +188,7 @@ public class Discoverer {
                 String s = new String(receivePacket.getData(), 0, receivePacket.getLength());
                 HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
 
-                if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null && (ioSpecs.getStatus().getDevice().equalsIgnoreCase(dooIP.getDescription().getStatus().getDevice())))
+                if (listener != null && ioSpecs != null && ioSpecs.getStatus() != null && (ioSpecs.getStatus().getDevice().equalsIgnoreCase(genericDevice.getDescription().getStatus().getDevice())))
                     listener.onMessageReceived(ioSpecs.getStatus());
             }
         } catch (SocketTimeoutException e) {
