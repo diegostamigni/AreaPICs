@@ -1,4 +1,63 @@
-What's DooIP ? Stay up.
+**AreaMobile & OpenPicus** is glad to present you:
+
+DooIP Firmware & AreaPICs APIs
+
+
+A few weeks ago we were wondering about the fact that Android, the Google operating system for Smartphones which is now a huge ecosystem with hundreds of thousands of daily activations,become too important. Then we should to have an easy-to-build integration with our openPICUS FlyPort ecosystem.
+
+Today, an Android Developers who wants to communicate with the real world, is provided only with a development environment, the so-called Android Open Accessory Development Kit, released directly by BigG several months ago. It is based on USB connection and it leverages the compatibility with the beloved Arduino boards, allowing you to develop Android accessories such as docking stations, usb speakers, etc...
+
+Anyone, who has actually used it, knows that Android OADK has some limitations. OADK is based on USB communication between Android and an external device and its commands are strongly based on the USB protocol. Using OADK a physical cable (USB) connection is required in order to communicate between the endpoints and it is basically possible to connect only one device at a time.
+
+The overall picture makes the OADK a not properly fitting solution when it comes to domotics for example: imagining your "home" as an Android accessory is probably hard.
+
+The question was: how to create a system that will allow you to connect as many devices as you want with your Android terminal also helping you to do it remotely and wirelessly?
+
+Our choice: Simplicity and Freedom: UDP, JSON and an Android API library
+Once again we have chosen standardization, simplicity and performance. That means using using UDP as a transport protocol and JSON as a communication protocol. For those not familiar with it, JSON is a specific lighweight client-server communication protocol that is lighter and easier to manage - in comparison with XML for example - that is reallly widespread these days. As Wikipedia says:
+JSON JavaScript Object Notation,is a lightweight text-based open standard designed for human-readable data interchange. It is derived from the JavaScript scripting language for representing what simple data structures and associative arrays,Called objects. Despite its   relationship to JavaScript, it is language-independent, with parsers available for many languages.
+
+So a lightweight, multi-platform and essentially human readable protocol is de-facto a standard, adopted because of its simplicity, by the most important Internet players before openPICUS (among them are Yahoo or Google).
+
+So, firstly we have developed a new firmware for our FlyPort (called DOoIP) that is able to receive, interpret and execute JSON commands. It would be similar to development of a lighter and more manageable version of UPNP that is text/JSON based instead of XML and verbose. Once done you will see it available on our page on Google Code (or on Download section of openpicus.com). All the developments are now under the test and will be available in a couple of weeks.
+
+With the development of the JSON based discovery and remote controlling protocol, we will have a new simple and powerful tool that will, at the end of the day, will let you directly talk and command Flyports via the Internet, without even put your hands on the IDE. 
+And, furthermore, to make it even easier to you, we started to develop a number of secondary endpoints that we will be bringing to the community in the future. The first one that is going be released contextually with DOoIP - will be a connector for the absolutely pervasive Android system.
+
+Thanks to the fruitful cooperation with our friends from AreaMobile, we have encapsulated the generation of commands that are needed to control the FlyPort via DOoIP remotely in an Android java library that is easily adoptable by the developer (great jobe mates!). 
+
+
+The openPicus team working with the mates from Areamobile
+
+
+To command a Flyport from an Android device just include the library in your app and you can use it right away. Your app could be published and downloadable from the Google Play market.
+
+The procedure is straightforward and easy and neither does require the knowledge of JSON and of low-level communication formalisms.
+
+At the end of the day, this choice led us to develop a technology that is:
+    Simple and Standard: using JSON and UDP
+    Extendable and Reusable: in the future we can simply write new libraries for iPhone, WindowsPhone, etc. … or you can write it!
+    Powerful: is wireless and multipoint
+    It’s easy for an Android developer: thanks to the availability of the Android library
+All that will allow you to create, for example, home automation applications without having to learn complex communication protocols or technologies: you just need to check the documentation that we’ll made available, and download the library!
+ 
+A lot of Ideas!
+After we had completed this work, we began to think a multiplicity of ideas that anyone of you can build using this new technology.
+
+You know that Italians are coffee lovers? We never start our workday without a steaming cup of coffee! Incidentially, this is a common practice even beyond the borders of this beautiful country!
+
+So, think of an Android application that "wakes you up" and, in addition to getting you out of the bed with your favorite music, it turns on the coffee machine and makes you the first morning coffee! Wouldn't it be pretty amazing.
+
+Imagine it as a hack, that every "maker" can do "hacking" his own old and good coffee machine, but also think this as an extension that any coffee-machine manufacturer might adopt for its own product: imagine buying a machine that is able to communicate with your Android phone - since it contains a FlyPort module - and you download the "Wake me up with coffee" application right from the Google Play: that's it! (Message to the reader: if you are a machine manufacturer, and not only of coffee machines, drop us an email here and let’s do it!)
+
+
+
+Why not to think even of a system that stores your favorite lighting-settings presets, and is activated via the device? Maybe by using the amazing Android built-in features such as facial recognition or Speech-to-Text. This would allow us to activate our illumination profile simply by smiling at our smartphone (or maybe at the usb camera connected to an Android set top box), or by talking in a natural way with the system.
+
+As you can imagine a number of potential developments and the potential of this new techology is huge and truly exciting.
+
+Now it’s your turn to innovate: Stay tuned, we will release it that in the next few days!
+
 
 Diego Stamigni
 diegostamigni@areamobile.eu
