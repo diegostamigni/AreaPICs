@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * Created by AreaMobile
  * Date: 29/12/11
  * <p/>
- * This class help you to search AreaFlies and manage those.
+ * This class help you to search DooIP and manage those.
  *
  * @author Diego Stamigni (diegostamigni@areamobile.eu)
  */

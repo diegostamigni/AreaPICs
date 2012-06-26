@@ -213,14 +213,14 @@ public interface HWOperations {
 
     /**
      * Initialize the ADC<br></br>Acknowledge is false.
-     * <b>Note:</b> the AreaFly initialize the ADCs itself
+     * <b>Note:</b> the DooIP initialize the ADCs itself
      * @see HWOperations
      */
     void adc_init();
 
     /**
      * Initialize the ADC<br></br>
-     * <b>Note:</b> the AreaFly initialize the ADCs itself
+     * <b>Note:</b> the DooIP initialize the ADCs itself
      * @param acknowledge if you want the acknowledge
      * @see HWOperations
      */
