@@ -175,6 +175,10 @@ public class Discoverer {
      * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
      */
     public void sendMessage(GenericDevice genericDevice, OnResponseListener listener) throws IOException {
+        this.sendMessage(genericDevice, listener, 250);
+    }
+
+    public void sendMessage(GenericDevice genericDevice, OnResponseListener listener, long value) throws IOException {
         byte[] buf = new byte[1024];
         String msg = mJSonFactory.transfertStream(genericDevice.getOperation().getJsonSpecs());
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, this.getSocketPort());
@@ -194,6 +198,8 @@ public class Discoverer {
         } catch (SocketTimeoutException e) {
             System.out.print("Receive timed out.");
         }
+
+        waitForComplete(value);
     }
 
     /**
@@ -205,9 +211,23 @@ public class Discoverer {
      * @see eu.areamobile.apis.hw.pics.proto.HWJSonIOSpecs
      */
     public void sendMessageToAll(Operation operation) throws IOException {
+        this.sendMessageToAll(operation, 250);
+    }
+
+    public void sendMessageToAll(Operation operation, long millisToWait) throws IOException {
         String msg = mJSonFactory.transfertStream(operation.getJsonSpecs());
         DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, getSocketPort());
         mainSocket.send(packet);
+
+        waitForComplete(millisToWait);
+    }
+
+    private void waitForComplete(long value) {
+        try {
+            Thread.sleep(value);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
