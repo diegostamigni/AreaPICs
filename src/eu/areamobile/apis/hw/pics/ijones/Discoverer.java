@@ -12,6 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -103,6 +105,64 @@ public class Discoverer {
         exec.setTime(System.currentTimeMillis()+"");
         sayHiAll.setExec(exec);
         return sayHiAll;
+    }
+
+    /**
+     * Scan the specified pics
+     * @param type the type of the device to be scanned
+     * @throws IOException
+     */
+    public <T> List<T> scan(Class<T> type) throws IOException, UnknownDeviceException {
+        T mCurrentGenericDevice = null;
+        Set<T> mGenericDeviceCollection = new CopyOnWriteArraySet<T>();
+        byte[] buf = new byte[1024];
+        DatagramPacket packet;
+        String s;
+
+        DatagramSocket socket = this.getSocketDiscoverer();
+        String msg = mJSonFactory.transfertStream(createNetworkScanMessage());
+        packet = new DatagramPacket(msg.getBytes(), msg.length(), this.broadcastAddress, this.getSocketPort());
+        socket.send(packet);
+
+        int position = 0;
+        try {
+            while (true) {
+                mCurrentGenericDevice = type.getConstructor(String.class).newInstance(this.macAddress);
+                packet = new DatagramPacket(buf, buf.length, this.broadcastAddress, this.getSocketDiscoverer().getLocalPort());
+
+                mainSocket.receive(packet);
+
+                ((GenericDevice) mCurrentGenericDevice).setIPAddress(packet.getAddress().getHostAddress());
+
+                s = new String(packet.getData(), 0, packet.getLength());
+
+                HWJSonIOSpecs ioSpecs = mJSonFactory.parseFromStream(s);
+
+                // check if already exist
+                if (ioSpecs != null && ioSpecs.getStatus() != null && ioSpecs.getStatus().getArgv().length > 0) {
+                    ((GenericDevice) mCurrentGenericDevice).setNetBiosName(((String) ioSpecs.getStatus().getArgv()[0].getValue()).trim());
+                    ((GenericDevice) mCurrentGenericDevice).setDescription(ioSpecs);
+                    mGenericDeviceCollection.add(mCurrentGenericDevice);
+                    position++;
+                }
+            }
+        } catch (SocketTimeoutException e) {
+            System.out.print("Receive timed out.");
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            throw new UnknownDeviceException("What kind of device I've to scan for you?");
+        }
+
+        return new ArrayList<T>(mGenericDeviceCollection);
     }
 
     /**
